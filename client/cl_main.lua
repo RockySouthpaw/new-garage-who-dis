@@ -2,22 +2,6 @@
 local blipCreated = false
 local blipInRange = false 
 
--- Create Markers
-Citizen.CreateThread(function()
-	while true do
-	    Citizen.Wait(10)
-        local playerPed = PlayerPedId()
-		local playerCoords = GetEntityCoords(playerPed)
-        for k, v in pairs(Config.markerLocations) do
-            local markerZone = vector3(v.x, v.y, v.z)
-            local markerDistance = #(playerCoords - markerZone)
-            if markerDistance <= Config.markerRange then
-                DrawMarker(Config.markerType, v.x, v.y, v.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.markerSize.x, Config.markerSize.y, Config.markerSize.z, Config.markerColor.r, Config.markerColor.g, Config.markerColor.b, Config.markerColor.a, false, Config.markerRotate, 2, 0, nil, nil, false)
-            end
-        end
-    end
-end)
-
 -- Create Blips
 Citizen.CreateThread(function() 
     while true do
@@ -36,7 +20,11 @@ Citizen.CreateThread(function()
                     SetBlipSprite(blip, 357)
                     SetBlipColour(blip, Config.blipColor)
                     BeginTextCommandSetBlipName("STRING")
-                    AddTextComponentString(v.name.. " Garage")
+                    if Config.enableBlipNames then
+                        AddTextComponentString(v.name.. " Garage")
+                    else
+                        AddTextComponentString("Garage")
+                    end
                     EndTextCommandSetBlipName(blip)
                     if DoesBlipExist(blip) then
                         blipCreated = true
@@ -49,16 +37,51 @@ Citizen.CreateThread(function()
                         SetBlipSprite(blip, 357)
                         SetBlipColour(blip, Config.blipColor)
                         BeginTextCommandSetBlipName("STRING")
-                        AddTextComponentString(v.name.. " Garage")
+                        if Config.enableBlipNames then
+                            AddTextComponentString(v.name.. " Garage")
+                        else
+                            AddTextComponentString("Garage")
+                        end
                         EndTextCommandSetBlipName(blip)
                         if DoesBlipExist(blip) then
                             activeGarage = blip
                             Wait(5000) -- Prevents the blip from being re-created if it already exist and stores it so it can be removed later once we're out of range.
                         end
-                    elseif blipDistance >= Config.blipRange then
+                    elseif blipDistance >= Config.blipRange then -- Curently assumes you're out of range for ALL blips. :Deskchan:
                         RemoveBlip(activeGarage)
                     end
                 end
+            end
+        end
+    end
+end)
+
+-- Create Markers
+Citizen.CreateThread(function()
+	while true do
+	    Citizen.Wait(10)
+        local playerPed = PlayerPedId()
+		local playerCoords = GetEntityCoords(playerPed)
+        for k, v in pairs(Config.markerLocations) do
+            local markerZone = vector3(v.x, v.y, v.z)
+            local markerDistance = #(playerCoords - markerZone)
+            if markerDistance <= Config.markerRange then
+                DrawMarker(Config.markerType, v.x, v.y, v.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.markerSize.x, Config.markerSize.y, Config.markerSize.z, Config.markerColor.r, Config.markerColor.g, Config.markerColor.b, Config.markerColor.a, false, Config.markerRotate, 2, 0, nil, nil, false)
+            end
+        end
+    end
+end)
+
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(5000)
+        if Config.deleteBariers then
+            for k, v in pairs(Config.barierLocations) do
+                local ent = GetClosestObjectOfType(Config.barierLocations[k].x, Config.barierLocations[k].y, Config.barierLocations[k].z, 2.0, GetHashKey(Config.barierLocations[k].model), false, false, false)
+                SetEntityAsMissionEntity(ent, 1, 1)
+                DeleteObject(ent)
+                SetEntityAsNoLongerNeeded(ent)
             end
         end
     end
