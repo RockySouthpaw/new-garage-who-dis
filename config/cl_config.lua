@@ -4,11 +4,11 @@ Config.deleteBariers = true
 --Config Variables (Blips)
 Config.enableBlips = true
 Config.enableBlipNames = false -- Set to false if you need to consolidate blips.
-Config.enableRangedBlip = true -- Only show blip if you're in range.
+Config.enableRangedBlip = false -- Only show blip if you're in range.
 
 Config.blipRange = 100 -- How far until the blip shows.
 Config.blipColor = 1 -- https://docs.fivem.net/natives/?_0x03D7FB09E75D6B7E
-Config.blipDisplay = 2 -- 2 = Map/Minimap, 3 = Only Map 5 = ONLY Minimap, 8 = Map/Minimap + Not selectable https://docs.fivem.net/natives/?_0x9029B2F3DA924928
+Config.blipDisplay = 3 -- 2 = Map/Minimap, 3 = Only Map 5 = ONLY Minimap, 8 = Map/Minimap + Not selectable https://docs.fivem.net/natives/?_0x9029B2F3DA924928
 
 -- Config Variables (Markers)
 Config.markerRotate = true -- Faces the player
@@ -37,7 +37,8 @@ Config.blipLocations = {
 [15] = {name = "West Vinewood", x = -554.99865722656, y = 331.64248657227, z = 84.370491027832},
 [16] = {name = "West Vinewood", x = -340.53051757813, y = 266.64599609375, z = 85.679481506348},
 [17] = {name = "Downtown Vinewood", x = 362.45098876953, y = 298.58694458008, z = 103.88379669189},
-[18] = {name = "Downtown Vinewood", x = 638.73327636719, y = 206.56455993652, z = 97.604179382324}
+[18] = {name = "Downtown Vinewood", x = 638.73327636719, y = 206.56455993652, z = 97.604179382324},
+[19] = {name = "Pillbox Hill", x = 65.847717285156, y = -616.36883544922, z = 30.931786804199}
 }
 
 -- Config (Markers)
