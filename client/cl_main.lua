@@ -56,23 +56,6 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Create Markers
-Citizen.CreateThread(function()
-	while true do
-	    Citizen.Wait(10)
-        local playerPed = PlayerPedId()
-		local playerCoords = GetEntityCoords(playerPed)
-        for k, v in pairs(Config.markerLocations) do
-            local markerZone = vector3(v.x, v.y, v.z)
-            local markerDistance = #(playerCoords - markerZone)
-            if markerDistance <= Config.markerRange then
-                DrawMarker(Config.markerType, v.x, v.y, v.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.markerSize.x, Config.markerSize.y, Config.markerSize.z, Config.markerColor.r, Config.markerColor.g, Config.markerColor.b, Config.markerColor.a, false, Config.markerRotate, 2, 0, nil, nil, false)
-            end
-        end
-    end
-end)
-
-
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5000)

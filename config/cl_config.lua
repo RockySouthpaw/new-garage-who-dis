@@ -41,17 +41,6 @@ Config.blipLocations = {
 [19] = {name = "Pillbox Hill", x = 65.847717285156, y = -616.36883544922, z = 30.931786804199}
 }
 
--- Config (Markers)
-Config.markerLocations = { -- Markers if we decide to use one
-[1] = {name = "Legion", x = 213.43267822266, y = -809.05993652344, z = 31.014888763428},
-[2] = {name = "Pink Cage", x = 275.32904052734, y = -344.58810424805, z = 45.173404693604},
-[3] = {name = "Mirror Park", x = 1036.2510986328, y = -763.19036865234, z = 57.992980957031},
-[4] = {name = "Pillbox Hill", x = 44.58373260498, y = -843.09783935547, z = 31.123804092407},
-[5] = {name = "Mission Row", x = 458.22341918945, y = -895.58660888672, z = 35.972236633301},
-[6] = {name = "Alta Street", x = -280.97952270508, y = -887.98712158203, z = 31.318016052246},
-[7] = {name = "Mission Row", x = 453.3307800293, y = -1146.189453125, z = 29.514123916626}
-}
-
 Config.barierLocations = {
 [1] = {model = "prop_sec_barier_02b", x = 266.09, y = -349.35, z = 44.74}, -- Pink Cage 1
 [2] = {model = "prop_sec_barier_02a", x = 285.28, y = -355.78, z = 45.13}, -- Pink Cage 2
