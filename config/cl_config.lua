@@ -4,26 +4,21 @@ Config.deleteBariers = true
 --Config Variables (Blips)
 Config.enableBlips = true
 Config.enableBlipNames = false -- Set to false if you need to consolidate blips.
-Config.enableRangedBlip = false -- Only show blip if you're in range.
+Config.enableRangedBlip = true -- Only show blip if you're in range.
 
 Config.blipRange = 100 -- How far until the blip shows.
 Config.blipColor = 1 -- https://docs.fivem.net/natives/?_0x03D7FB09E75D6B7E
-Config.blipDisplay = 3 -- 2 = Map/Minimap, 3 = Only Map 5 = ONLY Minimap, 8 = Map/Minimap + Not selectable https://docs.fivem.net/natives/?_0x9029B2F3DA924928
+Config.blipDisplay = 2 -- 2 = Map/Minimap, 3 = Only Map 5 = ONLY Minimap, 8 = Map/Minimap + Not selectable https://docs.fivem.net/natives/?_0x9029B2F3DA924928
 
--- Config Variables (Markers)
-Config.markerRotate = true -- Faces the player
-
-Config.markerRange = 25.0 -- Distance for creating the marker.
-Config.markerType = 20 -- Type of marker https://docs.fivem.net/docs/game-references/markers/
-Config.markerSize = {x = 1.0, y = 1.0, z = 1.0}
-Config.markerColor = {r = 255, g = 0, b = 0, a = 100}
+-- Config Variables (PolyZone)
+Config.zoneCheck = 1 -- Seconds to check if in the zone.
 
 -- Config (Blips)
-Config.blipLocations = {
+Config.blipLocations = { -- The index number corresponds to the garage number.
 [1] = {name = "Legion", x = 217.58685302734, y = -802.31695556641, z = 30.768518447876},
-[2] = {name = "Pink Cage", x = 273.77542114258, y = -344.17346191406, z = 44.919834136963},
-[3] = {name = "Mirror Park", x = 1036.2510986328, y = -763.19036865234, z = 57.992980957031},
-[4] = {name = "Pillbox Hill", x = 44.58373260498, y = -843.09783935547, z = 31.123804092407},
+[2] = {name = "Pink Cage", x = 273.77542114258, y = -344.17346191406, z = 44.919834136963}, 
+[3] = {name = "Mirror Park", x = 1036.2510986328, y = -763.19036865234, z = 57.992980957031}, 
+[4] = {name = "Pillbox Hill", x = 44.58373260498, y = -843.09783935547, z = 31.123804092407}, 
 [5] = {name = "Mission Row", x = 458.22341918945, y = -895.58660888672, z = 35.972236633301},
 [6] = {name = "Alta Street", x = -280.97952270508, y = -887.98712158203, z = 31.318016052246},
 [7] = {name = "Mission Row", x = 453.3307800293, y = -1146.189453125, z = 29.514123916626},
@@ -50,16 +45,3 @@ Config.barierLocations = {
 [6] = {model = "prop_sec_barier_02b", x = 1030.61, y = -758.09, z = 57.77}, -- Mirror Park 2 
 [7] = {model = "prop_sec_barier_02b", x = 451.45919799805, y = -1144.5382080078, z = 29.356086044312}, -- Mission Row
 }
-
---[[
--- Config (Parking Locations)
-Config.parkingLocations = { -- location to park your vehicle.
-[1] = {name = "Legion", x = 217.58685302734, y = -802.31695556641, z = 30.768518447876},
-[2] = {name = "Pink Cage", x = 266.5002746582, y = -332.10998535156, z = 43.949834136963},
-[3] = {name = "Mirror Park", x = 1036.2510986328, y = -763.19036865234, z = 57.992980957031},
-[4] = {name = "Pillbox Hill", x = 44.58373260498, y = -843.09783935547, z = 31.123804092407},
-[5] = {name = "Mission Row", x = 458.22341918945, y = -895.58660888672, z = 35.972236633301},
-[6] = {name = "Alta Street", x = -280.97952270508, y = -887.98712158203, z = 31.318016052246},
-[7] = {name = "Mission Row", x = 453.3307800293, y = -1146.189453125, z = 29.514123916626}
-}
-]]
