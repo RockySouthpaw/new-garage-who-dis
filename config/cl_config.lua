@@ -1,4 +1,18 @@
 Config = {}
+-- Config Interactions (Keys)
+Config.interactionKey = 'E' -- https://docs.fivem.net/docs/game-references/controls/
+Config.successLength = 2 -- Length of success Notification
+-- Config Variables (T-Notify)
+Config.tNotify = true
+Config.tLocation = 'top-right' -- (top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
+-- Config Variables (Myhtic Notify)
+Config.mythicNotify = false
+Config.backgroundColor = '#292929'
+-- Config Variables (pNotify)
+Config.pNotify = false
+Config.Layout = "centerRight" -- top, topLeft, topCenter, topRight, center, cenerLeft, centerRight, bottom, bottomLeft, bottomCenter, bottomRight
+Config.Duration = 5 -- Duration of prompt and success length.
+Config.Theme = "gta" -- gta, mint, relax, metroui
 -- Config Variables (Barier)
 Config.deleteBariers = true
 --Config Variables (Blips)
@@ -41,7 +55,8 @@ Config.barierLocations = {
 [2] = {model = "prop_sec_barier_02a", x = 285.28, y = -355.78, z = 45.13}, -- Pink Cage 2
 [3] = {model = "prop_sec_barrier_ld_01a", x = 206.52, y = -803.47, z = 30.95}, -- Legion 1
 [4] = {model = "prop_sec_barrier_ld_01a",x = 230.96, y = -816.36, z = 30.32}, -- Legion 2
-[5] = {model = "prop_sec_barier_02b", x = 1038.61, y = -763.18, z = 57.77}, -- Mirror Park 1
-[6] = {model = "prop_sec_barier_02b", x = 1030.61, y = -758.09, z = 57.77}, -- Mirror Park 2 
-[7] = {model = "prop_sec_barier_02b", x = 451.45919799805, y = -1144.5382080078, z = 29.356086044312}, -- Mission Row
+[5] = {model = "prop_sec_barrier_ld_01a",x = 223.87022399902, y = -740.16491699219, z = 33.428574829102}, -- Legion 3
+[6] = {model = "prop_sec_barier_02b", x = 1038.61, y = -763.18, z = 57.77}, -- Mirror Park 1
+[7] = {model = "prop_sec_barier_02b", x = 1030.61, y = -758.09, z = 57.77}, -- Mirror Park 2 
+[8] = {model = "prop_sec_barier_02b", x = 451.45919799805, y = -1144.5382080078, z = 29.356086044312}, -- Mission Row
 }

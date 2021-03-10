@@ -1,8 +1,25 @@
 -- Varibles
-local insideZone = false
+local activeNotification = false
+local notificationID = "garageNotify"
 
--- Garage [1] = {name = "Legion", x = 217.58685302734, y = -802.31695556641, z = 30.768518447876},
+-- Command/Keymap
+RegisterCommand("Store", function()
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    local driver  = GetPedInVehicleSeat(vehicle, -1) -- -1 is the Driver.
+    if activeNotification and IsPedInVehicle(PlayerPedId(),vehicle, true) and driver then 
+        storeVehicle(vehicle)
+    end
+end)
+RegisterKeyMapping("Store", "Store Player Vehicle", 'keyboard', Config.interactionKey)
 
+RegisterCommand("notiOff", function()
+    if activeNotification then
+        notifyEnd(notificationID)
+        activeNotification = false
+    end
+end)
+RegisterKeyMapping("notiOff", "Clear Notification", 'keyboard', 'f')
+-- PollyZones
 
 local Garage_1A = PolyZone:Create({
     vector2(208.25799560547, -803.65850830078),
@@ -96,13 +113,21 @@ local Garage_1H = PolyZone:Create({
     maxZ = 42.00
 })
   
-local combo = ComboZone:Create({Garage_1A, Garage_1B, Garage_1C, Garage_1D, Garage_1E, Garage_1F, Garage_1G, Garage_1H}, {name="Garage 1", debugPoly=true})
+local combo = ComboZone:Create({Garage_1A, Garage_1B, Garage_1C, Garage_1D, Garage_1E, Garage_1F, Garage_1G, Garage_1H}, {name="Garage 1", debugPoly=false})
 combo:onPlayerInOut(function(isPointInside, point, zone)
-  if isPointInside then
-    print("Inside Zone:",isPointInside,"for point", point)
-  else
-    print("Outside Zone:",isPointInside,"for point", point)
-  end
+    if isPointInside then
+        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
+            local garageName = "Garage 1"
+            notifyPrompt(garageName, notificationID)
+            activeNotification = true
+        end
+    else
+        if activeNotification then 
+            notifyEnd(notificationID)
+            activeNotification = false
+        end
+    end
 end)
 
 -- Garage [2] = {name = "Pink Cage", x = 273.77542114258, y = -344.17346191406, z = 44.919834136963}, )
@@ -140,11 +165,19 @@ local Garage_2C = PolyZone:Create({
     maxZ = 51.00
 })
 
-local combo = ComboZone:Create({Garage_2A, Garage_2B, Garage_2C}, {name="Garage 2", debugPoly=true})
+local combo = ComboZone:Create({Garage_2A, Garage_2B, Garage_2C}, {name="Garage 2", debugPoly=false})
 combo:onPlayerInOut(function(isPointInside, point, zone)
-  if isPointInside then
-    print("Inside Zone:",isPointInside,"for point", point)
-  else
-    print("Outside Zone:",isPointInside,"for point", point)
-  end
+    if isPointInside then
+        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
+            local garageName = "Garage 2"
+            notifyPrompt(garageName, notificationID)
+            activeNotification = true
+        end
+    else
+        if activeNotification then 
+            notifyEnd(notificationID)
+            activeNotification = false
+        end
+    end
 end)
