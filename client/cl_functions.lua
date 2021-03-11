@@ -83,9 +83,14 @@ function notifyEnd(id)
 end
 
 function storeVehicle(vehicle)
-    TriggerServerEvent('NGWD:storeVehicle', vehicle)
-    deleteVehicle(vehicle)
-    notifySuccess(1000 * Config.successLength)
+    if not inProgress then -- Checks if its already storing a vehicle to prevent key spam.
+        inProgress = true
+        TriggerServerEvent('NGWD:storeVehicle', vehicle)
+        deleteVehicle(vehicle)
+        notifySuccess(1000 * Config.successLength)
+        Wait(1000)
+        inProgress = false
+    end
 end
 
 function deleteVehicle(vehicle)
