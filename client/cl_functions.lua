@@ -5,7 +5,7 @@ local Delay = 500
 function notifyPrompt(garage, id)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local driver  = GetPedInVehicleSeat(vehicle, -1)
-    if not activeNotification and driver then
+    if not activeNotification and driver == PlayerPedId() then
         if Config.tNotify then 
             exports['t-notify']:Persist({
                 id = id,

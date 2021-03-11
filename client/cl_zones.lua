@@ -6,7 +6,7 @@ local notificationID = "garageNotify"
 RegisterCommand("Store", function()
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local driver  = GetPedInVehicleSeat(vehicle, -1) -- -1 is the Driver.
-    if activeNotification and IsPedInVehicle(PlayerPedId(),vehicle, true) and driver then 
+    if activeNotification and IsPedInVehicle(PlayerPedId(),vehicle, true) and driver == PlayerPedId() then 
         storeVehicle(vehicle)
     end
 end)
