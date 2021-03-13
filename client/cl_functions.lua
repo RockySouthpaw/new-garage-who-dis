@@ -85,12 +85,63 @@ end
 function storeVehicle(vehicle)
     if not inProgress then -- Checks if its already storing a vehicle to prevent key spam.
         inProgress = true
-        TriggerServerEvent('NGWD:storeVehicle', vehicle)
+        local vehicleProperties = getVehicleProperties(vehicle)
+        local vehicleCondition = getVehicleCondition(vehicle)
+        local vehicleMods = getVehicleModkits(vehicle)
+        TriggerServerEvent('NGWD:storeVehicle', vehicleProperties, vehicleCondition, vehicleMods)
         deleteVehicle(vehicle)
         notifySuccess(1000 * Config.successLength)
         Wait(1000)
         inProgress = false
     end
+end
+
+function getVehicleProperties(vehicle)
+    local vehicleProperties = 
+    {
+        {plate = GetVehicleNumberPlateText(vehicle)},
+        {class = GetVehicleClass(vehicle)},
+        {lightsState = GetVehicleLightsState(vehicle)},
+        {colorPrimary, ColorSecondary = GetVehicleColours(vehicle)}, -- Use with SetVehicleColours
+        {tyreSmoke = GetVehicleTyreSmokeColor(vehicle)},
+        {headlightColor = GetVehicleHeadlightsColour(vehicle)},
+        {interiorColor = GetVehicleInteriorColour(vehicle)},
+        {dashboardColor = GetVehicleDashboardColour(vehicle)},
+        {pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)},
+        {livery = GetVehicleLivery(vehicle)},
+        {liveryRoof = GetVehicleRoofLivery(vehicle)},
+        {vehicleMods = GetNumVehicleMods(vehicle, 48)},
+        {wheelSize = GetVehicleWheelSize(vehicle)},
+        {wheelWidth = GetVehicleWheelWidth(vehicle)},
+        {wheelType = GetVehicleWheelType(vehicle)},
+        {windowTint = GetVehicleWindowTint(vehicle)}
+    }
+    return vehicleProperties
+end
+
+function getVehicleModkits(vehicle) -- Needs testing
+    local vehicleMods = {}
+    for i = 0,49 + 1 do
+        vehicleMods[i] = GetVehicleMod(vehicle, i)
+    end
+    return vehicleMods
+end
+
+function getVehicleCondition(vehicle)
+    local vehicleCondition = 
+    {
+        {engineHealth = GetVehicleEngineHealth(vehicle)},
+        {bodyHealth = GetVehicleBodyHealth(vehicle)},
+        {tankHealth = GetVehiclePetrolTankHealth(vehicle)},
+        {fuelLevel = GetVehicleFuelLevel(vehicle)},
+        {oilLevel = GetVehicleOilLevel(vehicle)},
+        {dirt = GetVehicleDirtLevel(vehicle)},
+        {tire1 = GetVehicleWheelHealth(vehicle, 0)},
+        {tire2 = GetVehicleWheelHealth(vehicle, 1)},
+        {tire3 = GetVehicleWheelHealth(vehicle, 2)},
+        {tire4 = GetVehicleWheelHealth(vehicle, 3)}
+    }
+    return vehicleCondition
 end
 
 function deleteVehicle(vehicle)
