@@ -88,10 +88,10 @@ function storeVehicle(vehicle)
         local vehicleProperties = getVehicleProperties(vehicle)
         local vehicleCondition = getVehicleCondition(vehicle)
         local vehicleMods = getVehicleModkits(vehicle)
-        TriggerServerEvent('NGWD:storeVehicle', vehicleProperties, vehicleCondition, vehicleMods)
-        deleteVehicle(vehicle)
-        notifySuccess(1000 * Config.successLength)
-        Wait(1000)
+        TriggerServerEvent('NGWD:storeVehicle', vehicle, vehicleProperties, vehicleCondition, vehicleMods)
+        deleteVehicle(vehicle) -- May trigger server side
+        notifySuccess(1000 * Config.successLength) -- May trigger server side
+        Wait(1000) -- May trigger server side
         inProgress = false
     end
 end
