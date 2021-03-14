@@ -1,11 +1,12 @@
 -- Variables
 local activeNotification = false
 local Delay = 500
+local ped <const> = PlayerPedId()
 -- Function (Notification)
 function notifyPrompt(garage, id)
-    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    local vehicle = GetVehiclePedIsIn(ped, false)
     local driver  = GetPedInVehicleSeat(vehicle, -1)
-    if not activeNotification and driver == PlayerPedId() then
+    if not activeNotification and driver == ped then
         if Config.tNotify then 
             exports['t-notify']:Persist({
                 id = id,
@@ -40,24 +41,50 @@ function notifyPrompt(garage, id)
     end
 end
 
-function notifySuccess(length)
+function notifySuccess(length, message)
     notifyEnd("garageNotify")
     Wait(150) -- Ensurs all notifications are removed in time before creating new ones.
     if Config.tNotify then 
         exports['t-notify']:Alert({
             style  =  'success',
-            message  =  '✔️ Vehicle Stored Successfully.',
+            message  =  message,
             length = length
         })
     end
     if Config.mythicNotify then
-        exports['mythic_notify']:SendAlert('success', "✔️ Vehicle Stored Successfully.", length)
+        exports['mythic_notify']:SendAlert('success', message, length)
     end
     if Config.pNotify then
         exports.pNotify:SetQueueMax(id, 1)
         exports.pNotify:SendNotification({
-            text = "✔️ Vehicle Stored Successfully.",
+            text = message,
             type = "success",
+            timeout = 1000 * Config.Duration,
+            layout = Config.Layout,
+            theme = Config.Theme,
+            queue = "id"
+        })
+    end
+end
+
+function notifyError(length, message)
+    notifyEnd("garageNotify")
+    Wait(150) -- Ensurs all notifications are removed in time before creating new ones.
+    if Config.tNotify then 
+        exports['t-notify']:Alert({
+            style  =  'error',
+            message  =  message,
+            length = length
+        })
+    end
+    if Config.mythicNotify then
+        exports['mythic_notify']:SendAlert('error', message, length)
+    end
+    if Config.pNotify then
+        exports.pNotify:SetQueueMax(id, 1)
+        exports.pNotify:SendNotification({
+            text = message,
+            type = "error",
             timeout = 1000 * Config.Duration,
             layout = Config.Layout,
             theme = Config.Theme,
@@ -82,17 +109,23 @@ function notifyEnd(id)
     end
 end
 
-function storeVehicle(vehicle)
+function storeVehicle(vehicle, garageName)
     if not inProgress then -- Checks if its already storing a vehicle to prevent key spam.
         inProgress = true
         local vehicleProperties = getVehicleProperties(vehicle)
         local vehicleCondition = getVehicleCondition(vehicle)
         local vehicleMods = getVehicleModkits(vehicle)
-        TriggerServerEvent('NGWD:storeVehicle', vehicle, vehicleProperties, vehicleCondition, vehicleMods)
-        deleteVehicle(vehicle) -- May trigger server side
-        notifySuccess(1000 * Config.successLength) -- May trigger server side
-        Wait(1000) -- May trigger server side
-        inProgress = false
+        if garageName ~= nil then
+            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, vehicleProperties, vehicleCondition, vehicleMods)
+            message = '✔️ Vehicle Stored Successfully at ' .. garageName .. ' Garage'
+            notifySuccess(1000 * Config.successLength, message) -- May trigger server side
+            Wait(1000) -- May trigger server side
+            inProgress = false
+        elseif garageName ~= nil then
+            message = '❌ The Vehicle Wasnt Stored'
+            notifyError(1000 * Config.errorLength, message)
+            inProgress = false
+        end
     end
 end
 
@@ -146,7 +179,7 @@ end
 
 function deleteVehicle(vehicle)
     SetEntityAsMissionEntity(vehicle, true, true)
-    TaskLeaveVehicle(PlayerPedId(), vehicle, 0)
+    TaskLeaveVehicle(ped, vehicle, 0)
     Wait(1500)
     DeleteVehicle(vehicle)
 end

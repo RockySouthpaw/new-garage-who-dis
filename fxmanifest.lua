@@ -1,10 +1,12 @@
 fx_version 'cerulean'
 
 game 'gta5'
+lua54 'yes'
 
 description 'New-Garage-Who-Dis'
 
 server_scripts {
+	'@mysql-async/lib/MySQL.lua',
 	'config/sv_config.lua',
 	'server/sv_main.lua'
 }
