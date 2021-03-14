@@ -133,6 +133,7 @@ function getVehicleProperties(vehicle)
     local vehicleProperties = 
     {
         {plate = GetVehicleNumberPlateText(vehicle)},
+        {modelName = GetDisplayNameFromVehicleModel(GetEntityModel(Vehicle))},
         {class = GetVehicleClass(vehicle)},
         {lightsState = GetVehicleLightsState(vehicle)},
         {colorPrimary, ColorSecondary = GetVehicleColours(vehicle)}, -- Use with SetVehicleColours
