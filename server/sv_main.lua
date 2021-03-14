@@ -1,15 +1,14 @@
 RegisterNetEvent('NGWD:storeVehicle')
-AddEventHandler('NGWD:storeVehicle', function(vehicle, vehicleProperties, vehicleCondition, vehicleMods)
+AddEventHandler('NGWD:storeVehicle', function(vehicle, garageName, vehicleProperties, vehicleCondition, vehicleMods)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, 'license:') then
-            identifier = v
+            identifier = string.sub(v, 9)
             break
         end
     end
-    print(identifier)
+        -- Check if they're the vehicle owner and if the plate exist in the database
 
-        -- Check if they're the vehicle owner first by comparing their identifier to the results of the owner table
 --[[
         if results ~= identifier and result ~= null then 
            -- check config for if non owners can store vehicles.
@@ -34,7 +33,7 @@ AddEventHandler('NGWD:previewVehicle', function(plate)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, 'license:') then
-            identifier = v
+            identifier = string.sub(v, 9)
             break
         end
     end
@@ -54,7 +53,7 @@ AddEventHandler('NGWD:fetchVehicle', function(plate)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, 'license:') then
-            identifier = v
+            identifier = string.sub(v, 9)
             break
         end
     end
@@ -70,7 +69,7 @@ AddEventHandler('NGWD:fetchVehicle', function(plate)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, 'license:') then
-            identifier = v
+            identifier = string.sub(v, 9)
             break
         end
     end
