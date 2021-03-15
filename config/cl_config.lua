@@ -12,7 +12,7 @@ Config.backgroundColor = '#292929'
 -- Config Variables (pNotify)
 Config.pNotify = false
 Config.Layout = "centerRight" -- top, topLeft, topCenter, topRight, center, cenerLeft, centerRight, bottom, bottomLeft, bottomCenter, bottomRight
-Config.Duration = 5 -- Duration of prompt and success length.
+Config.Duration = 5 -- Duration of prompt and alert lengths.
 Config.Theme = "gta" -- gta, mint, relax, metroui
 -- Config Variables (Barier)
 Config.deleteBariers = true
