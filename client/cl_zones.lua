@@ -2,13 +2,12 @@
 local activeNotification = false -- Becomes true when the player is in a zone.
 local notificationID = "garageNotify" -- The unique ID for garage notifications.
 local garageName = nil
-local ped <const> = PlayerPedId()
 -- Command/Keymap
 RegisterCommand("Store", function()
-    local vehicle = GetVehiclePedIsIn(ped, false)
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local driver  = GetPedInVehicleSeat(vehicle, -1) -- -1 is the Driver.
-    if activeNotification and IsPedInVehicle(ped,vehicle, true) and driver == ped then 
-		local playerCoords = GetEntityCoords(ped)
+    if activeNotification and IsPedInVehicle(PlayerPedId(),vehicle, true) and driver == PlayerPedId() then 
+		local playerCoords = GetEntityCoords(PlayerPedId())
 
         for k, v in pairs(Config.blipLocations) do
             local blipZone = vector3(v.x, v.y, v.z)
@@ -133,8 +132,8 @@ local Legion_1H = PolyZone:Create({
 local combo = ComboZone:Create({Legion_1A, Legion_1B, Legion_1C, Legion_1D, Legion_1E, Legion_1F, Legion_1G, Legion_1H}, {name="Legion", debugPoly=false})
 combo:onPlayerInOut(function(isPointInside, point, zone)
     if isPointInside then
-        local vehicle = GetVehiclePedIsIn(ped, false)
-        if IsPedInVehicle(ped, vehicle, true) and not activeNotification then
+        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
             local garageName = "Legion"
             notifyPrompt(garageName, notificationID)
             activeNotification = true
@@ -183,8 +182,8 @@ local PinkCage_2C = PolyZone:Create({
 local combo = ComboZone:Create({PinkCage_2A, PinkCage_2B, PinkCage_2C}, {name="Pink Cage", debugPoly=false})
 combo:onPlayerInOut(function(isPointInside, point, zone)
     if isPointInside then
-        local vehicle = GetVehiclePedIsIn(ped, false)
-        if IsPedInVehicle(ped, vehicle, true) and not activeNotification then
+        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
             local garageName = "Pink Cage"
             notifyPrompt(garageName, notificationID)
             activeNotification = true
