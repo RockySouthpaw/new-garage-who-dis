@@ -63,14 +63,17 @@ function storeVehicle(vehicle, garageName)
         local vehicleProperties = getVehicleProperties(vehicle)
         local vehicleCondition = getVehicleCondition(vehicle)
         local vehicleMods = getVehicleModkits(vehicle)
+        local plate = GetVehicleNumberPlateText(vehicle)
+        local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
+        print(modelName)
         if garageName ~= nil then
-            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, vehicleProperties, vehicleCondition, vehicleMods)
-            Wait(5000)
+            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelName, vehicleProperties, vehicleCondition, vehicleMods)
+            --Wait(5000)
             inProgress = false
         elseif garageName ~= nil then
             message = 'Invalid Garage!'
             TriggerEvent('NGWD:notifyError', message)
-            Wait(5000)
+            --Wait(5000)
             inProgress = false
         end
     end
@@ -79,8 +82,6 @@ end
 function getVehicleProperties(vehicle)
     local vehicleProperties = 
     {
-        {plate = GetVehicleNumberPlateText(vehicle)},
-        {modelName = GetDisplayNameFromVehicleModel(GetEntityModel(Vehicle))},
         {class = GetVehicleClass(vehicle)},
         {lightsState = GetVehicleLightsState(vehicle)},
         {colorPrimary, ColorSecondary = GetVehicleColours(vehicle)}, -- Use with SetVehicleColours
