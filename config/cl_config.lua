@@ -1,7 +1,10 @@
 Config = {}
 -- Config Interactions (Keys)
-Config.interactionKey = 'E' -- https://docs.fivem.net/docs/game-references/controls/
+Config.storageKey = 'E' -- https://docs.fivem.net/docs/game-references/controls/
+Config.retrieveKey = 'E'
+-- Config Notifications
 Config.successLength = 2 -- Length of success Notification
+Config.errorLength = 2 -- Length of error Notification
 -- Config Variables (T-Notify)
 Config.tNotify = true
 Config.tLocation = 'top-right' -- (top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
@@ -11,14 +14,14 @@ Config.backgroundColor = '#292929'
 -- Config Variables (pNotify)
 Config.pNotify = false
 Config.Layout = "centerRight" -- top, topLeft, topCenter, topRight, center, cenerLeft, centerRight, bottom, bottomLeft, bottomCenter, bottomRight
-Config.Duration = 5 -- Duration of prompt and success length.
+Config.Duration = 5 -- Duration of prompt and alert lengths.
 Config.Theme = "gta" -- gta, mint, relax, metroui
 -- Config Variables (Barier)
 Config.deleteBariers = true
 --Config Variables (Blips)
 Config.enableBlips = true
-Config.enableBlipNames = false -- Set to false if you need to consolidate blips.
-Config.enableRangedBlip = true -- Only show blip if you're in range.
+Config.enableBlipNames = true -- Set to false if you need to consolidate blips.
+Config.enableRangedBlip = false -- Only show blip if you're in range.
 
 Config.blipRange = 100 -- How far until the blip shows.
 Config.blipColor = 1 -- https://docs.fivem.net/natives/?_0x03D7FB09E75D6B7E
@@ -37,7 +40,7 @@ Config.blipLocations = { -- The index number corresponds to the garage number.
 [6] = {name = "Alta Street", x = -280.97952270508, y = -887.98712158203, z = 31.318016052246},
 [7] = {name = "Mission Row", x = 453.3307800293, y = -1146.189453125, z = 29.514123916626},
 [8] = {name = "East Vinewood", x = 984.27691650391, y = -206.19375610352, z = 71.067764282227},
-[9] = {name = "Underground Garage", x = 172.97850036621, y = -719.61022949219, z = 33.132614135742},
+[9] = {name = "Underground Garage", x = 126.0163192749, y = -714.44866943359, z = 33.132358551025}, 
 [10] = {name = "Davis", x = -54.269744873047, y = -1835.7490234375, z = 26.57292175293},
 [11] = {name = "Banning", x = -36.026584625244, y = -2096.2746582031, z = 16.937074661255},
 [12] = {name = "Davis", x = -73.317260742188, y = -2004.0352783203, z = 18.275274276733},
