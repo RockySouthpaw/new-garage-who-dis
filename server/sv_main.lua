@@ -1,4 +1,4 @@
-RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelName, amount)
+RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelName)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.Identifier) then
@@ -7,15 +7,29 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelName, amount)
         end
     end
     if identifier then
-        -- Insert the vehicle owner, plate and model into the SQL. No need to store any other information since the player will store it after they buy it.
-        MySQL.Async.execute('INSERT INTO `ngwd_vehicles` (`owner`, `model`, `plate`) VALUES (@owner, @model, @plate,)',
-        {
-            ['@owner']  = identifier, -- Change to vehicle Owner.
-            ['model']   = modelName,
-            ['@plate']  = plate;
-        })
-        TriggerClientEvent('NGWD:notifySuccess', source, "" .. modelName .. "Was purchased successfully.")
-        -- Trigger removal of money here
+        MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, model, plate) = (@owner, @model, @plate)', {
+            ['@owner']  = identifier,
+            ['@model']  = modelName,
+            ['@plate']  = plate,
+        }, function(results)
+            if results[1] == nil then
+                MySQL.Async.execute('INSERT INTO `ngwd_vehicles` (`owner`, `model`, `plate`) VALUES (@owner, @model, @plate)',
+                {
+                    ['@owner']  = identifier, 
+                    ['model']   = modelName,
+                    ['@plate']  = plate;
+                })
+                print("^2  Success: Inserted vehicle owned by: ".. identifier .. " with the plate " .. plate .. ".")
+                if Config.purchaseNotification then
+                    TriggerClientEvent('NGWD:notifySuccess', source, "" .. modelName .. " Was purchased successfully.")
+                end
+            else
+                print("^1 Error: Duplicate Entry for " .. modelName .. ". User: ".. identifier .. "")
+                if Config.purchaseNotification then
+                        TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be purchased.")
+                end
+            end
+        end)
     else
         TriggerClientEvent('NGWD:notifyError', source, "Vehicle Wasn't Purchased")
         print("^1 Error Purchasing Vehicle, Identifier Not Found.")
@@ -31,78 +45,45 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
         end
     end
     if identifier then
-        MySQL.Async.fetchScalar('SELECT 1 FROM ngwd_vehicles WHERE (owner, plate, model) = (@owner, @plate, @model)', {
-            ['@owner']  = identifier,
+        MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (model, plate) = (@model, @plate)', {
             ['@model']  = modelName,
             ['@plate']  = plate,
         }, function(results)
-            if not results then -- Needs to be "If owner == identifier then
-                    MySQL.Async.execute('INSERT INTO `ngwd_vehicles` (`owner`, `plate`, `garage`, `model`) VALUES (@owner, @plate, @garage, @model)',
-                    {
-                        ['@owner']  = identifier, -- Change to vehicle Owner.
-                        ['model']   = modelName,
-                        ['@plate']  = plate;
-                        ['@garage'] = garageName
-                    })
+            --print(results[1].owner)
+            if results[1] ~= nil then
+                if results[1].owner == identifier then
+                    MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', -- Need to set properties too
+                    { ['@owner'] = identifier, ['@model'] = modelName, ['@plate'] = plate, ['@garage'] = garageName },
+                    function(affectedRows)end)             
                     TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
+                    print("^2 Success: Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. "")
                     Wait(1000)
                     TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. "")
---[[        else -- If they're not the owner and the vehicle is purchased,
-                if not Config.ownerRestricted then
-                    -- Update garage, vehicleProperties, vehicleCondition, and vehicleMods
-                    TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
-                    Wait(1000)
-                    TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. "")
-                else
-                    TriggerClientEvent('NGWD:notifyError', source, "Ownership Required")
+                elseif results[1].owner ~= identifier then
+                    if not Config.ownerRestricted then
+                        MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', -- Need to set properties too
+                        { ['@owner'] = identifier, ['@model'] = modelName, ['@plate'] = plate, ['@garage'] = garageName },
+                        function(affectedRows)end)                       
+                        TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
+                        Wait(1000)
+                        TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. "")
+                        print("^3 Succes: Vehicle owned by: ^2".. results[1].owner .. "^3 with the plate ^2" .. plate .. "^3 has been stored at ^2" .. garageName .. "")
+                    else
+                        TriggerClientEvent('NGWD:notifyError', source, "Ownership Required")
+                        print("^6 Info: Prevented User ^5" .. identifier .. "^1 from storing ^2" .. results[1].owner .. "'s ^1 vehicle")
+                    end
                 end
-            else -- If they're not the owner and the vehicle is NOT purchased.
-                -- Trigger webhook incase it was cheated in
+            else
+                print("^1  Error: Couldn't find the model " .. modelName .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
                 TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be Stored")
-]]
             end
         end)
     else
-        print("^1 Error Storing Vehicle, Identifier Not Found.")
+        print("^1 Error: Error Storing Vehicle, Identifier Not Found.")
     end
-end)
-
-RegisterNetEvent('NGWD:previewVehicle', function(plate)
-    -- Trigger this from a menu and take the selected vehicles plate and pass to server side.
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.Identifier) then
-            identifier = string.sub(v, 9)
-            break
-        end
-    end
-
-    -- Do a querry for where we stored vehicleProperties, vehicleCondition, vehicleMods
-
-    -- Trigger a vehicle preview event and pass the args
-
-    -- Create the vehicle on the client so its not seen server side and make the player invisble.
-
-    -- When they select the vehicle, delete it on the client and trigger the below event
-end)
-
-RegisterNetEvent('NGWD:fetchVehicle', function(plate)
-    -- This gets the selected vehicle from the SQL
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.Identifier) then
-            identifier = string.sub(v, 9)
-            break
-        end
-    end
-
-    -- Do a querry for where we stored vehicleProperties, vehicleCondition, vehicleMods
-
-    -- Trigger a client event that creates a vehicle as a network entity so its synced server side. (or use one sync?)
 end)
 
 RegisterNetEvent('NGWD:deleteVehicle', function(plate)
-    -- This will be used to delete the selected vehicle from the database. Can be done if they sold it.
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.Identifier) then
@@ -110,17 +91,25 @@ RegisterNetEvent('NGWD:deleteVehicle', function(plate)
             break
         end
     end
-        -- Check if they're the vehicle owner first by comparing their identifier to the results of the owner table
---[[
-        if results ~= identifier and result ~= null then 
-           -- trigger an alert saying they dont own this vehicle
-        elseif results == identifier and plate == plate then
-            -- do a querry to Delete the vehicle information from the garage. 
-            -- Trigger a money event here. (Configed)
-        elseif results ~= identifier and result == null then 
-           -- trigger a webhook with model, plate, and identifier saying they tried to sell a vehicle that isn't in DB. Could be a local car or someone trying to exploit.
+    MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, model, plate) = (@owner, @model, @plate)', {
+        ['@owner']  = identifier,
+        ['@model']  = modelName,
+        ['@plate']  = plate,
+    }, function(results)
+        if results then
+            MySQL.Async.execute('DELETE FROM ngwd_vehicles WHERE `owner` = @identifier AND plate = @plate',
+            {
+                ['@identifier'] = identifier,
+                ['@plate']     = plate
+            }, function(rowsChanged) 
+                if rowsChanged ~= 0 then                 
+                    print("^5  Success: Deleted " .. rowsChanged.. " vehicles owned by: ".. identifier .. " with the plate " .. plate .. ".")
+                else
+                    print("^1  Error: No vehicle was deleted.")
+                end
+            end)
         end
-]]
+    end)
 end)
 
 
@@ -130,7 +119,7 @@ RegisterNetEvent('NGWD:giveVehicle', function()
 end)
 
 RegisterNetEvent('NGWD:impoundVehicle', function()
-    -- This will be used to send the vehicle to the Impound Garage. Will 
+    -- This will be used to send the vehicle to the Impound Garage.
 end)
 
 RegisterNetEvent('NGWD:releaseVehicle', function()

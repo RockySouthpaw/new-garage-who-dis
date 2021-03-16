@@ -56,10 +56,41 @@ end)
 
 RegisterNetEvent('NGWD:leaveVehicle')
 AddEventHandler('NGWD:leaveVehicle', function(vehicle)
-    local vehicleId = NetworkGetNetworkIdFromEntity(vehicle)
     for i = -1, 7 do
         ped = GetPedInVehicleSeat(vehicle, i)
         TaskLeaveVehicle(ped, vehicle, 0)
+        TaskEveryoneLeaveVehicle(vehicle) -- Doesn't work
+        notifyEnd("garageNotify")
     end
     Wait(1500)
+    --deleteVehicle(vehicle)
 end)
+
+RegisterNetEvent('NGWD:previewVehicle')
+AddEventHandler('NGWD:previewVehicle', function(garageName)
+    -- Triggered by the menu to spawn vehicle
+    print(garageName)
+end)
+
+AddEventHandler('onResourceStop', function(resource)
+    if resource == GetCurrentResourceName() then
+        notifyEnd("garageNotify")
+    end
+end)
+
+-- only exist for testing. Will be removed
+RegisterCommand('buy', function(source, args, rawCommand)
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    local plate = GetVehicleNumberPlateText(vehicle)
+    local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
+
+    TriggerServerEvent('NGWD:purchaseVehicle', plate, modelName)
+end, false)
+
+RegisterCommand('sell', function(source, args, rawCommand)
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    local plate = GetVehicleNumberPlateText(vehicle)
+    local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
+
+    TriggerServerEvent('NGWD:deleteVehicle', plate, modelName)
+end, false)
