@@ -15,7 +15,7 @@ client_scripts {
 	'config/cl_config.lua',
 	'@PolyZone/client.lua',
 	'@PolyZone/ComboZone.lua',
-	'client/*.lua',
+	'client/**/*.lua',
 }
 
 dependencies { 'PolyZone' } -- https://github.com/mkafrin/PolyZone

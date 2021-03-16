@@ -3,7 +3,7 @@ local activeNotification = false
 local Delay = 500
 
 -- Function (Notification)
-function notifyPrompt(garage, id)
+function notifyStorePrompt(garage, id)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local driver  = GetPedInVehicleSeat(vehicle, -1)
     if not activeNotification and driver == PlayerPedId() then
@@ -15,20 +15,56 @@ function notifyPrompt(garage, id)
                     style = 'message',
                     title = garage.. ' Parking',
                     sound = true,
-                    message = "Press **["..Config.interactionKey.."]** To Park Vehicle",
+                    message = "Press **["..Config.storageKey.."]** To Park Vehicle",
                     position = Config.tLocation
                     
                 }
             })
         end
         if Config.mythicNotify then
-            text = "Press ["..Config.interactionKey.."] To Park Vehicle"
+            text = "Press ["..Config.storageKey.."] To Park Vehicle"
             exports['mythic_notify']:PersistentAlert('start',id,'inform', text, { ['background-color'] = Config.backgroundColor })
         end
         if Config.pNotify then
             exports.pNotify:SetQueueMax(id, 1)
             exports.pNotify:SendNotification({
-                text = "Press ["..Config.interactionKey.."] To Park Vehicle",
+                text = "Press ["..Config.storageKey.."] To Park Vehicle",
+                type = "info",
+                timeout = 1000 * Config.Duration,
+                layout = Config.Layout,
+                theme = Config.Theme,
+                queue = "id"
+            })
+        end
+        activeNotification = true
+        Wait(Delay)
+    end
+end
+
+function notifyRetrievePrompt(garage, id)
+    if not activeNotification then
+        if Config.tNotify then 
+            exports['t-notify']:Persist({
+                id = id,
+                step = 'start',
+                options = {
+                    style = 'message',
+                    title = garage.. ' Parking',
+                    sound = true,
+                    message = "Press **["..Config.retrieveKey.."]** To Retrieve Vehicle",
+                    position = Config.tLocation
+                    
+                }
+            })
+        end
+        if Config.mythicNotify then
+            text = "Press ["..Config.retrieveKey.."] To Retrieve Vehicle"
+            exports['mythic_notify']:PersistentAlert('start',id,'inform', text, { ['background-color'] = Config.backgroundColor })
+        end
+        if Config.pNotify then
+            exports.pNotify:SetQueueMax(id, 1)
+            exports.pNotify:SendNotification({
+                text = "Press ["..Config.retrieveKey.."] To Retrieve Vehicle",
                 type = "info",
                 timeout = 1000 * Config.Duration,
                 layout = Config.Layout,
@@ -57,28 +93,7 @@ function notifyEnd(id)
     end
 end
 
-function storeVehicle(vehicle, garageName)
-    if not inProgress then -- Checks if its already storing a vehicle to prevent key spam.
-        inProgress = true
-        local vehicleProperties = getVehicleProperties(vehicle)
-        local vehicleCondition = getVehicleCondition(vehicle)
-        local vehicleMods = getVehicleModkits(vehicle)
-        local plate = GetVehicleNumberPlateText(vehicle)
-        local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
-        print(modelName)
-        if garageName ~= nil then
-            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelName, vehicleProperties, vehicleCondition, vehicleMods)
-            --Wait(5000)
-            inProgress = false
-        elseif garageName ~= nil then
-            message = 'Invalid Garage!'
-            TriggerEvent('NGWD:notifyError', message)
-            --Wait(5000)
-            inProgress = false
-        end
-    end
-end
-
+-- Functions (Exports)
 function getVehicleProperties(vehicle)
     local vehicleProperties = 
     {
@@ -124,6 +139,30 @@ function getVehicleCondition(vehicle)
         {tire4 = GetVehicleWheelHealth(vehicle, 3)}
     }
     return vehicleCondition
+end
+
+-- Functions (Core)
+function storeVehicle(vehicle, garageName)
+    if not inProgress then -- Checks if its already storing a vehicle to prevent key spam.
+        inProgress = true
+        local vehicleProperties = getVehicleProperties(vehicle)
+        local vehicleCondition = getVehicleCondition(vehicle)
+        local vehicleMods = getVehicleModkits(vehicle)
+        local plate = GetVehicleNumberPlateText(vehicle)
+        local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
+        print(modelName)
+        print(garageName)
+        if garageName ~= nil then
+            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelName, vehicleProperties, vehicleCondition, vehicleMods)
+            --Wait(5000)
+            inProgress = false
+        elseif garageName ~= nil then
+            message = 'Invalid Garage!'
+            TriggerEvent('NGWD:notifyError', message)
+            --Wait(5000)
+            inProgress = false
+        end
+    end
 end
 
 function deleteVehicle(vehicle)

@@ -2,10 +2,15 @@
 local activeNotification = false -- Becomes true when the player is in a zone.
 local notificationID = "garageNotify" -- The unique ID for garage notifications.
 local garageName = nil
--- Command/Keymap
+
+-- Keymappings
+RegisterKeyMapping("Store", "Store Player Vehicle", 'keyboard', Config.storageKey)
+RegisterKeyMapping("notiOff", "Clear Notification", 'keyboard', 'f')
+
+-- Commands
 RegisterCommand("Store", function()
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-    local driver  = GetPedInVehicleSeat(vehicle, -1) -- -1 is the Driver.
+    local driver  = GetPedInVehicleSeat(vehicle, -1)
     if activeNotification and IsPedInVehicle(PlayerPedId(),vehicle, true) and driver == PlayerPedId() then 
 		local playerCoords = GetEntityCoords(PlayerPedId())
 
@@ -26,7 +31,6 @@ RegisterCommand("Store", function()
         end
     end
 end)
-RegisterKeyMapping("Store", "Store Player Vehicle", 'keyboard', Config.interactionKey)
 
 RegisterCommand("notiOff", function()
     if activeNotification then
@@ -34,9 +38,8 @@ RegisterCommand("notiOff", function()
         activeNotification = false
     end
 end)
-RegisterKeyMapping("notiOff", "Clear Notification", 'keyboard', 'f')
--- PollyZones
 
+-- Store Zones
 local Legion_1A = PolyZone:Create({
     vector2(208.25799560547, -803.65850830078),
     vector2(201.4606628418, -801.01647949219),
@@ -129,13 +132,13 @@ local Legion_1H = PolyZone:Create({
     maxZ = 42.00
 })
   
-local combo = ComboZone:Create({Legion_1A, Legion_1B, Legion_1C, Legion_1D, Legion_1E, Legion_1F, Legion_1G, Legion_1H}, {name="Legion", debugPoly=false})
+local combo = ComboZone:Create({Legion_1A, Legion_1B, Legion_1C, Legion_1D, Legion_1E, Legion_1F, Legion_1G, Legion_1H}, {name="Legion", debugPoly=true})
 combo:onPlayerInOut(function(isPointInside, point, zone)
     if isPointInside then
         local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
         if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
             local garageName = "Legion"
-            notifyPrompt(garageName, notificationID)
+            notifyStorePrompt(garageName, notificationID)
             activeNotification = true
         end
     else
@@ -179,13 +182,13 @@ local PinkCage_2C = PolyZone:Create({
     maxZ = 51.00
 })
 
-local combo = ComboZone:Create({PinkCage_2A, PinkCage_2B, PinkCage_2C}, {name="Pink Cage", debugPoly=false})
+local combo = ComboZone:Create({PinkCage_2A, PinkCage_2B, PinkCage_2C}, {name="Pink Cage", debugPoly=true})
 combo:onPlayerInOut(function(isPointInside, point, zone)
     if isPointInside then
         local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
         if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
             local garageName = "Pink Cage"
-            notifyPrompt(garageName, notificationID)
+            notifyStorePrompt(garageName, notificationID)
             activeNotification = true
         end
     else

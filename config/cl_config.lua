@@ -1,6 +1,8 @@
 Config = {}
 -- Config Interactions (Keys)
-Config.interactionKey = 'E' -- https://docs.fivem.net/docs/game-references/controls/
+Config.storageKey = 'E' -- https://docs.fivem.net/docs/game-references/controls/
+Config.retrieveKey = 'E'
+-- Config Notifications
 Config.successLength = 2 -- Length of success Notification
 Config.errorLength = 2 -- Length of error Notification
 -- Config Variables (T-Notify)
@@ -18,8 +20,8 @@ Config.Theme = "gta" -- gta, mint, relax, metroui
 Config.deleteBariers = true
 --Config Variables (Blips)
 Config.enableBlips = true
-Config.enableBlipNames = false -- Set to false if you need to consolidate blips.
-Config.enableRangedBlip = true -- Only show blip if you're in range.
+Config.enableBlipNames = true -- Set to false if you need to consolidate blips.
+Config.enableRangedBlip = false -- Only show blip if you're in range.
 
 Config.blipRange = 100 -- How far until the blip shows.
 Config.blipColor = 1 -- https://docs.fivem.net/natives/?_0x03D7FB09E75D6B7E
