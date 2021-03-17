@@ -32,7 +32,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelName)
                         print("^1 [ERROR]: Duplicate Entry for " .. modelName .. ". User: ".. identifier .. "")
                     end
                     if Config.purchaseNotification then
-                            TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be purchased.")
+                        TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be purchased.")
                     end
                 end
             end)
@@ -58,53 +58,59 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
         end
     end
     if identifier then
-        MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (model, plate) = (@model, @plate)', {
-            ['@model']  = modelName,
-            ['@plate']  = plate,
-        }, function(results)
-            if results[1] ~= nil then
-                if results[1].owner == identifier then
-                    MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', { 
-                        ['@owner'] = identifier, 
-                        ['@model'] = modelName, 
-                        ['@plate'] = plate, 
-                        ['@garage'] = garageName 
-                    }, function(affectedRows)
-                    end)             
-                    TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
-                    if Config.Debug then
-                        print("^2 [SUCCESS]: Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. "")
-                    end
-                    Wait(1000)
-                    TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. "")
-                elseif results[1].owner ~= identifier then
-                    if not Config.ownerRestricted then
+        if plate ~= nil and modelName ~= nil then
+            MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (model, plate) = (@model, @plate)', {
+                ['@model']  = modelName,
+                ['@plate']  = plate,
+            }, function(results)
+                if results[1] ~= nil then
+                    if results[1].owner == identifier then
                         MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', { 
                             ['@owner'] = identifier, 
                             ['@model'] = modelName, 
                             ['@plate'] = plate, 
                             ['@garage'] = garageName 
-                        }, function(affectedRows)end)                       
+                        }, function(affectedRows)
+                        end)             
                         TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
+                        if Config.Debug then
+                            print("^2 [SUCCESS]: Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. "")
+                        end
                         Wait(1000)
                         TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. "")
-                        if Config.Debug then
-                            print("^3 [SUCCESS]: Vehicle owned by: ^2".. results[1].owner .. "^3 with the plate ^2" .. plate .. "^3 has been stored at ^2" .. garageName .. "")
-                        end
-                    else
-                        TriggerClientEvent('NGWD:notifyError', source, "Ownership Required")
-                        if Config.Debug then
-                            print("^6 [INFO]: Prevented User ^5" .. identifier .. "^1 from storing ^2" .. results[1].owner .. "'s ^1 vehicle")
+                    elseif results[1].owner ~= identifier then
+                        if not Config.ownerRestricted then
+                            MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', { 
+                                ['@owner'] = identifier, 
+                                ['@model'] = modelName, 
+                                ['@plate'] = plate, 
+                                ['@garage'] = garageName 
+                            }, function(affectedRows)end)                       
+                            TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
+                            Wait(1000)
+                            TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. "")
+                            if Config.Debug then
+                                print("^3 [SUCCESS]: Vehicle owned by: ^2".. results[1].owner .. "^3 with the plate ^2" .. plate .. "^3 has been stored at ^2" .. garageName .. "")
+                            end
+                        else
+                            TriggerClientEvent('NGWD:notifyError', source, "Ownership Required")
+                            if Config.Debug then
+                                print("^6 [INFO]: Prevented User ^5" .. identifier .. "^1 from storing ^2" .. results[1].owner .. "'s ^1 vehicle")
+                            end
                         end
                     end
+                else
+                    if Config.Debug then
+                        print("^1  [ERROR]: Couldn't find the model " .. modelName .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
+                    end
+                    TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be Stored")
                 end
-            else
-                if Config.Debug then
-                    print("^1  [ERROR]: Couldn't find the model " .. modelName .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
-                end
-                TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be Stored")
+            end)
+        else
+            if Config.Debug then
+                print("^1  [ERROR]: Unable to store vehicle, plate or model is nil")
             end
-        end)
+        end
     else
         if Config.Debug then
             print("^1 [ERROR]: Unable to store vehicle, identifier not found.")
@@ -120,29 +126,35 @@ RegisterNetEvent('NGWD:deleteVehicle', function(plate)
             break
         end
     end
-    MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, model, plate) = (@owner, @model, @plate)', {
-        ['@owner']  = identifier,
-        ['@model']  = modelName,
-        ['@plate']  = plate,
-    }, function(results)
-        if results then
-            MySQL.Async.execute('DELETE FROM ngwd_vehicles WHERE `owner` = @identifier AND plate = @plate',
-            {
-                ['@identifier'] = identifier,
-                ['@plate']     = plate
-            }, function(rowsChanged) 
-                if rowsChanged ~= 0 then
-                    if Config.Debug then
-                        print("^5  [SUCCESS]: Deleted " .. rowsChanged.. " vehicles owned by: ".. identifier .. " with the plate " .. plate .. ".")
-                    end                 
-                else
-                    if Config.Debug then
-                        print("^1  [ERROR]: No vehicle was deleted.")
-                    end   
-                end
-            end)
-        end
-    end)
+    if plate ~= nil then
+        MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, model, plate) = (@owner, @model, @plate)', {
+            ['@owner']  = identifier,
+            ['@model']  = modelName,
+            ['@plate']  = plate,
+        }, function(results)
+            if results then
+                MySQL.Async.execute('DELETE FROM ngwd_vehicles WHERE `owner` = @identifier AND plate = @plate',
+                {
+                    ['@identifier'] = identifier,
+                    ['@plate']     = plate
+                }, function(rowsChanged) 
+                    if rowsChanged ~= 0 then
+                        if Config.Debug then
+                            print("^5  [SUCCESS]: Deleted " .. rowsChanged.. " vehicles owned by: ".. identifier .. " with the plate " .. plate .. ".")
+                        end                 
+                    else
+                        if Config.Debug then
+                            print("^1  [ERROR]: No vehicle found with the plate: " .. plate .. "")
+                        end   
+                    end
+                end)
+            end
+        end)
+    else
+        if Config.Debug then
+            print("^1  [ERROR]: Unable to sell vehice, no plate was found.")
+        end  
+    end
 end)
 
 
