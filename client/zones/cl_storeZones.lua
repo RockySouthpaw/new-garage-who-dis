@@ -132,7 +132,7 @@ local Legion_1H = PolyZone:Create({
     maxZ = 42.00
 })
   
-local combo = ComboZone:Create({Legion_1A, Legion_1B, Legion_1C, Legion_1D, Legion_1E, Legion_1F, Legion_1G, Legion_1H}, {name="Legion", debugPoly=true})
+local combo = ComboZone:Create({Legion_1A, Legion_1B, Legion_1C, Legion_1D, Legion_1E, Legion_1F, Legion_1G, Legion_1H}, {name="Legion", debugPoly=false})
 combo:onPlayerInOut(function(isPointInside, point, zone)
     if isPointInside then
         local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -182,7 +182,7 @@ local PinkCage_2C = PolyZone:Create({
     maxZ = 51.00
 })
 
-local combo = ComboZone:Create({PinkCage_2A, PinkCage_2B, PinkCage_2C}, {name="Pink Cage", debugPoly=true})
+local combo = ComboZone:Create({PinkCage_2A, PinkCage_2B, PinkCage_2C}, {name="Pink Cage", debugPoly=false})
 combo:onPlayerInOut(function(isPointInside, point, zone)
     if isPointInside then
         local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
