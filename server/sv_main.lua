@@ -7,33 +7,40 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelName)
         end
     end
     if identifier then
-        MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, model, plate) = (@owner, @model, @plate)', {
-            ['@owner']  = identifier,
-            ['@model']  = modelName,
-            ['@plate']  = plate,
-        }, function(results)
-            if results[1] == nil then
-                MySQL.Async.execute('INSERT INTO `ngwd_vehicles` (`owner`, `model`, `plate`) VALUES (@owner, @model, @plate)',
-                {
-                    ['@owner']  = identifier, 
-                    ['model']   = modelName,
-                    ['@plate']  = plate;
-                })
-                if Config.Debug then
-                    print("^2  [SUCCESS]: Inserted vehicle owned by: ".. identifier .. " with the plate " .. plate .. ".")
+        if plate ~= nil and modelName ~= nil then
+            -- can also add a distance check for the dealership cords and trigger a kick event..
+            MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, model, plate) = (@owner, @model, @plate)', {
+                ['@owner']  = identifier,
+                ['@model']  = modelName,
+                ['@plate']  = plate,
+            }, function(results)
+                if results[1] == nil then
+                    MySQL.Async.execute('INSERT INTO `ngwd_vehicles` (`owner`, `model`, `plate`) VALUES (@owner, @model, @plate)',
+                    {
+                        ['@owner']  = identifier, 
+                        ['model']   = modelName,
+                        ['@plate']  = plate;
+                    })
+                    if Config.Debug then
+                        print("^2  [SUCCESS]: Inserted vehicle owned by: ".. identifier .. " with the plate " .. plate .. ".")
+                    end
+                    if Config.purchaseNotification then
+                        TriggerClientEvent('NGWD:notifySuccess', source, "" .. modelName .. " Was purchased successfully.")
+                    end
+                else
+                    if Config.Debug then
+                        print("^1 [ERROR]: Duplicate Entry for " .. modelName .. ". User: ".. identifier .. "")
+                    end
+                    if Config.purchaseNotification then
+                            TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be purchased.")
+                    end
                 end
-                if Config.purchaseNotification then
-                    TriggerClientEvent('NGWD:notifySuccess', source, "" .. modelName .. " Was purchased successfully.")
-                end
-            else
-                if Config.Debug then
-                    print("^1 [ERROR]: Duplicate Entry for " .. modelName .. ". User: ".. identifier .. "")
-                end
-                if Config.purchaseNotification then
-                        TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be purchased.")
-                end
+            end)
+        else
+            if Config.Debug then
+                print("^1 [ERROR] Purchasing Vehicle: Model and plate not found.")
             end
-        end)
+        end
     else
         TriggerClientEvent('NGWD:notifyError', source, "Vehicle Wasn't Purchased")
         if Config.Debug then
