@@ -95,25 +95,29 @@ end
 
 -- Functions (Exports)
 function getVehicleProperties(vehicle)
-    local vehicleProperties = 
-    {
-        {class = GetVehicleClass(vehicle)},
-        {lightsState = GetVehicleLightsState(vehicle)},
-        {colorPrimary, ColorSecondary = GetVehicleColours(vehicle)}, -- Use with SetVehicleColours
-        {tyreSmoke = GetVehicleTyreSmokeColor(vehicle)},
-        {headlightColor = GetVehicleHeadlightsColour(vehicle)},
-        {interiorColor = GetVehicleInteriorColour(vehicle)},
-        {dashboardColor = GetVehicleDashboardColour(vehicle)},
-        {pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)},
-        {livery = GetVehicleLivery(vehicle)},
-        {liveryRoof = GetVehicleRoofLivery(vehicle)},
-        {vehicleMods = GetNumVehicleMods(vehicle, 48)},
-        {wheelSize = GetVehicleWheelSize(vehicle)},
-        {wheelWidth = GetVehicleWheelWidth(vehicle)},
-        {wheelType = GetVehicleWheelType(vehicle)},
-        {windowTint = GetVehicleWindowTint(vehicle)}
-    }
-    return vehicleProperties
+    if DoesEntityExist(vehicle) then
+        local vehicleProperties = 
+        {
+            {class = GetVehicleClass(vehicle)},
+            {lightsState = GetVehicleLightsState(vehicle)},
+            {colorPrimary, ColorSecondary = GetVehicleColours(vehicle)}, -- Use with SetVehicleColours
+            {tyreSmoke = GetVehicleTyreSmokeColor(vehicle)},
+            {headlightColor = GetVehicleHeadlightsColour(vehicle)},
+            {interiorColor = GetVehicleInteriorColour(vehicle)},
+            {dashboardColor = GetVehicleDashboardColour(vehicle)},
+            {pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)},
+            {livery = GetVehicleLivery(vehicle)},
+            {liveryRoof = GetVehicleRoofLivery(vehicle)},
+            {vehicleMods = GetNumVehicleMods(vehicle, 48)},
+            {wheelSize = GetVehicleWheelSize(vehicle)},
+            {wheelWidth = GetVehicleWheelWidth(vehicle)},
+            {wheelType = GetVehicleWheelType(vehicle)},
+            {windowTint = GetVehicleWindowTint(vehicle)}
+        }
+        return vehicleProperties
+    else
+        return
+    end
 end
 
 function getVehicleModkits(vehicle) -- Needs testing
@@ -125,20 +129,24 @@ function getVehicleModkits(vehicle) -- Needs testing
 end
 
 function getVehicleCondition(vehicle)
-    local vehicleCondition = 
-    {
-        {engineHealth = GetVehicleEngineHealth(vehicle)},
-        {bodyHealth = GetVehicleBodyHealth(vehicle)},
-        {tankHealth = GetVehiclePetrolTankHealth(vehicle)},
-        {fuelLevel = GetVehicleFuelLevel(vehicle)},
-        {oilLevel = GetVehicleOilLevel(vehicle)},
-        {dirt = GetVehicleDirtLevel(vehicle)},
-        {tire1 = GetVehicleWheelHealth(vehicle, 0)},
-        {tire2 = GetVehicleWheelHealth(vehicle, 1)},
-        {tire3 = GetVehicleWheelHealth(vehicle, 2)},
-        {tire4 = GetVehicleWheelHealth(vehicle, 3)}
-    }
-    return vehicleCondition
+    if DoesEntityExist(vehicle) then
+        local vehicleCondition = 
+        {
+            {engineHealth = GetVehicleEngineHealth(vehicle)},
+            {bodyHealth = GetVehicleBodyHealth(vehicle)},
+            {tankHealth = GetVehiclePetrolTankHealth(vehicle)},
+            {fuelLevel = GetVehicleFuelLevel(vehicle)},
+            {oilLevel = GetVehicleOilLevel(vehicle)},
+            {dirt = GetVehicleDirtLevel(vehicle)},
+            {tire1 = GetVehicleWheelHealth(vehicle, 0)},
+            {tire2 = GetVehicleWheelHealth(vehicle, 1)},
+            {tire3 = GetVehicleWheelHealth(vehicle, 2)},
+            {tire4 = GetVehicleWheelHealth(vehicle, 3)}
+        }
+        return vehicleCondition
+    else
+        return
+    end
 end
 
 -- Functions (Core)
@@ -154,12 +162,12 @@ function storeVehicle(vehicle, garageName)
         print(garageName)
         if garageName ~= nil then
             TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelName, vehicleProperties, vehicleCondition, vehicleMods)
-            --Wait(5000)
+            Wait(500)
             inProgress = false
         elseif garageName ~= nil then
             message = 'Invalid Garage!'
             TriggerEvent('NGWD:notifyError', message)
-            --Wait(5000)
+            Wait(500)
             inProgress = false
         end
     end

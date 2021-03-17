@@ -55,12 +55,15 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
             ['@model']  = modelName,
             ['@plate']  = plate,
         }, function(results)
-            --print(results[1].owner)
             if results[1] ~= nil then
                 if results[1].owner == identifier then
-                    MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', -- Need to set properties too
-                    { ['@owner'] = identifier, ['@model'] = modelName, ['@plate'] = plate, ['@garage'] = garageName },
-                    function(affectedRows)end)             
+                    MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', { 
+                        ['@owner'] = identifier, 
+                        ['@model'] = modelName, 
+                        ['@plate'] = plate, 
+                        ['@garage'] = garageName 
+                    }, function(affectedRows)
+                    end)             
                     TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
                     if Config.Debug then
                         print("^2 [SUCCESS]: Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. "")
@@ -69,9 +72,12 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                     TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. "")
                 elseif results[1].owner ~= identifier then
                     if not Config.ownerRestricted then
-                        MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', -- Need to set properties too
-                        { ['@owner'] = identifier, ['@model'] = modelName, ['@plate'] = plate, ['@garage'] = garageName },
-                        function(affectedRows)end)                       
+                        MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', { 
+                            ['@owner'] = identifier, 
+                            ['@model'] = modelName, 
+                            ['@plate'] = plate, 
+                            ['@garage'] = garageName 
+                        }, function(affectedRows)end)                       
                         TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
                         Wait(1000)
                         TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. "")
