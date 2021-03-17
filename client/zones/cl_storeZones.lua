@@ -22,7 +22,6 @@ RegisterCommand("Store", function()
                 if not storing then
                     storing = true
                     garageName = v.name
-                    print(v.name)
                     storeVehicle(vehicle, garageName)
                     Wait(1000) -- Waits before allowing this to be triggered again.
                     storing = false

@@ -158,8 +158,7 @@ function storeVehicle(vehicle, garageName)
         local vehicleMods = getVehicleModkits(vehicle)
         local plate = GetVehicleNumberPlateText(vehicle)
         local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
-        print(modelName)
-        print(garageName)
+        
         if garageName ~= nil then
             TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelName, vehicleProperties, vehicleCondition, vehicleMods)
             Wait(500)
