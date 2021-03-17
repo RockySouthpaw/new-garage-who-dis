@@ -54,6 +54,12 @@ AddEventHandler('NGWD:notifyError', function(message)
     end
 end)
 
+RegisterNetEvent('NGWD:teleportIntoVehicle')
+AddEventHandler('NGWD:teleportIntoVehicle', function(vehicle)
+    print(vehicle)
+    TaskWarpPedIntoVehicle(ped, vehicle, -1)
+end)
+
 RegisterNetEvent('NGWD:leaveVehicle')
 AddEventHandler('NGWD:leaveVehicle', function(vehicle)
     for i = -1, 7 do
@@ -91,5 +97,11 @@ RegisterCommand('sell', function(source, args, rawCommand)
     local plate = GetVehicleNumberPlateText(vehicle)
     local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
 
-    TriggerServerEvent('NGWD:deleteVehicle', plate, modelName)
+    TriggerServerEvent('NGWD:sellVehicle', plate, modelName)
+end, false)
+
+RegisterCommand('spawn', function(source, args, rawCommand)
+    local plate = "29NDG376"
+
+    TriggerServerEvent('NGWD:spawnVehicle', plate)
 end, false)

@@ -74,10 +74,10 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                         end)             
                         TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
                         if Config.Debug then
-                            print("^2 [SUCCESS]: Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. "")
+                            print("^2 [SUCCESS]: Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. " Garage")
                         end
                         Wait(1000)
-                        TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. "")
+                        TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
                     elseif results[1].owner ~= identifier then
                         if not Config.ownerRestricted then
                             MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', { 
@@ -88,9 +88,9 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                             }, function(affectedRows)end)                       
                             TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
                             Wait(1000)
-                            TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. "")
+                            TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
                             if Config.Debug then
-                                print("^3 [SUCCESS]: Vehicle owned by: ^2".. results[1].owner .. "^3 with the plate ^2" .. plate .. "^3 has been stored at ^2" .. garageName .. "")
+                                print("^3 [SUCCESS]: Vehicle owned by: ^2".. results[1].owner .. "^3 with the plate ^2" .. plate .. "^3 has been stored at ^2" .. garageName .. " Garage")
                             end
                         else
                             TriggerClientEvent('NGWD:notifyError', source, "Ownership Required")
@@ -118,7 +118,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
     end
 end)
 
-RegisterNetEvent('NGWD:deleteVehicle', function(plate)
+RegisterNetEvent('NGWD:sellVehicle', function(plate)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.Identifier) then
@@ -157,6 +157,34 @@ RegisterNetEvent('NGWD:deleteVehicle', function(plate)
     end
 end)
 
+RegisterNetEvent('NGWD:spawnVehicle', function(plate)
+    local source = source
+    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
+        if string.match(v, Config.Identifier) then
+            identifier = string.sub(v, 9)
+            break
+        end
+    end
+    if plate ~= nil then
+        MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, plate) = (@owner, @plate)', {
+            ['@owner']  = identifier,
+            ['@plate']  = plate
+        }, function(results)
+            if results then 
+                --local vehicle = CreateVehicle(GetHashKey(results[1].model), 216.20930480957, -801.96600341797, 29.82642868042, 248.35, true, true)
+                --TriggerClientEvent('NGWD:teleportIntoVehicle', source, vehicle)
+            else
+                if Config.Debug then
+                    print("^1  [ERROR]: No vehicle found with the plate: " .. plate .. " owned by " .. identifier .. "")
+                end  
+            end
+        end)
+    else
+        if Config.Debug then
+            print("^1  [ERROR]: Unable to spawn vehice, no plate was found.")
+        end  
+    end
+end)
 
 RegisterNetEvent('NGWD:giveVehicle', function()
     -- This will be used to give ownership of the vehicle to another player.
