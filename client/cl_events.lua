@@ -1,7 +1,7 @@
 RegisterNetEvent('NGWD:notifySuccess')
 AddEventHandler('NGWD:notifySuccess', function(message)
     notifyEnd("garageNotify")
-    Wait(150) -- Ensurs all notifications are removed in time before creating new ones.
+    Wait(150) -- Ensures all notifications are removed in time before creating new ones.
     length = Config.successLength * 1000
     if Config.tNotify then 
         exports['t-notify']:Alert({
@@ -29,7 +29,7 @@ end)
 RegisterNetEvent('NGWD:notifyError')
 AddEventHandler('NGWD:notifyError', function(message)
     notifyEnd("garageNotify")
-    Wait(150) -- Ensurs all notifications are removed in time before creating new ones.
+    Wait(150) -- Ensures all notifications are removed in time before creating new ones.
     length = Config.successLength * 1000
     if Config.tNotify then 
         exports['t-notify']:Alert({
@@ -59,7 +59,6 @@ AddEventHandler('NGWD:leaveVehicle', function(vehicle)
     for i = -1, 7 do
         ped = GetPedInVehicleSeat(vehicle, i)
         TaskLeaveVehicle(ped, vehicle, 0)
-        TaskEveryoneLeaveVehicle(vehicle) -- Doesn't work
         notifyEnd("garageNotify")
     end
     Wait(1500)

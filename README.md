@@ -1,3 +1,8 @@
+# STILL WIP DO NOT USE
+# STILL WIP DO NOT USE
+# STILL WIP DO NOT USE
+# STILL WIP DO NOT USE
+
 # Current Dev Commands
 - `buy` Will insert the vehicle you're currently sitting in into the NGWD vehicles table. (Ensure it doesn't duplicate.)
 - `sell` Will delete the vehicle youre currently sitting in from the SQL.
