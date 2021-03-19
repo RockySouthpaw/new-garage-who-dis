@@ -54,10 +54,41 @@ AddEventHandler('NGWD:notifyError', function(message)
     end
 end)
 
-RegisterNetEvent('NGWD:teleportIntoVehicle')
-AddEventHandler('NGWD:teleportIntoVehicle', function(vehicle)
-    print(vehicle)
-    TaskWarpPedIntoVehicle(ped, vehicle, -1)
+RegisterNetEvent('NGWD:spawnVehicle')
+AddEventHandler('NGWD:spawnVehicle', function(modelName, plate)
+    local hashedModel = GetHashKey(modelName)
+
+    if IsModelInCdimage(hashedModel) then
+        RequestModel(hashedModel)
+        while not HasModelLoaded(hashedModel) do
+            Citizen.Wait(1)
+        end
+        local ped = PlayerPedId()
+        local playerCoords = GetEntityCoords(ped)
+        for _, v in pairs(Config.spawnLocations) do
+            local spawnZone = vector3(v.x, v.y, v.z)
+            local spawnDistance = #(playerCoords - spawnZone)
+
+            if spawnDistance <= Config.spawnRange then
+                local conflictVehicle = GetClosestVehicle(v.x, v.y, v.z,  2.0,  0,  71)
+                if DoesEntityExist(conflictVehicle) then
+                  deleteVehicle(conflictVehicle)
+                end
+                if not IsPedInAnyVehicle(ped, false) then
+                    local vehicle = CreateVehicle(hashedModel, v.x, v.y, v.z, heading, true, false)
+                    local fuel = 100.00
+                    vehicleUtils(vehicle)
+                    vehicleSetters(vehicle, fuel, plate)
+                    TaskWarpPedIntoVehicle(ped, vehicle, -1)
+                    TriggerEvent('NGWD:notifySuccess', "" .. modelName .. " has spawned successfully.")
+                else
+                    TriggerEvent('NGWD:notifyError', "Action unavailable while in a vehiclce.")
+                end
+            end
+        end
+    else
+        print("Error: Failed to spawn vehicle")
+    end
 end)
 
 RegisterNetEvent('NGWD:leaveVehicle')

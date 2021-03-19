@@ -170,9 +170,10 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate)
             ['@owner']  = identifier,
             ['@plate']  = plate
         }, function(results)
-            if results then 
-                --local vehicle = CreateVehicle(GetHashKey(results[1].model), 216.20930480957, -801.96600341797, 29.82642868042, 248.35, true, true)
-                --TriggerClientEvent('NGWD:teleportIntoVehicle', source, vehicle)
+            if results then
+                modelName = results[1].model
+                plate = results[1].plate
+                TriggerClientEvent('NGWD:spawnVehicle', source, modelName, plate)
             else
                 if Config.Debug then
                     print("^1  [ERROR]: No vehicle found with the plate: " .. plate .. " owned by " .. identifier .. "")

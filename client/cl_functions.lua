@@ -174,7 +174,23 @@ end
 
 function deleteVehicle(vehicle)
     SetEntityAsMissionEntity(vehicle, true, true)
-    TaskLeaveVehicle(PlayerPedId(), vehicle, 0)
-    Wait(1500)
     DeleteVehicle(vehicle)
+end
+
+function vehicleUtils(vehicle)
+    if DoesEntityExist(vehicle) then
+        local netId = NetworkGetNetworkIdFromEntity(vehicle)
+        SetNetworkIdCanMigrate(netId, true) -- idk if this even needs to be a thing.
+        SetVehicleHasBeenOwnedByPlayer(vehicle, true)
+        SetVehicleNeedsToBeHotwired(vehicle, false)
+        SetVehicleAlarm(vehicle, false)
+        SetVehRadioStation(vehicle, "OFF")
+    end
+end
+
+function vehicleSetters(vehicle, fuel, plate)
+    if DoesEntityExist(vehicle) then
+        SetVehicleFuelLevel(vehicle, fuel)
+        SetVehicleNumberPlateText(vehicle, plate)
+    end
 end

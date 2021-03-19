@@ -21,6 +21,7 @@ RegisterCommand("Retrieve", function()
                     garageName = v.name
                     --print(v.name)
                     print("openMenu")
+                    
                     Wait(1000) -- Waits before allowing this to be triggered again.
                     retrieving = false
                 end
