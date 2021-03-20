@@ -55,9 +55,8 @@ AddEventHandler('NGWD:notifyError', function(message)
 end)
 
 RegisterNetEvent('NGWD:spawnVehicle')
-AddEventHandler('NGWD:spawnVehicle', function(modelName, plate)
-    local hashedModel = GetHashKey(modelName)
-
+AddEventHandler('NGWD:spawnVehicle', function(modelHash, plate)
+    local hashedModel = tostring(modelHash)
     if IsModelInCdimage(hashedModel) then
         RequestModel(hashedModel)
         while not HasModelLoaded(hashedModel) do
@@ -65,7 +64,7 @@ AddEventHandler('NGWD:spawnVehicle', function(modelName, plate)
         end
         local ped = PlayerPedId()
         local playerCoords = GetEntityCoords(ped)
-        for _, v in pairs(Config.spawnLocations) do
+        for k, v in pairs(Config.spawnLocations) do
             local spawnZone = vector3(v.x, v.y, v.z)
             local spawnDistance = #(playerCoords - spawnZone)
 
@@ -80,7 +79,7 @@ AddEventHandler('NGWD:spawnVehicle', function(modelName, plate)
                     vehicleUtils(vehicle)
                     vehicleSetters(vehicle, fuel, plate)
                     TaskWarpPedIntoVehicle(ped, vehicle, -1)
-                    TriggerEvent('NGWD:notifySuccess', "" .. modelName .. " has spawned successfully.")
+                    TriggerEvent('NGWD:notifySuccess', "" .. modelHash .. " has spawned successfully.")
                 else
                     TriggerEvent('NGWD:notifyError', "Action unavailable while in a vehiclce.")
                 end
@@ -118,17 +117,21 @@ end)
 RegisterCommand('buy', function(source, args, rawCommand)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local plate = GetVehicleNumberPlateText(vehicle)
-    local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
+    local modelHash = GetEntityModel(vehicle)
+    local modelName = GetDisplayNameFromVehicleModel(modelHash)
+    local localizedName = GetLabelText(modelName)
+    local properties = getVehicleProperties(vehicle)
 
-    TriggerServerEvent('NGWD:purchaseVehicle', plate, modelName)
+    TriggerServerEvent('NGWD:purchaseVehicle', plate, modelHash, localizedName)
 end, false)
 
 RegisterCommand('sell', function(source, args, rawCommand)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local plate = GetVehicleNumberPlateText(vehicle)
+    local modelHash = GetEntityModel(vehicle)
     local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
 
-    TriggerServerEvent('NGWD:sellVehicle', plate, modelName)
+    TriggerServerEvent('NGWD:sellVehicle', plate, modelHash)
 end, false)
 
 RegisterCommand('spawn', function(source, args, rawCommand)

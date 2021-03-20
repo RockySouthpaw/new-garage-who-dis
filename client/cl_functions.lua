@@ -93,62 +93,6 @@ function notifyEnd(id)
     end
 end
 
--- Functions (Exports)
-function getVehicleProperties(vehicle)
-    if DoesEntityExist(vehicle) then
-        local vehicleProperties = 
-        {
-            {class = GetVehicleClass(vehicle)},
-            {lightsState = GetVehicleLightsState(vehicle)},
-            {colorPrimary, ColorSecondary = GetVehicleColours(vehicle)}, -- Use with SetVehicleColours
-            {tyreSmoke = GetVehicleTyreSmokeColor(vehicle)},
-            {headlightColor = GetVehicleHeadlightsColour(vehicle)},
-            {interiorColor = GetVehicleInteriorColour(vehicle)},
-            {dashboardColor = GetVehicleDashboardColour(vehicle)},
-            {pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)},
-            {livery = GetVehicleLivery(vehicle)},
-            {liveryRoof = GetVehicleRoofLivery(vehicle)},
-            {vehicleMods = GetNumVehicleMods(vehicle, 48)},
-            {wheelSize = GetVehicleWheelSize(vehicle)},
-            {wheelWidth = GetVehicleWheelWidth(vehicle)},
-            {wheelType = GetVehicleWheelType(vehicle)},
-            {windowTint = GetVehicleWindowTint(vehicle)}
-        }
-        return vehicleProperties
-    else
-        return
-    end
-end
-
-function getVehicleModkits(vehicle) -- Needs testing
-    local vehicleMods = {}
-    for i = 0,49 + 1 do
-        vehicleMods[i] = GetVehicleMod(vehicle, i)
-    end
-    return vehicleMods
-end
-
-function getVehicleCondition(vehicle)
-    if DoesEntityExist(vehicle) then
-        local vehicleCondition = 
-        {
-            {engineHealth = GetVehicleEngineHealth(vehicle)},
-            {bodyHealth = GetVehicleBodyHealth(vehicle)},
-            {tankHealth = GetVehiclePetrolTankHealth(vehicle)},
-            {fuelLevel = GetVehicleFuelLevel(vehicle)},
-            {oilLevel = GetVehicleOilLevel(vehicle)},
-            {dirt = GetVehicleDirtLevel(vehicle)},
-            {tire1 = GetVehicleWheelHealth(vehicle, 0)},
-            {tire2 = GetVehicleWheelHealth(vehicle, 1)},
-            {tire3 = GetVehicleWheelHealth(vehicle, 2)},
-            {tire4 = GetVehicleWheelHealth(vehicle, 3)}
-        }
-        return vehicleCondition
-    else
-        return
-    end
-end
-
 -- Functions (Core)
 function storeVehicle(vehicle, garageName)
     if not inProgress then -- Checks if its already storing a vehicle to prevent key spam.
@@ -157,10 +101,12 @@ function storeVehicle(vehicle, garageName)
         local vehicleCondition = getVehicleCondition(vehicle)
         local vehicleMods = getVehicleModkits(vehicle)
         local plate = GetVehicleNumberPlateText(vehicle)
-        local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
-        
+        local modelHash = GetEntityModel(vehicle)
+        local modelName = GetDisplayNameFromVehicleModel(modelHash)
+        local localizedName = GetLabelText(modelName)
+
         if garageName ~= nil then
-            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelName, vehicleProperties, vehicleCondition, vehicleMods)
+            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
             Wait(500)
             inProgress = false
         elseif garageName ~= nil then
@@ -192,5 +138,60 @@ function vehicleSetters(vehicle, fuel, plate)
     if DoesEntityExist(vehicle) then
         SetVehicleFuelLevel(vehicle, fuel)
         SetVehicleNumberPlateText(vehicle, plate)
+    end
+end
+
+-- Functions (Exports)
+function getVehicleProperties(vehicle)
+    if DoesEntityExist(vehicle) then
+        local vehicleProperties = 
+        {
+            {lightsState = GetVehicleLightsState(vehicle)},
+            {colorPrimary, ColorSecondary = GetVehicleColours(vehicle)}, -- Use with SetVehicleColours
+            {pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)},
+            {plateIndex = GetVehicleNumberPlateTextIndex(vehicle)},
+            {tyreSmoke = GetVehicleTyreSmokeColor(vehicle)},
+            {headlightColor = GetVehicleHeadlightsColour(vehicle)},
+            {interiorColor = GetVehicleInteriorColour(vehicle)},
+            {dashboardColor = GetVehicleDashboardColour(vehicle)},
+            {liveryRoof = GetVehicleRoofLivery(vehicle)},
+            {livery = (GetVehicleLiveryCount(vehicle) == -1 and GetVehicleMod(vehicle, 48)) or GetVehicleLivery(vehicle)},
+            {wheelSize = GetVehicleWheelSize(vehicle)},
+            {wheelWidth = GetVehicleWheelWidth(vehicle)},
+            {wheelType = GetVehicleWheelType(vehicle)},
+            {windowTint = GetVehicleWindowTint(vehicle)}
+        }
+        return vehicleProperties
+    else
+        return
+    end
+end
+
+function getVehicleModkits(vehicle)
+    local vehicleMods = {}
+    for i = 0,49 do
+        vehicleMods[i] = GetVehicleMod(vehicle, i)
+    end
+    return vehicleMods
+end
+
+function getVehicleCondition(vehicle)
+    if DoesEntityExist(vehicle) then
+        local vehicleCondition = 
+        {
+            {engineHealth = GetVehicleEngineHealth(vehicle)},
+            {bodyHealth = GetVehicleBodyHealth(vehicle)},
+            {tankHealth = GetVehiclePetrolTankHealth(vehicle)},
+            {fuelLevel = GetVehicleFuelLevel(vehicle)},
+            {oilLevel = GetVehicleOilLevel(vehicle)},
+            {dirt = GetVehicleDirtLevel(vehicle)},
+            {tire1 = GetVehicleWheelHealth(vehicle, 0)},
+            {tire2 = GetVehicleWheelHealth(vehicle, 1)},
+            {tire3 = GetVehicleWheelHealth(vehicle, 2)},
+            {tire4 = GetVehicleWheelHealth(vehicle, 3)}
+        }
+        return vehicleCondition
+    else
+        return
     end
 end
