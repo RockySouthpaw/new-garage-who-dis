@@ -135,7 +135,6 @@ end, false)
 
 RegisterCommand('spawn', function(source, args, rawCommand)
     local plate = "29NDG376"
-    local neon = GetVehicleNeonLightsColour(vehicle)
-    print(neon)
+
     TriggerServerEvent('NGWD:spawnVehicle', plate)
 end, false)
