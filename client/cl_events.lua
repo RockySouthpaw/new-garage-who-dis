@@ -56,10 +56,9 @@ end)
 
 RegisterNetEvent('NGWD:spawnVehicle')
 AddEventHandler('NGWD:spawnVehicle', function(modelHash, plate)
-    local hashedModel = tostring(modelHash)
-    if IsModelInCdimage(hashedModel) then
-        RequestModel(hashedModel)
-        while not HasModelLoaded(hashedModel) do
+    if IsModelInCdimage(modelHash) then
+        RequestModel(modelHash)
+        while not HasModelLoaded(modelHash) do
             Citizen.Wait(1)
         end
         local ped = PlayerPedId()
@@ -74,7 +73,7 @@ AddEventHandler('NGWD:spawnVehicle', function(modelHash, plate)
                   deleteVehicle(conflictVehicle)
                 end
                 if not IsPedInAnyVehicle(ped, false) then
-                    local vehicle = CreateVehicle(hashedModel, v.x, v.y, v.z, heading, true, false)
+                    local vehicle = CreateVehicle(modelHash, v.x, v.y, v.z, heading, true, false)
                     local fuel = 100.00
                     vehicleUtils(vehicle)
                     vehicleSetters(vehicle, fuel, plate)
@@ -118,9 +117,10 @@ RegisterCommand('buy', function(source, args, rawCommand)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local plate = GetVehicleNumberPlateText(vehicle)
     local modelHash = GetEntityModel(vehicle)
-    local modelName = GetDisplayNameFromVehicleModel(modelHash)
-    local localizedName = GetLabelText(modelName)
-    local properties = getVehicleProperties(vehicle)
+    local displayName = GetDisplayNameFromVehicleModel(modelHash)
+    local localizedName = GetLabelText(displayName)
+    --local properties = getVehicleProperties(vehicle)
+    --local condition = getVehicleCondition(vehicle)
 
     TriggerServerEvent('NGWD:purchaseVehicle', plate, modelHash, localizedName)
 end, false)
@@ -129,13 +129,13 @@ RegisterCommand('sell', function(source, args, rawCommand)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local plate = GetVehicleNumberPlateText(vehicle)
     local modelHash = GetEntityModel(vehicle)
-    local modelName = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))
 
     TriggerServerEvent('NGWD:sellVehicle', plate, modelHash)
 end, false)
 
 RegisterCommand('spawn', function(source, args, rawCommand)
     local plate = "29NDG376"
-
+    local neon = GetVehicleNeonLightsColour(vehicle)
+    print(neon)
     TriggerServerEvent('NGWD:spawnVehicle', plate)
 end, false)

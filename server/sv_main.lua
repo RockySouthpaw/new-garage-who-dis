@@ -1,4 +1,4 @@
-RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedName)
+RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedName) -- Should also pass the modelName maybe?
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.Identifier) then
@@ -9,18 +9,18 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
     if identifier then
         if plate ~= nil and modelHash ~= nil then
             -- can also add a distance check for the dealership cords and trigger a kick event..
-            MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, modelName, plate) = (@owner, @modelHash, @modelName, @plate)', {
+            MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, localizedName, plate) = (@owner, @modelHash, @localizedName, @plate)', {
                 ['@owner']     = identifier,
                 ['@modelHash']     = modelHash,
-                ['@modelName'] = localizedName,
+                ['@localizedName'] = localizedName,
                 ['@plate']     = plate,
             }, function(results)
                 if results[1] == nil then
-                    MySQL.Async.execute('INSERT INTO `ngwd_vehicles` (`owner`, `modelHash`, `modelName`, `plate`) VALUES (@owner, @modelHash, @modelName, @plate)',
+                    MySQL.Async.execute('INSERT INTO `ngwd_vehicles` (`owner`, `modelHash`, `localizedName`, `plate`) VALUES (@owner, @modelHash, @localizedName, @plate)',
                     {
                         ['@owner']  = identifier, 
                         ['modelHash']   = modelHash,
-                        ['@modelName'] = localizedName,
+                        ['@localizedName'] = localizedName,
                         ['@plate']  = plate;
                     })
                     if Config.Debug then
@@ -51,7 +51,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
     end
 end)
 
-RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
+RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.Identifier) then
@@ -70,7 +70,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                         MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', { 
                             ['@owner'] = identifier, 
                             ['@modelHash'] = modelHash,
-                            ['@modelName'] = localizedName,
+                            ['@localizedName'] = localizedName,
                             ['@plate'] = plate, 
                             ['@garage'] = garageName 
                         }, function(affectedRows)
@@ -86,7 +86,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                             MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', { 
                                 ['@owner'] = identifier, 
                                 ['@modelHash'] = modelHash,
-                                ['@modelName'] = localizedName,
+                                ['@localizedName'] = localizedName,
                                 ['@plate'] = plate, 
                                 ['@garage'] = garageName 
                             }, function(affectedRows)end)                       

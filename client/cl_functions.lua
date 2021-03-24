@@ -99,14 +99,13 @@ function storeVehicle(vehicle, garageName)
         inProgress = true
         local vehicleProperties = getVehicleProperties(vehicle)
         local vehicleCondition = getVehicleCondition(vehicle)
-        local vehicleMods = getVehicleModkits(vehicle)
         local plate = GetVehicleNumberPlateText(vehicle)
         local modelHash = GetEntityModel(vehicle)
         local modelName = GetDisplayNameFromVehicleModel(modelHash)
         local localizedName = GetLabelText(modelName)
 
         if garageName ~= nil then
-            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
+            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition)
             Wait(500)
             inProgress = false
         elseif garageName ~= nil then
@@ -141,56 +140,66 @@ function vehicleSetters(vehicle, fuel, plate)
     end
 end
 
--- Functions (Exports)
-function getVehicleProperties(vehicle)
+-- Exports
+
+function getVehicleCondition(vehicle) -- make async export 
     if DoesEntityExist(vehicle) then
-        local vehicleProperties = 
-        {
-            {lightsState = GetVehicleLightsState(vehicle)},
-            {colorPrimary, ColorSecondary = GetVehicleColours(vehicle)}, -- Use with SetVehicleColours
-            {pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)},
-            {plateIndex = GetVehicleNumberPlateTextIndex(vehicle)},
-            {tyreSmoke = GetVehicleTyreSmokeColor(vehicle)},
-            {headlightColor = GetVehicleHeadlightsColour(vehicle)},
-            {interiorColor = GetVehicleInteriorColour(vehicle)},
-            {dashboardColor = GetVehicleDashboardColour(vehicle)},
-            {liveryRoof = GetVehicleRoofLivery(vehicle)},
-            {livery = (GetVehicleLiveryCount(vehicle) == -1 and GetVehicleMod(vehicle, 48)) or GetVehicleLivery(vehicle)},
-            {wheelSize = GetVehicleWheelSize(vehicle)},
-            {wheelWidth = GetVehicleWheelWidth(vehicle)},
-            {wheelType = GetVehicleWheelType(vehicle)},
-            {windowTint = GetVehicleWindowTint(vehicle)}
-        }
-        return vehicleProperties
+        local Condition = {}
+        
+        Condition.engineHealth = GetVehicleEngineHealth(vehicle)
+        Condition.bodyHealth = GetVehicleBodyHealth(vehicle)
+        Condition.tankHealth = GetVehiclePetrolTankHealth(vehicle)
+        Condition.fuelLevel = GetVehicleFuelLevel(vehicle)
+        Condition.oilLevel = GetVehicleOilLevel(vehicle)
+        Condition.dirt = GetVehicleDirtLevel(vehicle)
+        Condition.Tires = {}
+        for i = 0,3 do
+            Condition.Tires[i] = GetVehicleWheelHealth(vehicle, i)
+        end
+        return Condition
     else
         return
     end
 end
 
-function getVehicleModkits(vehicle)
-    local vehicleMods = {}
-    for i = 0,49 do
-        vehicleMods[i] = GetVehicleMod(vehicle, i)
-    end
-    return vehicleMods
-end
-
-function getVehicleCondition(vehicle)
+function getVehicleProperties(vehicle) -- make async export 
     if DoesEntityExist(vehicle) then
-        local vehicleCondition = 
-        {
-            {engineHealth = GetVehicleEngineHealth(vehicle)},
-            {bodyHealth = GetVehicleBodyHealth(vehicle)},
-            {tankHealth = GetVehiclePetrolTankHealth(vehicle)},
-            {fuelLevel = GetVehicleFuelLevel(vehicle)},
-            {oilLevel = GetVehicleOilLevel(vehicle)},
-            {dirt = GetVehicleDirtLevel(vehicle)},
-            {tire1 = GetVehicleWheelHealth(vehicle, 0)},
-            {tire2 = GetVehicleWheelHealth(vehicle, 1)},
-            {tire3 = GetVehicleWheelHealth(vehicle, 2)},
-            {tire4 = GetVehicleWheelHealth(vehicle, 3)}
-        }
-        return vehicleCondition
+        local Property = {}
+
+        Property.vehicleMods = {}
+        for i = 0,49 do
+            Property.vehicleMods[i] = GetVehicleMod(vehicle, i)
+        end
+        Property.Extras = {}
+        for i = 1,14 do
+            Property.Extras[i] = DoesExtraExist(vehicle, i)
+        end
+        Property.Neons = {}
+        for i = 0,3 do
+            Property.Neons[i] = IsVehicleNeonLightEnabled(vehicle, i)
+        end
+        Property.neonColor = {}
+        Property.neonColor.r, Property.neonColor.g, Property.neonColor.b = GetVehicleNeonLightsColour(vehicle)
+        Property.smokeColor = {}
+        Property.smokeColor.r, Property.smokeColor.g, Property.smokeColor.b = GetVehicleTyreSmokeColor(vehicle)
+
+        Property.turboPurchased = IsToggleModOn(vehicle, 18)
+        Property.smokePurchased = IsToggleModOn(vehicle, 20)
+        Property.xenonEnabled = IsToggleModOn(vehicle, 22)
+        Property.lightsState = GetVehicleLightsState(vehicle)
+        Property.colorPrimary, ColorSecondary = GetVehicleColours(vehicle) -- Use with SetVehicleColours
+        Property.pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)
+        Property.plateIndex = GetVehicleNumberPlateTextIndex(vehicle)
+        Property.headlightColor = GetVehicleHeadlightsColour(vehicle) -- Formally known as GetVehicleHeadlightsColour
+        Property.interiorColor = GetVehicleInteriorColour(vehicle)
+        Property.dashboardColor = GetVehicleDashboardColour(vehicle)
+        Property.Livery  = (GetVehicleLiveryCount(vehicle) == -1 and GetVehicleMod(vehicle, 48)) or GetVehicleLivery(vehicle) -- AvarianKnight
+        Property.liveryRoof = GetVehicleRoofLivery(vehicle)
+        Property.wheelSize = GetVehicleWheelSize(vehicle)
+        Property.wheelWidth = GetVehicleWheelWidth(vehicle)
+        Property.wheelType = GetVehicleWheelType(vehicle)
+        Property.windowTint = GetVehicleWindowTint(vehicle)
+        return Property
     else
         return
     end
