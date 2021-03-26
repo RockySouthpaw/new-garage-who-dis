@@ -161,6 +161,7 @@ function getVehicleCondition(vehicle) -- make async export
         return
     end
 end
+exports('getVehicleCondition', getVehicleCondition)
 
 function getVehicleProperties(vehicle) -- make async export 
     if DoesEntityExist(vehicle) then
@@ -204,3 +205,4 @@ function getVehicleProperties(vehicle) -- make async export
         return
     end
 end
+exports('getVehicleProperties', getVehicleProperties)

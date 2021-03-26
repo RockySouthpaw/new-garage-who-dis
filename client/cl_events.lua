@@ -54,6 +54,15 @@ AddEventHandler('NGWD:notifyError', function(message)
     end
 end)
 
+RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, vehProperties)
+    while not NetworkDoesEntityExistWithNetworkId(vehNet) do
+        -- vehicles wont instantly exist on the client, even though they exist on the server.
+        Wait(50)
+    end
+
+    -- handle vehProperties
+end)
+
 RegisterNetEvent('NGWD:spawnVehicle')
 AddEventHandler('NGWD:spawnVehicle', function(modelHash, plate)
     if IsModelInCdimage(modelHash) then
