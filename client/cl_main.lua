@@ -61,10 +61,15 @@ Citizen.CreateThread(function()
         Citizen.Wait(5000)
         if Config.deleteBariers then
             for k, v in pairs(Config.barierLocations) do
-                local ent = GetClosestObjectOfType(Config.barierLocations[k].x, Config.barierLocations[k].y, Config.barierLocations[k].z, 2.0, GetHashKey(Config.barierLocations[k].model), false, false, false)
-                SetEntityAsMissionEntity(ent, 1, 1)
-                DeleteObject(ent)
-                SetEntityAsNoLongerNeeded(ent)
+                local playerCoords = GetEntityCoords(PlayerPedId())
+                local barrierZone = vector3(v.x, v.y, v.z)
+                local barrierDistance = #(playerCoords - barrierZone)
+                if barrierDistance <= 75 then
+                    local objectEntity = GetClosestObjectOfType(Config.barierLocations[k].x, Config.barierLocations[k].y, Config.barierLocations[k].z, 2.0, GetHashKey(Config.barierLocations[k].model), false, false, false)
+                    SetEntityAsMissionEntity(objectEntity, true, true)
+                    DeleteObject(objectEntity)
+                    SetEntityAsNoLongerNeeded(objectEntity)
+                end
             end
         end
     end

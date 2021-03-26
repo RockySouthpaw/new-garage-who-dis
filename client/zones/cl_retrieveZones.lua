@@ -21,6 +21,7 @@ RegisterCommand("Retrieve", function()
                     garageName = v.name
                     --print(v.name)
                     print("openMenu")
+                    
                     Wait(1000) -- Waits before allowing this to be triggered again.
                     retrieving = false
                 end
@@ -40,7 +41,7 @@ local retrievePinkCage = PolyZone:Create({
     minZ = 44.203404693604,
     maxZ = 47.0,
     lazyGrid=true,
-    debugPoly=true
+    debugPoly=false
   })
 
 retrievePinkCage:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
@@ -72,7 +73,7 @@ local retrieveLegion = PolyZone:Create({
     minZ = 30.044890670776, 
     maxZ = 32.8,
     lazyGrid=true,
-    debugPoly=true
+    debugPoly=false
   })
 
 retrieveLegion:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
