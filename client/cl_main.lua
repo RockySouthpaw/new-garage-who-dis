@@ -56,7 +56,7 @@ Citizen.CreateThread(function()
     end
 end)
 
-local propsToDelete = Config.barrierLocations
+local propsToDelete = Config.barrierProps
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5000)
@@ -69,7 +69,9 @@ Citizen.CreateThread(function()
                     for i = 1, #objTbl do
                         local obj = objTbl[i]
                         if propsToDelete[GetEntityModel(obj)] then
-                            DeleteEntity(obj)
+                            SetEntityAsMissionEntity(obj, true, true)
+                            DeleteObject(obj)
+                            SetEntityAsNoLongerNeeded(obj)
                         end
                     end
                 end

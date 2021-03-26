@@ -34,7 +34,7 @@ Config.zoneCheck = 1 -- Seconds to check if in the zone.
 Config.spawnRange = 10 -- Distance of the player to the spawn range. 10 is roughly 3 parking spaces.
 -- Config (Blips)
 Config.blipLocations = { -- The index number corresponds to the garage number.
-	[1] = {name = "Legion", pos = vector3(217.58, -802.31, 30.76)},
+	{name = "Legion", pos = vector3(217.58, -802.31, 30.76)},
 	{name = "Pink Cage", pos = vector3(273.77, -344.17, 44.91)},
 	{name = "Mirror Park", pos = vector3(1036.25, -763.19, 57.99)},
 	{name = "Pillbox Hill", pos = vector3(44.58, -843.09, 31.127)},
@@ -61,7 +61,7 @@ Config.spawnLocations = { -- The index number corresponds to the garage number.
 }
 
 Config.barrierLocations = {
-	[1] = {pos = vector3(266.09, -349.35, 44.74)}, -- Pink Cage 1
+	{pos = vector3(266.09, -349.35, 44.74)}, -- Pink Cage 1
 	{pos = vector3(285.28, -355.78, 45.13)}, -- Pink Cage 2
 	{pos = vector3(206.52, -803.47, 30.95)}, -- Legion 1
 	{pos = vector3(230.96, -816.36, 30.32)}, -- Legion 2
