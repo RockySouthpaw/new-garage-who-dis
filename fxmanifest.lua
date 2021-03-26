@@ -19,6 +19,3 @@ client_scripts {
 }
 
 dependencies { 'PolyZone' } -- https://github.com/mkafrin/PolyZone
-
-export 'getVehicleCondition'
-export 'getVehicleProperties'

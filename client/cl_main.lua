@@ -10,18 +10,18 @@ Citizen.CreateThread(function()
 		local playerCoords = GetEntityCoords(playerPed)
         
         if Config.enableBlips and not blipCreated then -- Do the check for if they're created here so all blips get created.
-            for k, v in pairs(Config.blipLocations) do
-                local blipZone = vector3(v.x, v.y, v.z)
-                local blipDistance = #(playerCoords - blipZone)
+            for i = 1, #Config.blipLocations do
+                local zone = Config.blipLocations[i]
+                local blipDistance = #(playerCoords - zone.pos)
 
                 if not Config.enableRangedBlip then -- Shows all blips if they don't already exist
-                    blip = AddBlipForCoord(v.x, v.y, v.z)
+                    blip = AddBlipForCoord(zone.pos)
                     SetBlipDisplay(blip, Config.blipDisplay)
                     SetBlipSprite(blip, 357)
                     SetBlipColour(blip, Config.blipColor)
                     BeginTextCommandSetBlipName("STRING")
                     if Config.enableBlipNames then
-                        AddTextComponentString(v.name.. " Garage")
+                        AddTextComponentString(zone.name.. " Garage")
                     else
                         AddTextComponentString("Garage")
                     end
@@ -32,13 +32,13 @@ Citizen.CreateThread(function()
                 end
                 if Config.enableRangedBlip then -- Show only blips in range.
                     if blipDistance <= Config.blipRange then
-                        blip = AddBlipForCoord(v.x, v.y, v.z)
+                        blip = AddBlipForCoord(zone.pos)
                         SetBlipDisplay(blip, Config.blipDisplay)
                         SetBlipSprite(blip, 357)
                         SetBlipColour(blip, Config.blipColor)
                         BeginTextCommandSetBlipName("STRING")
                         if Config.enableBlipNames then
-                            AddTextComponentString(v.name.. " Garage")
+                            AddTextComponentString(zone.name.. " Garage")
                         else
                             AddTextComponentString("Garage")
                         end
@@ -56,19 +56,22 @@ Citizen.CreateThread(function()
     end
 end)
 
+local propsToDelete = Config.barrierLocations
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5000)
         if Config.deleteBariers then
-            for k, v in pairs(Config.barierLocations) do
-                local playerCoords = GetEntityCoords(PlayerPedId())
-                local barrierZone = vector3(v.x, v.y, v.z)
-                local barrierDistance = #(playerCoords - barrierZone)
-                if barrierDistance <= 75 then
-                    local objectEntity = GetClosestObjectOfType(Config.barierLocations[k].x, Config.barierLocations[k].y, Config.barierLocations[k].z, 2.0, GetHashKey(Config.barierLocations[k].model), false, false, false)
-                    SetEntityAsMissionEntity(objectEntity, true, true)
-                    DeleteObject(objectEntity)
-                    SetEntityAsNoLongerNeeded(objectEntity)
+            local plyPos = GetEntityCoords(PlayerPedId())
+            for i = 1, #Config.barrierLocations do
+                local zone = Config.barierLocations[i]
+                if #(plyPos - zone.pos) then
+                    local objTbl = GetGamePool('CObject')
+                    for i = 1, #objTbl do
+                        local obj = objTbl[i]
+                        if propsToDelete[GetEntityModel(obj)] then
+                            DeleteEntity(obj)
+                        end
+                    end
                 end
             end
         end
