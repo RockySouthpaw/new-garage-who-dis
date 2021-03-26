@@ -63,7 +63,7 @@ Citizen.CreateThread(function()
         if Config.deleteBariers then
             local plyPos = GetEntityCoords(PlayerPedId())
             for i = 1, #Config.barrierLocations do
-                local zone = Config.barierLocations[i]
+                local zone = Config.barrierLocations[i]
                 if #(plyPos - zone.pos) then
                     local objTbl = GetGamePool('CObject')
                     for i = 1, #objTbl do
