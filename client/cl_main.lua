@@ -64,8 +64,7 @@ Citizen.CreateThread(function()
             local plyPos = GetEntityCoords(PlayerPedId())
             for i = 1, #Config.barrierLocations do
                 local zone = Config.barrierLocations[i]
-                local barrierDistance = #(plyPos - zone.pos)
-                if barrierDistance <= 75 then -- Micro optimization. Not really needed.
+                if #(plyPos - zone.pos) then
                     local objTbl = GetGamePool('CObject')
                     for i = 1, #objTbl do
                         local obj = objTbl[i]
