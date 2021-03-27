@@ -14,14 +14,14 @@ RegisterCommand("Store", function()
     if activeNotification and IsPedInVehicle(PlayerPedId(),vehicle, true) and driver == PlayerPedId() then 
 		local playerCoords = GetEntityCoords(PlayerPedId())
 
-        for k, v in pairs(Config.blipLocations) do
-            local blipZone = vector3(v.x, v.y, v.z)
-            local blipDistance = #(playerCoords - blipZone)
+        for i = 1, #Config.blipLocations do
+            local zone = Config.blipLocations[i]
+            local blipDistance = #(playerCoords - zone.pos)
 
             if blipDistance <= Config.blipRange then
                 if not storing then
                     storing = true
-                    garageName = v.name
+                    garageName = zone.name
                     storeVehicle(vehicle, garageName)
                     Wait(1000) -- Waits before allowing this to be triggered again.
                     storing = false

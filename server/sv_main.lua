@@ -4,7 +4,7 @@ function createVehicle(source, model, coords)
     if not DoesEntityExist(veh) then return nil end
     local entState = Entity(veh).state
     entState:set('owner', GetPlayerName(source), true)
-    entState:set('fishedSpawning', false, true)
+    entState:set('finishedSpawning', false, true)
 
     while GetVehiclePedIsIn(plyPed) ~= veh do
         Wait(50)
