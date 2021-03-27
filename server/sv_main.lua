@@ -42,6 +42,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.Identifier) then
             identifier = string.sub(v, 9)
+            -- identifier = v
             break
         end
     end
@@ -62,31 +63,23 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
                         ['@localizedName'] = localizedName,
                         ['@plate']  = plate;
                     })
-                    if Config.Debug then
-                        print("^2  [SUCCESS]: Inserted vehicle owned by: ".. identifier .. " with the plate " .. plate .. ".")
-                    end
+                    Utils.Debug('success', "".. identifier .. " Purchased a vehicle with the plate " .. plate .. ".")
                     if Config.purchaseNotification then
                         TriggerClientEvent('NGWD:notifySuccess', source, "" .. modelHash .. " Was purchased successfully.")
                     end
                 else
-                    if Config.Debug then
-                        print("^1 [ERROR]: Duplicate Entry for " .. modelHash .. ". User: ".. identifier .. "")
-                    end
+                    Utils.Debug('error', "Duplicate Entry for " .. modelHash .. ". User: ".. identifier .. "")
                     if Config.purchaseNotification then
                         TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be purchased.")
                     end
                 end
             end)
         else
-            if Config.Debug then
-                print("^1 [ERROR] Purchasing Vehicle: Model and plate not found.")
-            end
+            Utils.Debug('error', "Purchasing Vehicle: Model and plate not found.")
         end
     else
         TriggerClientEvent('NGWD:notifyError', source, "Vehicle Wasn't Purchased")
-        if Config.Debug then
-            print("^1 [ERROR] Purchasing Vehicle, Identifier Not Found.")
-        end
+        Utils.Debug('error', "Purchasing Vehicle, Identifier Not Found.")
     end
 end)
 
@@ -95,6 +88,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.Identifier) then
             identifier = string.sub(v, 9)
+            -- identifier = v
             break
         end
     end
@@ -115,9 +109,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                         }, function(affectedRows)
                         end)             
                         TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
-                        if Config.Debug then
-                            print("^2 [SUCCESS]: Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. " Garage")
-                        end
+                        Utils.Debug('inform', "Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. " Garage")
                         Wait(1000)
                         TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
                     elseif results[1].owner ~= identifier then
@@ -132,32 +124,22 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                             TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
                             Wait(1000)
                             TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
-                            if Config.Debug then
-                                print("^3 [SUCCESS]: Vehicle owned by: ^2".. results[1].owner .. "^3 with the plate ^2" .. plate .. "^3 has been stored at ^2" .. garageName .. " Garage")
-                            end
+                            Utils.Debug('inform', "Vehicle owned by: ^2".. results[1].owner .. "^3 with the plate ^2" .. plate .. "^3 has been stored at ^2" .. garageName .. " Garage")
                         else
                             TriggerClientEvent('NGWD:notifyError', source, "Ownership Required")
-                            if Config.Debug then
-                                print("^6 [INFO]: Prevented User ^5" .. identifier .. "^1 from storing ^2" .. results[1].owner .. "'s ^1 vehicle")
-                            end
+                            Utils.Debug('inform', "Prevented User ^5" .. identifier .. "^1 from storing ^2" .. results[1].owner .. "'s ^1 vehicle")
                         end
                     end
                 else
-                    if Config.Debug then
-                        print("^1  [ERROR]: Couldn't find the modelHash " .. modelHash .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
-                    end
+                    Utils.Debug('error', "Couldn't find the modelHash " .. modelHash .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
                     TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be Stored")
                 end
             end)
         else
-            if Config.Debug then
-                print("^1  [ERROR]: Unable to store vehicle, plate or modelHash is nil")
-            end
+            Utils.Debug('error', "Unable to store vehicle, plate or modelHash is nil")
         end
     else
-        if Config.Debug then
-            print("^1 [ERROR]: Unable to store vehicle, identifier not found.")
-        end
+        Utils.Debug('error', "Unable to store vehicle, identifier not found.")
     end
 end)
 
@@ -166,6 +148,7 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.Identifier) then
             identifier = string.sub(v, 9)
+            -- identifier = v
             break
         end
     end
@@ -182,21 +165,17 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
                     ['@plate']     = plate
                 }, function(rowsChanged) 
                     if rowsChanged ~= 0 then
-                        if Config.Debug then
-                            print("^5  [SUCCESS]: Deleted " .. rowsChanged.. " vehicles owned by: ".. identifier .. " with the plate " .. plate .. ".")
+                        if Debug.debugLevel >= 2 then
+                            Utils.Debug('success', "Deleted " .. rowsChanged.. " vehicles owned by: ".. identifier .. " with the plate " .. plate .. ".")
                         end                 
                     else
-                        if Config.Debug then
-                            print("^1  [ERROR]: No vehicle found with the plate: " .. plate .. "")
-                        end   
+                        Utils.Debug('error', "No vehicle found with the plate: " .. plate .. "")  
                     end
                 end)
             end
         end)
     else
-        if Config.Debug then
-            print("^1  [ERROR]: Unable to sell vehice, no plate was found.")
-        end  
+        Utils.Debug('error', "Unable to sell vehice, no plate was found.")
     end
 end)
 
@@ -205,6 +184,7 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate)
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.Identifier) then
             identifier = string.sub(v, 9)
+            -- identifier = v
             break
         end
     end
@@ -218,15 +198,11 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate)
                 plate = results[1].plate
                 TriggerClientEvent('NGWD:spawnVehicle', source, modelHash, plate)
             else
-                if Config.Debug then
-                    print("^1  [ERROR]: No vehicle found with the plate: " .. plate .. " owned by " .. identifier .. "")
-                end  
+                Utils.Debug('error', "No vehicle found with the plate: " .. plate .. " owned by " .. identifier .. "") 
             end
         end)
     else
-        if Config.Debug then
-            print("^1  [ERROR]: Unable to spawn vehice, no plate was found.")
-        end  
+       Utils.Debug('error', "Unable to spawn vehice, no plate was found.")  
     end
 end)
 

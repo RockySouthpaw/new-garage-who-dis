@@ -152,9 +152,9 @@ function getVehicleCondition(vehicle) -- make async export
         Condition.fuelLevel = GetVehicleFuelLevel(vehicle)
         Condition.oilLevel = GetVehicleOilLevel(vehicle)
         Condition.dirt = GetVehicleDirtLevel(vehicle)
-        Condition.Tires = {}
+        Condition.tires = {}
         for i = 0,3 do
-            Condition.Tires[i] = GetVehicleWheelHealth(vehicle, i)
+            Condition.tires[i] = GetVehicleWheelHealth(vehicle, i)
         end
         return Condition
     else
