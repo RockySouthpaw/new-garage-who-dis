@@ -30,9 +30,9 @@ function notifyStorePrompt(garage, id)
             exports.pNotify:SendNotification({
                 text = "Press ["..Config.storageKey.."] To Park Vehicle",
                 type = "info",
-                timeout = 1000 * Config.Duration,
-                layout = Config.Layout,
-                theme = Config.Theme,
+                timeout = 1000 * Config.duration,
+                layout = Config.layout,
+                theme = Config.theme,
                 queue = "id"
             })
         end
@@ -66,9 +66,9 @@ function notifyRetrievePrompt(garage, id)
             exports.pNotify:SendNotification({
                 text = "Press ["..Config.retrieveKey.."] To Retrieve Vehicle",
                 type = "info",
-                timeout = 1000 * Config.Duration,
-                layout = Config.Layout,
-                theme = Config.Theme,
+                timeout = 1000 * Config.duration,
+                layout = Config.layout,
+                theme = Config.theme,
                 queue = "id"
             })
         end

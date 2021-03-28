@@ -40,9 +40,8 @@ end)
 RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedName) -- Should also pass the modelName maybe?
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.Identifier) then
-            identifier = string.sub(v, 9)
-            -- identifier = v
+        if string.match(v, Config.identifier) then
+            identifier = v
             break
         end
     end
@@ -86,9 +85,8 @@ end)
 RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.Identifier) then
-            identifier = string.sub(v, 9)
-            -- identifier = v
+        if string.match(v, Config.identifier) then
+            identifier = v
             break
         end
     end
@@ -146,9 +144,8 @@ end)
 RegisterNetEvent('NGWD:sellVehicle', function(plate)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.Identifier) then
-            identifier = string.sub(v, 9)
-            -- identifier = v
+        if string.match(v, Config.identifier) then
+            identifier = v
             break
         end
     end
@@ -182,9 +179,8 @@ end)
 RegisterNetEvent('NGWD:spawnVehicle', function(plate)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.Identifier) then
-            identifier = string.sub(v, 9)
-            -- identifier = v
+        if string.match(v, Config.identifier) then
+            identifier = v
             break
         end
     end

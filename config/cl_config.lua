@@ -13,11 +13,11 @@ Config.mythicNotify = false
 Config.backgroundColor = '#292929'
 -- Config Variables (pNotify)
 Config.pNotify = false
-Config.Layout = "centerRight" -- top, topLeft, topCenter, topRight, center, cenerLeft, centerRight, bottom, bottomLeft, bottomCenter, bottomRight
-Config.Duration = 5 -- Duration of prompt and alert lengths.
-Config.Theme = "gta" -- gta, mint, relax, metroui
+Config.layout = "centerRight" -- top, topLeft, topCenter, topRight, center, cenerLeft, centerRight, bottom, bottomLeft, bottomCenter, bottomRight
+Config.duration = 5 -- Duration of prompt and alert lengths.
+Config.theme = "gta" -- gta, mint, relax, metroui
 -- Config Variables (Barier)
-Config.deleteBariers = true
+Config.deleteBarriers = true
 --Config Variables (Blips)
 Config.enableBlips = true
 Config.enableBlipNames = true -- Set to false if you need to consolidate blips.
