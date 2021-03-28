@@ -90,7 +90,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                         end
                     end
                 else
-                    Utils.Debug('error', "Couldn't find the modelHash " .. modelHash .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
+                    Utils.Debug('error', "Unable to find the modelHash " .. modelHash .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
                     TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be Stored")
                 end
             end)
@@ -137,7 +137,7 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
     end
 end)
 
---[[RegisterNetEvent('NGWD:spawnVehicle', function(plate)
+RegisterNetEvent('NGWD:spawnVehicle', function(plate --[[could also send the vehId, would be faster to fetch from the db]])
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.identifier) then
@@ -153,33 +153,23 @@ end)
             if results then
                 modelHash = results[1].modelHash
                 plate = results[1].plate
-                TriggerClientEvent('NGWD:spawnVehicle', source, modelHash, plate)
+                local plyPed = GetPlayerPed(source)
+                local vehNet, veh = createVehicle(source, plyPed, modelHash, GetEntityCoords(plyPed))
+                if not vehNet then 
+                    return 
+                end
+                TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, {} --[[Send the vehicle data to the client]])
+
+                Wait(100)
+                if not DoesEntityExist(veh) then 
+                    return 
+                end
             else
-                Utils.Debug('error', "No vehicle found with the plate: " .. plate .. " owned by " .. identifier .. "") 
+                Utils.Debug('error', "No vehicle found owned by: " .. identifier .. " With Plate " .. plate .. "") 
             end
         end)
     else
        Utils.Debug('error', "Unable to spawn vehice, no plate was found.")  
-    end
-end)]]
-
-local tempModel = GetHashKey('blista')
-RegisterNetEvent('NGWD:createVehicle', function(plate --[[could also send the vehId, would be faster to fetch from the db]])
-    local source = source
-    -- delete when sending actual position
-    local plyPed = GetPlayerPed(source)
-    local vehNet, veh = createVehicle(plyPed, tempModel, GetEntityCoords(plyPed))
-    if not vehNet then return end
-    TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, {} --[[Send the vehicle data to the client]])
-
-    Wait(100)
-    if not DoesEntityExist(veh) then return end
-    if not Entity(veh).state.finishedSpawning then
-        -- might not even be deeded
-        DeleteEntity(veh)
-        local vehNet, veh = createVehicle(plyPed, tempModel, GetEntityCoords(plyPed))
-        if not vehNet then return end
-        TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, {} --[[Send the vehicle data to the client]])
     end
 end)
 
@@ -195,4 +185,3 @@ end)
 RegisterNetEvent('NGWD:releaseVehicle', function()
     -- This will be used to release the vehicle from the impound lot and spawn at a pre determined garage based off the config.
 end)
-

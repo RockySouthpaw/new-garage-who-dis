@@ -30,8 +30,6 @@ Config.blipDisplay = 2 -- 2 = Map/Minimap, 3 = Only Map 5 = ONLY Minimap, 8 = Ma
 -- Config Variables (PolyZone)
 Config.zoneCheck = 1 -- Seconds to check if in the zone.
 
--- Config Variables (Spawning)
-Config.spawnRange = 10 -- Distance of the player to the spawn range. 10 is roughly 3 parking spaces.
 -- Config (Blips)
 Config.blipLocations = { -- The index number corresponds to the garage number.
 	{name = "Legion", pos = vector3(217.58, -802.31, 30.76)},
@@ -53,11 +51,6 @@ Config.blipLocations = { -- The index number corresponds to the garage number.
 	{name = "Downtown Vinewood", pos = vector3(362.45, 298.58, 103.88)},
 	{name = "Downtown Vinewood", pos = vector3(638.73, 206.56, 97.60)},
 	{name = "Pillbox Hill", pos = vector3(65.84, -616.36, 30.93)}
-}
-
-Config.spawnLocations = { -- The index number corresponds to the garage number.
-	[1] = {name = "Legion", x = 227.46684265137, y = -811.34936523438, z = 29.527854232788, heading = 161.44157409668},
-	[2] = {name = "Pink Cage", x = 286.7854309082, y = -345.6882019043, z = 43.949834136963, heading = 154.09780883789}
 }
 
 Config.barrierLocations = {
