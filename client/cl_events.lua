@@ -18,9 +18,9 @@ AddEventHandler('NGWD:notifySuccess', function(message)
         exports.pNotify:SendNotification({
             text = "✔️ " .. message,
             type = "success",
-            timeout = 1000 * Config.Duration,
-            layout = Config.Layout,
-            theme = Config.Theme,
+            timeout = 1000 * Config.duration,
+            layout = Config.layout,
+            theme = Config.theme,
             queue = "id"
         })
     end
@@ -46,9 +46,9 @@ AddEventHandler('NGWD:notifyError', function(message)
         exports.pNotify:SendNotification({
             text = "❌ " .. message,
             type = "error",
-            timeout = 1000 * Config.Duration,
-            layout = Config.Layout,
-            theme = Config.Theme,
+            timeout = 1000 * Config.duration,
+            layout = Config.layout,
+            theme = Config.theme,
             queue = "id"
         })
     end
