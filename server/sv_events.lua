@@ -1,42 +1,3 @@
-local CreateAutomobile = GetHashKey("CREATE_AUTOMOBILE")
-function createVehicle(source, model, coords)
-    local veh = Citizen.InvokeNative(CreateAutomobile, model --[[ model ]], coords --[[ spawn coords]])
-    if not DoesEntityExist(veh) then return nil end
-    local entState = Entity(veh).state
-    entState:set('owner', GetPlayerName(source), true)
-    entState:set('finishedSpawning', false, true)
-
-    while GetVehiclePedIsIn(plyPed) ~= veh do
-        Wait(50)
-        SetPedIntoVehicle(plyPed, veh, -1)
-    end
-
-    while NetworkGetEntityOwner(veh) ~= source do
-        Wait(50)
-    end
-    return NetworkGetNetworkIdFromEntity(veh), veh
-end
-
-local tempModel = GetHashKey('blista')
-RegisterNetEvent('NGWD:spawnVehicle', function(plate --[[could also send the vehId, would be faster to fetch from the db]])
-    local source = source
-    -- delete when sending actual position
-    local plyPed = GetPlayerPed(source)
-    local vehNet, veh = createVehicle(source, tempModel, GetEntityCoords(plyPed))
-    if not vehNet then return end
-    TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, {} --[[Send the vehicle data to the client]])
-
-    Wait(100)
-    if not DoesEntityExist(veh) then return end
-    if not Entity(veh).state.finishedSpawning then
-        -- might not even be deeded
-        DeleteEntity(veh)
-        local vehNet, veh = createVehicle(source, tempModel, GetEntityCoords(plyPed))
-        if not vehNet then return end
-        TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, {} --[[Send the vehicle data to the client]])
-    end
-end)
-
 RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedName) -- Should also pass the modelName maybe?
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
@@ -176,7 +137,7 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
     end
 end)
 
-RegisterNetEvent('NGWD:spawnVehicle', function(plate)
+--[[RegisterNetEvent('NGWD:spawnVehicle', function(plate)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.identifier) then
@@ -199,6 +160,26 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate)
         end)
     else
        Utils.Debug('error', "Unable to spawn vehice, no plate was found.")  
+    end
+end)]]
+
+local tempModel = GetHashKey('blista')
+RegisterNetEvent('NGWD:createVehicle', function(plate --[[could also send the vehId, would be faster to fetch from the db]])
+    local source = source
+    -- delete when sending actual position
+    local plyPed = GetPlayerPed(source)
+    local vehNet, veh = createVehicle(plyPed, tempModel, GetEntityCoords(plyPed))
+    if not vehNet then return end
+    TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, {} --[[Send the vehicle data to the client]])
+
+    Wait(100)
+    if not DoesEntityExist(veh) then return end
+    if not Entity(veh).state.finishedSpawning then
+        -- might not even be deeded
+        DeleteEntity(veh)
+        local vehNet, veh = createVehicle(plyPed, tempModel, GetEntityCoords(plyPed))
+        if not vehNet then return end
+        TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, {} --[[Send the vehicle data to the client]])
     end
 end)
 

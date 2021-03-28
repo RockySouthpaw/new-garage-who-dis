@@ -8,15 +8,11 @@ description 'New-Garage-Who-Dis'
 server_scripts {
 	'@mysql-async/lib/MySQL.lua',
 	'config/sv_config.lua',
-	'shared/shared_config.lua',
-	'shared/utils.lua',
-	'server/sv_main.lua'
+	'server/*.lua'
 }
 
 client_scripts {
 	'config/cl_config.lua',
-	'shared/shared_config.lua',
-	'shared/utils.lua',
 	'@PolyZone/client.lua',
 	'@PolyZone/ComboZone.lua',
 	'client/**/*.lua',

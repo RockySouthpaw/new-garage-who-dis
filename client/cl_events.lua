@@ -143,7 +143,7 @@ RegisterCommand('sell', function(source, args, rawCommand)
 end, false)
 
 RegisterCommand('spawn', function(source, args, rawCommand)
-    local plate = "29NDG376"
+    local plate = "43DTL278"
 
     TriggerServerEvent('NGWD:spawnVehicle', plate)
 end, false)
