@@ -18,8 +18,8 @@ RegisterCommand("Retrieve", function()
             if blipDistance <= Config.blipRange then
                 if not retrieving then
                     retrieving = true
-                    print("openMenu")
-                    
+                    garageName = zone.name
+                    TriggerEvent('NGWD:openMenu', source, garageName)
                     Wait(1000) -- Waits before allowing this to be triggered again.
                     retrieving = false
                 end
