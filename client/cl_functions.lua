@@ -2,6 +2,18 @@
 local activeNotification = false
 local Delay = 500
 
+if Config.esxNotify then
+    ESX              = nil
+    local PlayerData = {}
+
+    Citizen.CreateThread(function()
+        while ESX == nil do
+            TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+            Citizen.Wait(0)
+        end
+    end)
+end
+
 -- Function (Notification)
 function notifyStorePrompt(garage, id)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -30,11 +42,20 @@ function notifyStorePrompt(garage, id)
             exports.pNotify:SendNotification({
                 text = "Press ["..Config.storageKey.."] To Park Vehicle",
                 type = "info",
-                timeout = 1000 * Config.duration,
+                timeout = 1000 * Config.pNotifyLength,
                 layout = Config.layout,
                 theme = Config.theme,
                 queue = "id"
             })
+        end
+        if Config.esxNotify then
+            print("esxGoBrr")
+            ESX.ShowHelpNotification(
+                "Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", 
+                false, 
+                false, 
+                1000 * Config.esxNotifyLength
+            )
         end
         activeNotification = true
         Wait(Delay)
@@ -66,11 +87,14 @@ function notifyRetrievePrompt(garage, id)
             exports.pNotify:SendNotification({
                 text = "Press ["..Config.retrieveKey.."] To Retrieve Vehicle",
                 type = "info",
-                timeout = 1000 * Config.duration,
+                timeout = 1000 * Config.pNotifyLength,
                 layout = Config.layout,
                 theme = Config.theme,
                 queue = "id"
             })
+        end
+        if Config.esxNotify then
+            print("esxGoBrr")
         end
         activeNotification = true
         Wait(Delay)

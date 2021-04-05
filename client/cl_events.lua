@@ -1,3 +1,15 @@
+if Config.esxNotify then
+    ESX              = nil
+    local PlayerData = {}
+
+    Citizen.CreateThread(function()
+        while ESX == nil do
+            TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+            Citizen.Wait(0)
+        end
+    end)
+end
+
 RegisterNetEvent('NGWD:notifySuccess')
 AddEventHandler('NGWD:notifySuccess', function(message)
     notifyEnd("garageNotify")
@@ -18,11 +30,19 @@ AddEventHandler('NGWD:notifySuccess', function(message)
         exports.pNotify:SendNotification({
             text = "✔️ " .. message,
             type = "success",
-            timeout = 1000 * Config.duration,
+            timeout = 1000 * Config.pNotifyLength,
             layout = Config.layout,
             theme = Config.theme,
             queue = "id"
         })
+    end
+    if Config.esxNotify then
+        ESX.ShowNotification(
+            "✔️ " .. message, 
+            false, 
+            false, 
+            140
+        )
     end
 end)
 
@@ -46,11 +66,19 @@ AddEventHandler('NGWD:notifyError', function(message)
         exports.pNotify:SendNotification({
             text = "❌ " .. message,
             type = "error",
-            timeout = 1000 * Config.duration,
+            timeout = 1000 * Config.pNotifyLength,
             layout = Config.layout,
             theme = Config.theme,
             queue = "id"
         })
+    end
+    if Config.esxNotify then
+        ESX.ShowNotification(
+            "❌ " .. message, 
+            false, 
+            false, 
+            140
+        )
     end
 end)
 

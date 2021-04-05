@@ -1,34 +1,39 @@
 Config = {}
 -- Config Interactions (Keys)
-Config.storageKey = 'E' -- https://docs.fivem.net/docs/game-references/controls/
-Config.retrieveKey = 'E'
--- Config Notifications
-Config.successLength = 2 -- Length of success Notification
-Config.errorLength = 2 -- Length of error Notification
--- Config Variables (T-Notify)
-Config.tNotify = true
-Config.tLocation = 'top-right' -- (top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
--- Config Variables (Myhtic Notify)
-Config.mythicNotify = false
-Config.backgroundColor = '#292929'
--- Config Variables (pNotify)
-Config.pNotify = false
-Config.layout = "centerRight" -- top, topLeft, topCenter, topRight, center, cenerLeft, centerRight, bottom, bottomLeft, bottomCenter, bottomRight
-Config.duration = 5 -- Duration of prompt and alert lengths.
-Config.theme = "gta" -- gta, mint, relax, metroui
--- Config Variables (Barier)
-Config.deleteBarriers = true
---Config Variables (Blips)
-Config.enableBlips = true
-Config.enableBlipNames = true -- Set to false if you need to consolidate blips.
-Config.enableRangedBlip = false -- Only show blip if you're in range.
+Config.storageKey 		= 'E' -- https://docs.fivem.net/docs/game-references/controls/
+Config.retrieveKey 		= 'E'
 
-Config.blipRange = 100 -- How far until the blip shows.
-Config.blipColor = 1 -- https://docs.fivem.net/natives/?_0x03D7FB09E75D6B7E
-Config.blipDisplay = 2 -- 2 = Map/Minimap, 3 = Only Map 5 = ONLY Minimap, 8 = Map/Minimap + Not selectable https://docs.fivem.net/natives/?_0x9029B2F3DA924928
+-- Config Notifications
+Config.successLength 	= 2 -- Length of success Notification
+Config.errorLength 		= 2 -- Length of error Notification
+-- Config Variables (T-Notify)
+Config.tNotify 			= true
+Config.tLocation 		= 'top-right' -- (top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
+-- Config Variables (Mythic Notify https://github.com/FlawwsX/mythic_notify)
+Config.mythicNotify 	= false
+Config.backgroundColor  = '#292929'
+-- Config Variables (pNotify)
+Config.pNotify 			= false
+Config.layout 			= "centerRight" -- top, topLeft, topCenter, topRight, center, cenerLeft, centerRight, bottom, bottomLeft, bottomCenter, bottomRight
+Config.pNotifyLength 	= 5 -- Duration of prompt and alert lengths.
+Config.theme 			= "gta" -- gta, mint, relax, metroui
+-- Config Variables (ESX Notification)
+Config.esxNotify		= true
+Config.esxNotifyLength  = 5 -- Duration of prompt lengths.
+
+-- Config Variables (Barier)
+Config.deleteBarriers 	= true
+
+--Config Variables (Blips)
+Config.enableBlips 		= true
+Config.enableBlipNames 	= true -- Set to false if you need to consolidate blips.
+Config.enableRangedBlip = false -- Only show blip if you're in range.
+Config.blipRange 		= 100 -- How far until the blip shows.
+Config.blipColor 		= 1 -- https://docs.fivem.net/natives/?_0x03D7FB09E75D6B7E
+Config.blipDisplay 		= 2 -- 2 = Map/Minimap, 3 = Only Map 5 = ONLY Minimap, 8 = Map/Minimap + Not selectable https://docs.fivem.net/natives/?_0x9029B2F3DA924928
 
 -- Config Variables (PolyZone)
-Config.zoneCheck = 1 -- Seconds to check if in the zone.
+Config.zoneCheck 		= 1 -- Seconds to check if in the zone.
 
 -- Config (Blips)
 Config.blipLocations = { -- The index number corresponds to the garage number.
