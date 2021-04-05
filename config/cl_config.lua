@@ -11,17 +11,17 @@ Config.errorLength 		= 2 -- Length of error Notification (Seconds)
 Config.tNotify 			= true
 Config.tLocation 		= 'top-right' -- (top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
 -- Config Variables (Mythic Notify https://github.com/FlawwsX/mythic_notify)
-Config.mythicNotify 	= true
+Config.mythicNotify 	= false
 Config.backgroundColor  = '#292929'
 -- Config Variables (pNotify)
-Config.pNotify 			= true
+Config.pNotify 			= false
 Config.layout 			= "centerRight" -- top, topLeft, topCenter, topRight, center, cenerLeft, centerRight, bottom, bottomLeft, bottomCenter, bottomRight
 Config.theme 			= "gta" -- gta, mint, relax, metroui
 -- Config Variables (ESX Notification)
 Config.esxNotify		= false
 
 -- Config Variables (Barier)
-Config.deleteBarriers 	= true
+Config.deleteBarriers 	= false
 
 --Config Variables (Blips)
 Config.enableBlips 		= true
