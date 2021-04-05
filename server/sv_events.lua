@@ -108,6 +108,46 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
     end
 end)
 
+RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
+    local source = source
+    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
+        if string.match(v, Config.identifier) then
+            identifier = v
+            break
+        end
+    end
+    if plate ~= nil then
+        MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
+            ['@owner']              = identifier,
+            ['@plate']              = plate,
+            ['@garage']             = garageName
+        }, function(results)
+            if results then
+                modelHash           = results[1].modelHash
+                plate               = results[1].plate
+                vehicleProperties   = results[1].vehicleProperties
+                vehicleCondition    = results[1].vehicleCondition
+
+                local plyPed = GetPlayerPed(source)
+                local vehNet, veh = createVehicle(source, plyPed, modelHash, GetEntityCoords(plyPed))
+                if not vehNet then 
+                    return 
+                end
+                TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, plate, vehicleProperties, vehicleCondition)
+
+                Wait(100)
+                if not DoesEntityExist(veh) then 
+                    return 
+                end
+            else
+                Utils.Debug('error', "No vehicle found owned by: " .. identifier .. " With Plate " .. plate .. "") 
+            end
+        end)
+    else
+       Utils.Debug('error', "Unable to spawn vehice, no plate was found.")  
+    end
+end)
+
 RegisterNetEvent('NGWD:sellVehicle', function(plate)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
@@ -140,44 +180,6 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
         end)
     else
         Utils.Debug('error', "Unable to sell vehice, no plate was found.")
-    end
-end)
-
-RegisterNetEvent('NGWD:spawnVehicle', function(plate --[[could also send the vehId, would be faster to fetch from the db]])
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.identifier) then
-            identifier = v
-            break
-        end
-    end
-    if plate ~= nil then
-        --[[MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, plate) = (@owner, @plate)', {
-            ['@owner']  = identifier,
-            ['@plate']  = plate]]
-        MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner) = (@owner)', {
-            ['@owner']  = identifier
-        }, function(results)
-            if results then
-                modelHash   = results[1].modelHash
-                plate       = results[1].plate
-                local plyPed = GetPlayerPed(source)
-                local vehNet, veh = createVehicle(source, plyPed, modelHash, GetEntityCoords(plyPed))
-                if not vehNet then 
-                    return 
-                end
-                TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, {} --[[Send the vehicle data to the client]])
-
-                Wait(100)
-                if not DoesEntityExist(veh) then 
-                    return 
-                end
-            else
-                Utils.Debug('error', "No vehicle found owned by: " .. identifier .. " With Plate " .. plate .. "") 
-            end
-        end)
-    else
-       Utils.Debug('error', "Unable to spawn vehice, no plate was found.")  
     end
 end)
 

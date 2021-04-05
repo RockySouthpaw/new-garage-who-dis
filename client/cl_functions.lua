@@ -171,8 +171,9 @@ function vehicleSetters(vehicle, fuel, plate)
     end
 end
 
--- Exports
+--          Exports
 
+-- getters
 function getVehicleCondition(vehicle) -- make async export 
     if DoesEntityExist(vehicle) then
         local Condition = {}
@@ -236,5 +237,29 @@ function getVehicleProperties(vehicle) -- make async export
         return
     end
 end
-
 exports('getVehicleProperties', getVehicleProperties)
+
+-- Setters
+
+function setVehicleCondition(vehicle, vehicleCondition) -- make async export 
+    if DoesEntityExist(vehicle) then
+        SetVehicleEngineHealth(vehicle, health)
+        SetVehicleBodyHealth(vehicle, value)
+        SetVehiclePetrolTankHealth(vehicle, health)
+        SetVehicleFuelLevel(vehicle, level)
+        SetVehicleOilLevel(vehicle, level)
+        SetVehicleDirtLevel(vehicle, dirtLevel)
+        SetVehicleWheelHealth(vehicle, 0, health)
+        SetVehicleWheelHealth(vehicle, 1, health)
+        SetVehicleWheelHealth(vehicle, 2, health)
+        SetVehicleWheelHealth(vehicle, 3, health)
+    end
+end
+exports('setVehicleCondition', setVehicleCondition)
+
+function setVehicleProperties(vehicle, plate, vehicleProperties) -- make async export 
+    if DoesEntityExist(vehicle) then
+        SetVehicleNumberPlateText(vehicle, plate)
+    end
+end
+exports('setVehicleProperties', setVehicleProperties)

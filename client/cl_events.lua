@@ -87,13 +87,14 @@ AddEventHandler('NGWD:openMenu', function(garageName)
     print(garageName)
 end)
 
-RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, vehProperties)
+RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehicleProperties, vehicleCondition)
     while not NetworkDoesEntityExistWithNetworkId(vehNet) do
         -- vehicles wont instantly exist on the client, even though they exist on the server.
         Wait(50)
     end
-
-    -- handle vehProperties
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    setVehicleProperties(vehicle, plate, vehicleProperties)
+    setVehicleCondition(vehicle, vehicleCondition)
 end)
 
 RegisterNetEvent('NGWD:leaveVehicle')
@@ -146,11 +147,7 @@ RegisterCommand('sell', function(source, args, rawCommand)
 end, false)
 
 RegisterCommand('spawn', function(source, args, rawCommand)
-    local plate = "29NDG376"
-
-    TriggerServerEvent('NGWD:spawnVehicle', plate)
-
-    Wait(500)
-    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-    SetVehicleNumberPlateText(vehicle, plate)
+    local plate = '23HSO859'
+    local garageName = 'Pink Cage'
+    TriggerServerEvent('NGWD:spawnVehicle', plate, garageName)
 end, false)
