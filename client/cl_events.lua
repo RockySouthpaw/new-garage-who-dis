@@ -83,7 +83,7 @@ AddEventHandler('NGWD:notifyError', function(message)
 end)
 
 RegisterNetEvent('NGWD:openMenu')
-AddEventHandler('NGWD:openMenu', function(source, garageName)
+AddEventHandler('NGWD:openMenu', function(garageName)
     print(garageName)
 end)
 
@@ -105,6 +105,11 @@ AddEventHandler('NGWD:leaveVehicle', function(vehicle)
     end
     Wait(1500)
     --deleteVehicle(vehicle)
+    if not DoesEntityExist(vehicle) then
+        print("^5[INFO] Vehicle delete successfully.")
+    else
+        print("^2[ERROR] Vehicle was not deleted.")
+    end
 end)
 
 RegisterNetEvent('NGWD:previewVehicle')

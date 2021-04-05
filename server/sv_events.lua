@@ -10,18 +10,18 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
         if plate ~= nil and modelHash ~= nil then
             -- can also add a distance check for the dealership cords and trigger a kick event..
             MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, localizedName, plate) = (@owner, @modelHash, @localizedName, @plate)', {
-                ['@owner']     = identifier,
-                ['@modelHash']     = modelHash,
-                ['@localizedName'] = localizedName,
-                ['@plate']     = plate,
+                ['@owner']          = identifier,
+                ['@modelHash']      = modelHash,
+                ['@localizedName']  = localizedName,
+                ['@plate']          = plate,
             }, function(results)
                 if results[1] == nil then
-                    MySQL.Async.execute('INSERT INTO `ngwd_vehicles` (`owner`, `modelHash`, `localizedName`, `plate`) VALUES (@owner, @modelHash, @localizedName, @plate)',
+                    MySQL.Async.execute('INSERT INTO ngwd_vehicles (owner, modelHash, localizedName, plate) VALUES (@owner, @modelHash, @localizedName, @plate)',
                     {
-                        ['@owner']  = identifier, 
-                        ['modelHash']   = modelHash,
-                        ['@localizedName'] = localizedName,
-                        ['@plate']  = plate;
+                        ['@owner']          = identifier, 
+                        ['modelHash']       = modelHash,
+                        ['@localizedName']  = localizedName,
+                        ['@plate']          = plate;
                     })
                     Utils.Debug('success', "".. identifier .. " Purchased a vehicle with the plate " .. plate .. ".")
                     if Config.purchaseNotification then
@@ -55,16 +55,19 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
         if plate ~= nil and modelHash ~= nil then
             MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (modelHash, plate) = (@modelHash, @plate)', {
                 ['@modelHash']  = modelHash,
-                ['@plate']  = plate,
+                ['@plate']      = plate,
             }, function(results)
                 if results[1] ~= nil then
                     if results[1].owner == identifier then
-                        MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', { 
-                            ['@owner'] = identifier, 
-                            ['@modelHash'] = modelHash,
-                            ['@localizedName'] = localizedName,
-                            ['@plate'] = plate, 
-                            ['@garage'] = garageName 
+                        --print(json.encode(vehicleProperties))
+                        MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition WHERE plate = @plate', { 
+                            ['@owner']                  = identifier, 
+                            ['@modelHash']              = modelHash,
+                            ['@localizedName']          = localizedName,
+                            ['@plate']                  = plate, 
+                            ['@garage']                 = garageName,
+                            ['@vehicleProperties']      = json.encode(vehicleProperties),
+                            ['@vehicleCondition']       = json.encode(vehicleCondition)
                         }, function(affectedRows)
                         end)             
                         TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
@@ -73,13 +76,16 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                         TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
                     elseif results[1].owner ~= identifier then
                         if not Config.ownerRestricted then
-                            MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage WHERE plate = @plate', { 
-                                ['@owner'] = identifier, 
-                                ['@modelHash'] = modelHash,
-                                ['@localizedName'] = localizedName,
-                                ['@plate'] = plate, 
-                                ['@garage'] = garageName 
-                            }, function(affectedRows)end)                       
+                            MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition WHERE plate = @plate', { 
+                                ['@owner']                  = identifier, 
+                                ['@modelHash']              = modelHash,
+                                ['@localizedName']          = localizedName,
+                                ['@plate']                  = plate, 
+                                ['@garage']                 = garageName,
+                                ['@vehicleProperties']      = json.encode(vehicleProperties),
+                                ['@vehicleCondition']       = json.encode(vehicleCondition)
+                            }, function(affectedRows)
+                            end)                      
                             TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
                             Wait(1000)
                             TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
@@ -112,15 +118,15 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
     end
     if plate ~= nil then
         MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
-            ['@owner']  = identifier,
+            ['@owner']      = identifier,
             ['@modelHash']  = modelHash,
-            ['@plate']  = plate,
+            ['@plate']      = plate,
         }, function(results)
             if results then
-                MySQL.Async.execute('DELETE FROM ngwd_vehicles WHERE `owner` = @identifier AND plate = @plate',
+                MySQL.Async.execute('DELETE FROM ngwd_vehicles WHERE owner = @identifier AND plate = @plate',
                 {
                     ['@identifier'] = identifier,
-                    ['@plate']     = plate
+                    ['@plate']      = plate
                 }, function(rowsChanged) 
                     if rowsChanged ~= 0 then
                         if Debug.debugLevel >= 2 then
@@ -153,8 +159,8 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate --[[could also send the veh
             ['@owner']  = identifier
         }, function(results)
             if results then
-                modelHash = results[1].modelHash
-                plate = results[1].plate
+                modelHash   = results[1].modelHash
+                plate       = results[1].plate
                 local plyPed = GetPlayerPed(source)
                 local vehNet, veh = createVehicle(source, plyPed, modelHash, GetEntityCoords(plyPed))
                 if not vehNet then 

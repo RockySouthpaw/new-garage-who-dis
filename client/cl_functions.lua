@@ -128,7 +128,7 @@ end
 
 -- Functions (Core)
 function storeVehicle(vehicle, garageName)
-    if not inProgress then -- Checks if its already storing a vehicle to prevent key spam.
+    if not inProgress then
         inProgress = true
         local vehicleProperties = getVehicleProperties(vehicle)
         local vehicleCondition = getVehicleCondition(vehicle)
@@ -139,12 +139,10 @@ function storeVehicle(vehicle, garageName)
 
         if garageName ~= nil then
             TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition)
-            Wait(500)
             inProgress = false
         elseif garageName ~= nil then
             message = 'Invalid Garage!'
             TriggerEvent('NGWD:notifyError', message)
-            Wait(500)
             inProgress = false
         end
     end
@@ -238,4 +236,5 @@ function getVehicleProperties(vehicle) -- make async export
         return
     end
 end
+
 exports('getVehicleProperties', getVehicleProperties)

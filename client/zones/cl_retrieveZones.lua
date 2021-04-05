@@ -19,7 +19,7 @@ RegisterCommand("Retrieve", function()
                 if not retrieving then
                     retrieving = true
                     garageName = zone.name
-                    TriggerEvent('NGWD:openMenu', source, garageName)
+                    TriggerEvent('NGWD:openMenu', garageName)
                     Wait(1000) -- Waits before allowing this to be triggered again.
                     retrieving = false
                 end
