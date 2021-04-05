@@ -27,7 +27,7 @@ function notifyStorePrompt(garage, id)
                     style = 'message',
                     title = garage.. ' Parking',
                     sound = true,
-                    message = "Press **["..Config.storageKey.."]** To Park Vehicle",
+                    message = "Press **~c~["..Config.storageKey.."]~c~** To Park Vehicle",
                     position = Config.tLocation
                     
                 }
@@ -70,7 +70,7 @@ function notifyRetrievePrompt(garage, id)
                     style = 'message',
                     title = garage.. ' Parking',
                     sound = true,
-                    message = "Press **["..Config.retrieveKey.."]** To Retrieve Vehicle",
+                    message = "Press **~c~["..Config.retrieveKey.."]~c~** To Retrieve Vehicle",
                     position = Config.tLocation
                 }
             })
