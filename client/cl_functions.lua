@@ -29,7 +29,6 @@ function notifyStorePrompt(garage, id)
                     sound = true,
                     message = "Press **["..Config.storageKey.."]** To Park Vehicle",
                     position = Config.tLocation
-                    
                 }
             })
         end
@@ -49,7 +48,6 @@ function notifyStorePrompt(garage, id)
             })
         end
         if Config.esxNotify then
-            print("esxGoBrr")
             ESX.ShowHelpNotification(
                 "Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", 
                 false, 
@@ -74,7 +72,6 @@ function notifyRetrievePrompt(garage, id)
                     sound = true,
                     message = "Press **["..Config.retrieveKey.."]** To Retrieve Vehicle",
                     position = Config.tLocation
-                    
                 }
             })
         end
@@ -94,7 +91,12 @@ function notifyRetrievePrompt(garage, id)
             })
         end
         if Config.esxNotify then
-            print("esxGoBrr")
+            ESX.ShowHelpNotification(
+                "Press ~y~["..Config.retrieveKey.."]~w~ To Retrieve Vehicle", 
+                false, 
+                false, 
+                1000 * Config.esxNotifyLength
+            )
         end
         activeNotification = true
         Wait(Delay)
