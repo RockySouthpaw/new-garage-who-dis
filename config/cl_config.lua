@@ -6,6 +6,7 @@ Config.retrieveKey 		= 'E'
 -- Config Notifications
 Config.successLength 	= 2 -- Length of success Notification
 Config.errorLength 		= 2 -- Length of error Notification
+Config.floatingAlerts		= true
 -- Config Variables (T-Notify)
 Config.tNotify 			= true
 Config.tLocation 		= 'top-right' -- (top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
