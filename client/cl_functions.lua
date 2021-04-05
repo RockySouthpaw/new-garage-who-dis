@@ -48,13 +48,13 @@ function notifyStorePrompt(garage, id)
                 queue = "id"
             })
         end
-        if Config.esxNotify then
+        if Config.floatingAlerts then
             print("esxGoBrr")
             Citizen.CreateThread(function()
                 while activeNotification do
                     Citizen.Wait(10)
                     local coords = GetEntityCoords(vehicle)
-                    ShowFloatingHelpNotification("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", vector3(coords.x, coords.y, coords.z + 1))
+                    floatingNoti("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", vector3(coords.x, coords.y, coords.z + 1))
                 end
             end)
         end
@@ -159,6 +159,14 @@ function vehicleSetters(vehicle, fuel, plate)
         SetVehicleFuelLevel(vehicle, fuel)
         SetVehicleNumberPlateText(vehicle, plate)
     end
+end
+
+function floatingNoti(message, coords)
+    AddTextEntry('floatingNoti', message)
+    SetFloatingHelpTextWorldPosition(1, coords)
+    SetFloatingHelpTextStyle(1, 1, 2, -1, 3, 0)
+    BeginTextCommandDisplayHelp('floatingNoti')
+    EndTextCommandDisplayHelp(2, false, false, -1)
 end
 
 -- Exports
