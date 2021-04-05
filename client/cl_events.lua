@@ -148,6 +148,6 @@ end, false)
 
 RegisterCommand('spawn', function(source, args, rawCommand)
     local plate = '23HSO859'
-    local garageName = 'Pink Cage'
+    local garageName = 'Legion'
     TriggerServerEvent('NGWD:spawnVehicle', plate, garageName)
 end, false)

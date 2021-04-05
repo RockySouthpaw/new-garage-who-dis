@@ -183,10 +183,10 @@ function getVehicleCondition(vehicle) -- make async export
         Condition.tankHealth = GetVehiclePetrolTankHealth(vehicle)
         Condition.fuelLevel = GetVehicleFuelLevel(vehicle)
         Condition.oilLevel = GetVehicleOilLevel(vehicle)
-        Condition.dirt = GetVehicleDirtLevel(vehicle)
-        Condition.tires = {}
+        Condition.dirtLevel = GetVehicleDirtLevel(vehicle)
+        Condition.tireHealth = {}
         for i = 0,3 do
-            Condition.tires[i] = GetVehicleWheelHealth(vehicle, i)
+            Condition.tireHealth[i] = GetVehicleWheelHealth(vehicle, i)
         end
         return Condition
     else
@@ -215,13 +215,15 @@ function getVehicleProperties(vehicle) -- make async export
         Property.neonColor.r, Property.neonColor.g, Property.neonColor.b = GetVehicleNeonLightsColour(vehicle)
         Property.smokeColor = {}
         Property.smokeColor.r, Property.smokeColor.g, Property.smokeColor.b = GetVehicleTyreSmokeColor(vehicle)
+        Property.vehicleColor = {}
+        Property.vehicleColor.primary, Property.vehicleColor.secondary = GetVehicleColours(vehicle) -- Use with SetVehicleColours
+        Property.extraColor = {}
+        Property.extraColor.pearlescentColor, Property.extraColor.wheelColor = GetVehicleExtraColours(vehicle)
 
         Property.turboPurchased = IsToggleModOn(vehicle, 18)
         Property.smokePurchased = IsToggleModOn(vehicle, 20)
         Property.xenonEnabled = IsToggleModOn(vehicle, 22)
-        Property.lightsState = GetVehicleLightsState(vehicle)
-        Property.colorPrimary, ColorSecondary = GetVehicleColours(vehicle) -- Use with SetVehicleColours
-        Property.pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)
+
         Property.plateIndex = GetVehicleNumberPlateTextIndex(vehicle)
         Property.headlightColor = GetVehicleHeadlightsColour(vehicle) -- Formally known as GetVehicleHeadlightsColour
         Property.interiorColor = GetVehicleInteriorColour(vehicle)
@@ -243,16 +245,29 @@ exports('getVehicleProperties', getVehicleProperties)
 
 function setVehicleCondition(vehicle, vehicleCondition) -- make async export 
     if DoesEntityExist(vehicle) then
-        SetVehicleEngineHealth(vehicle, health)
-        SetVehicleBodyHealth(vehicle, value)
-        SetVehiclePetrolTankHealth(vehicle, health)
-        SetVehicleFuelLevel(vehicle, level)
-        SetVehicleOilLevel(vehicle, level)
-        SetVehicleDirtLevel(vehicle, dirtLevel)
-        SetVehicleWheelHealth(vehicle, 0, health)
-        SetVehicleWheelHealth(vehicle, 1, health)
-        SetVehicleWheelHealth(vehicle, 2, health)
-        SetVehicleWheelHealth(vehicle, 3, health)
+        for Condition, Value in pairs(vehicleCondition) do
+            --print(Condition, Value)
+            if Condition == 'engineHealth' then
+                SetVehicleEngineHealth(vehicle, Value)
+            end
+            if Condition == 'bodyHealth' then
+                SetVehicleBodyHealth(vehicle, Value)
+            end
+            if Condition == 'tankHealth' then
+                SetVehiclePetrolTankHealth(vehicle, Value)
+            end
+            if Condition == 'fuelLevel' then
+                SetVehicleFuelLevel(vehicle, Value)
+            end
+            if Condition == 'oilLevel' then
+                SetVehicleOilLevel(vehicle, Value)
+            end
+            if Condition == 'dirtLevel' then
+                SetVehicleDirtLevel(vehicle, Value)
+            end
+            if Condition == 'tireHealth' then
+            end
+        end
     end
 end
 exports('setVehicleCondition', setVehicleCondition)
@@ -260,6 +275,37 @@ exports('setVehicleCondition', setVehicleCondition)
 function setVehicleProperties(vehicle, plate, vehicleProperties) -- make async export 
     if DoesEntityExist(vehicle) then
         SetVehicleNumberPlateText(vehicle, plate)
+
+        for Property, Value in pairs(vehicleProperties) do
+            if Property == 'turboPurchased' then
+                SetVehicleModKit(vehicle, 0)
+                ToggleVehicleMod(vehicle, 18, Value)
+            end
+            if Property == 'smokePurchased' then
+                SetVehicleModKit(vehicle, 0)
+                ToggleVehicleMod(vehicle, 20, Value)
+            end
+            if Property == 'xenonEnabled' then
+                print(Value)
+                SetVehicleModKit(vehicle, 0)
+                ToggleVehicleMod(vehicle, 22, Value)
+            end
+            if Property == 'headlightColor' then
+                SetVehicleHeadlightsColour(vehicle, Value)
+            end
+            if Property == 'interiorColor' then
+                SetVehicleInteriorColour(vehicle, Value)
+            end
+            if Property == 'dashboardColor' then
+                SetVehicleDashboardColour(vehicle, Value)
+            end
+            if Property == 'Livery' then
+                SetVehicleModKit(vehicle, 0)
+                SetVehicleMod(vehicle, 48, value, false)
+                SetVehicleLivery(vehicle, value)
+                SetVehicleRoofLivery(vehicle, value)
+            end
+        end
     end
 end
 exports('setVehicleProperties', setVehicleProperties)

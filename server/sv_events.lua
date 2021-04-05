@@ -57,7 +57,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                 ['@modelHash']  = modelHash,
                 ['@plate']      = plate,
             }, function(results)
-                if results[1] ~= nil then
+                if results[1] then
                     if results[1].owner == identifier then
                         --print(json.encode(vehicleProperties))
                         MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition WHERE plate = @plate', { 
@@ -122,12 +122,12 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
             ['@plate']              = plate,
             ['@garage']             = garageName
         }, function(results)
-            if results then
+            if results ~= nil then
                 modelHash           = results[1].modelHash
                 plate               = results[1].plate
-                vehicleProperties   = results[1].vehicleProperties
-                vehicleCondition    = results[1].vehicleCondition
-
+                vehicleProperties   = json.decode(results[1].vehicleProperties)
+                vehicleCondition    = json.decode(results[1].vehicleCondition)
+                print(vehicleProperties)
                 local plyPed = GetPlayerPed(source)
                 local vehNet, veh = createVehicle(source, plyPed, modelHash, GetEntityCoords(plyPed))
                 if not vehNet then 

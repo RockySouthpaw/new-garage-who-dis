@@ -5,7 +5,15 @@ function createVehicle(source, plyPed, modelHash, coords)
         local heading = GetEntityHeading(plyPed)
         local spawnZone = vector3(v.x, v.y, v.z)
         local spawnDistance = #(GetEntityCoords(plyPed) - spawnZone)
+        local inVehicle = GetVehiclePedIsIn(plyPed)
         if spawnDistance <= Config.spawnRange then
+            if inVehicle ~= 0 then
+                DeleteEntity(inVehicle)
+                Wait(300)
+                Utils.Debug('inform', "Player was in a vehicle.")
+            else
+                Utils.Debug('inform', "Player was not in a vehicle.")
+            end
             local veh = Citizen.InvokeNative(CreateAutomobile, modelHash, v.x, v.y, v.z, heading, true, false)
             if not DoesEntityExist(veh) then 
                 return nil 
