@@ -18,7 +18,7 @@ Config.layout 			= "centerRight" -- top, topLeft, topCenter, topRight, center, c
 Config.pNotifyLength 	= 5 -- Duration of prompt and alert lengths.
 Config.theme 			= "gta" -- gta, mint, relax, metroui
 -- Config Variables (ESX Notification)
-Config.esxNotify		= true
+Config.esxNotify		= false
 Config.esxNotifyLength  = 5 -- Duration of prompt lengths.
 
 -- Config Variables (Barier)
