@@ -38,23 +38,20 @@ function notifyStorePrompt(garage, id)
             exports['mythic_notify']:PersistentAlert('start',id,'inform', text, { ['background-color'] = Config.backgroundColor })
         end
         if Config.pNotify then
-            exports.pNotify:SetQueueMax(id, 1)
-            exports.pNotify:SendNotification({
-                text = "Press ["..Config.storageKey.."] To Park Vehicle",
-                type = "info",
-                timeout = 1000 * Config.pNotifyLength,
-                layout = Config.layout,
-                theme = Config.theme,
-                queue = "id"
-            })
-        end
-        if Config.floatingAlerts then
-            print("esxGoBrr")
             Citizen.CreateThread(function()
                 while activeNotification do
                     Citizen.Wait(10)
                     local coords = GetEntityCoords(vehicle)
-                    floatingNoti("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", vector3(coords.x, coords.y, coords.z + 1))
+                    floatingNotification("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", vector3(coords.x, coords.y, coords.z + 1))
+                end
+            end)
+        end
+        if Config.esxNotify then
+            Citizen.CreateThread(function()
+                while activeNotification do
+                    Citizen.Wait(10)
+                    local coords = GetEntityCoords(vehicle)
+                    floatingNotification("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", vector3(coords.x, coords.y, coords.z + 1))
                 end
             end)
         end
@@ -83,15 +80,22 @@ function notifyRetrievePrompt(garage, id)
             exports['mythic_notify']:PersistentAlert('start',id,'inform', text, { ['background-color'] = Config.backgroundColor })
         end
         if Config.pNotify then
-            exports.pNotify:SetQueueMax(id, 1)
-            exports.pNotify:SendNotification({
-                text = "Press ["..Config.retrieveKey.."] To Retrieve Vehicle",
-                type = "info",
-                timeout = 1000 * Config.pNotifyLength,
-                layout = Config.layout,
-                theme = Config.theme,
-                queue = "id"
-            })
+            Citizen.CreateThread(function()
+                while activeNotification do
+                    Citizen.Wait(10)
+                    local coords = GetEntityCoords(PlayerPedId())
+                    floatingNotification("Press ~y~["..Config.retrieveKey.."]~w~ To Retrieve Vehicle", vector3(coords.x, coords.y, coords.z + 1))
+                end
+            end)
+        end
+        if Config.esxNotify then
+            Citizen.CreateThread(function()
+                while activeNotification do
+                    Citizen.Wait(10)
+                    local coords = GetEntityCoords(PlayerPedId())
+                    floatingNotification("Press ~y~["..Config.retrieveKey.."]~w~ To Retrieve Vehicle", vector3(coords.x, coords.y, coords.z + 1))
+                end
+            end)
         end
         activeNotification = true
         Wait(Delay)
@@ -112,6 +116,14 @@ function notifyEnd(id)
         activeNotification = false
         Wait(Delay)
     end
+end
+
+function floatingNotification(message, coords) -- by Lucas.#4689 in ESX Discord.
+    AddTextEntry('floatingNotification', message)
+    SetFloatingHelpTextWorldPosition(1, coords)
+    SetFloatingHelpTextStyle(1, 1, 2, -1, 3, 0)
+    BeginTextCommandDisplayHelp('floatingNotification')
+    EndTextCommandDisplayHelp(2, false, false, -1)
 end
 
 -- Functions (Core)
@@ -159,14 +171,6 @@ function vehicleSetters(vehicle, fuel, plate)
         SetVehicleFuelLevel(vehicle, fuel)
         SetVehicleNumberPlateText(vehicle, plate)
     end
-end
-
-function floatingNoti(message, coords)
-    AddTextEntry('floatingNoti', message)
-    SetFloatingHelpTextWorldPosition(1, coords)
-    SetFloatingHelpTextStyle(1, 1, 2, -1, 3, 0)
-    BeginTextCommandDisplayHelp('floatingNoti')
-    EndTextCommandDisplayHelp(2, false, false, -1)
 end
 
 -- Exports

@@ -3,24 +3,22 @@ Config = {}
 Config.storageKey 		= 'E' -- https://docs.fivem.net/docs/game-references/controls/
 Config.retrieveKey 		= 'E'
 
--- Config Notifications
-Config.successLength 	= 2 -- Length of success Notification
-Config.errorLength 		= 2 -- Length of error Notification
-Config.floatingAlerts		= true
+-- Config Notifications (Applies to All)
+Config.successLength 	= 2 -- Length of success Notification (Seconds)
+Config.errorLength 		= 2 -- Length of error Notification (Seconds)
+
 -- Config Variables (T-Notify)
 Config.tNotify 			= true
 Config.tLocation 		= 'top-right' -- (top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
 -- Config Variables (Mythic Notify https://github.com/FlawwsX/mythic_notify)
-Config.mythicNotify 	= false
+Config.mythicNotify 	= true
 Config.backgroundColor  = '#292929'
 -- Config Variables (pNotify)
-Config.pNotify 			= false
+Config.pNotify 			= true
 Config.layout 			= "centerRight" -- top, topLeft, topCenter, topRight, center, cenerLeft, centerRight, bottom, bottomLeft, bottomCenter, bottomRight
-Config.pNotifyLength 	= 5 -- Duration of prompt and alert lengths.
 Config.theme 			= "gta" -- gta, mint, relax, metroui
 -- Config Variables (ESX Notification)
 Config.esxNotify		= false
-Config.esxNotifyLength  = 5 -- Duration of prompt lengths.
 
 -- Config Variables (Barier)
 Config.deleteBarriers 	= true

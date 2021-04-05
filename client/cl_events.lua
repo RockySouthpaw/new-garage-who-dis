@@ -19,7 +19,7 @@ AddEventHandler('NGWD:notifySuccess', function(message)
         exports['t-notify']:Alert({
             style  =  'success',
             message  =  "✔️ " .. message,
-            length = Config.successLength * 1000
+            length = length
         })
     end
     if Config.mythicNotify then
@@ -30,7 +30,7 @@ AddEventHandler('NGWD:notifySuccess', function(message)
         exports.pNotify:SendNotification({
             text = "✔️ " .. message,
             type = "success",
-            timeout = 1000 * Config.pNotifyLength,
+            timeout = length,
             layout = Config.layout,
             theme = Config.theme,
             queue = "id"
@@ -66,7 +66,7 @@ AddEventHandler('NGWD:notifyError', function(message)
         exports.pNotify:SendNotification({
             text = "❌ " .. message,
             type = "error",
-            timeout = 1000 * Config.pNotifyLength,
+            timeout = length,
             layout = Config.layout,
             theme = Config.theme,
             queue = "id"
