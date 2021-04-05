@@ -50,7 +50,7 @@ RegisterNetEvent('NGWD:notifyError')
 AddEventHandler('NGWD:notifyError', function(message)
     notifyEnd("garageNotify")
     Wait(150) -- Ensures all notifications are removed in time before creating new ones.
-    length = Config.successLength * 1000
+    length = Config.errorLength * 1000
     if Config.tNotify then 
         exports['t-notify']:Alert({
             style  =  'error',
