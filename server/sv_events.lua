@@ -146,9 +146,11 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate --[[could also send the veh
         end
     end
     if plate ~= nil then
-        MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, plate) = (@owner, @plate)', {
+        --[[MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, plate) = (@owner, @plate)', {
             ['@owner']  = identifier,
-            ['@plate']  = plate
+            ['@plate']  = plate]]
+        MySQL.Async.fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner) = (@owner)', {
+            ['@owner']  = identifier
         }, function(results)
             if results then
                 modelHash = results[1].modelHash

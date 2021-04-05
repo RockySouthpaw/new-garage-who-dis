@@ -2,6 +2,7 @@ local CreateAutomobile = GetHashKey("CREATE_AUTOMOBILE")
 
 function createVehicle(source, plyPed, modelHash, coords)
     for k, v in pairs(Config.spawnLocations) do
+        local heading = GetEntityHeading(plyPed)
         local spawnZone = vector3(v.x, v.y, v.z)
         local spawnDistance = #(GetEntityCoords(plyPed) - spawnZone)
         if spawnDistance <= Config.spawnRange then

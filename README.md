@@ -1,9 +1,12 @@
 # STILL WIP DO NOT USE
 
+# Dependencies
+- [PolyZone](https://github.com/mkafrin/PolyZone) This ensures the lowest resource use possible as the resource currently uses `0.01 ms` due to no threads being used outside of blips and barrier deletion (Config based). This dependency will exist for the forseable future.
+
 # Current Dev Commands
-- `buy` Will insert the vehicle you're currently sitting in into the NGWD vehicles table. (Ensure it doesn't duplicate.)
+- `buy` Will insert the vehicle you're currently sitting in into the NGWD vehicles table.
 - `sell` Will delete the vehicle you're currently sitting in from the SQL.
-- `spawn` WIP
+- `spawn` Will spawn a vehicle in the configured spawn zone so long as you're close enough. **You must have at least one purchased vehicle for this.**
 
 # Supported Notifications
 *New-Garage-Who-Dis* supports the following notification resources by default:
