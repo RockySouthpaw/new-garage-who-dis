@@ -29,6 +29,7 @@ function notifyStorePrompt(garage, id)
                     sound = true,
                     message = "Press **["..Config.storageKey.."]** To Park Vehicle",
                     position = Config.tLocation
+                    
                 }
             })
         end
@@ -47,13 +48,15 @@ function notifyStorePrompt(garage, id)
                 queue = "id"
             })
         end
-        if Config.esxNotify then
-            ESX.ShowHelpNotification(
-                "Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", 
-                false, 
-                false, 
-                1000 * Config.esxNotifyLength
-            )
+        if Config.floatingAlerts then
+            print("esxGoBrr")
+            Citizen.CreateThread(function()
+                while activeNotification do
+                    Citizen.Wait(10)
+                    local coords = GetEntityCoords(vehicle)
+                    floatingNoti("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", vector3(coords.x, coords.y, coords.z + 1))
+                end
+            end)
         end
         activeNotification = true
         Wait(Delay)
@@ -89,14 +92,6 @@ function notifyRetrievePrompt(garage, id)
                 theme = Config.theme,
                 queue = "id"
             })
-        end
-        if Config.esxNotify then
-            ESX.ShowHelpNotification(
-                "Press ~y~["..Config.retrieveKey.."]~w~ To Retrieve Vehicle", 
-                false, 
-                false, 
-                1000 * Config.esxNotifyLength
-            )
         end
         activeNotification = true
         Wait(Delay)
@@ -164,6 +159,14 @@ function vehicleSetters(vehicle, fuel, plate)
         SetVehicleFuelLevel(vehicle, fuel)
         SetVehicleNumberPlateText(vehicle, plate)
     end
+end
+
+function floatingNoti(message, coords)
+    AddTextEntry('floatingNoti', message)
+    SetFloatingHelpTextWorldPosition(1, coords)
+    SetFloatingHelpTextStyle(1, 1, 2, -1, 3, 0)
+    BeginTextCommandDisplayHelp('floatingNoti')
+    EndTextCommandDisplayHelp(2, false, false, -1)
 end
 
 -- Exports
