@@ -29,6 +29,7 @@ function notifyStorePrompt(garage, id)
                     sound = true,
                     message = "Press **["..Config.storageKey.."]** To Park Vehicle",
                     position = Config.tLocation
+                    
                 }
             })
         end
@@ -48,12 +49,8 @@ function notifyStorePrompt(garage, id)
             })
         end
         if Config.esxNotify then
-            ESX.ShowHelpNotification(
-                "Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", 
-                false, 
-                false, 
-                1000 * Config.esxNotifyLength
-            )
+            print("esxGoBrr")
+            ESX.ShowHelpNotification("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", true, true) -- Time won't matter. The max is already.
         end
         activeNotification = true
         Wait(Delay)
@@ -113,6 +110,10 @@ function notifyEnd(id)
         end
         if Config.mythicNotify then
             exports['mythic_notify']:PersistentAlert('end', id)
+        end
+
+        if Config.esxNotify then
+            ESX.ShowHelpNotification("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", true, true)
         end
         activeNotification = false
         Wait(Delay)
