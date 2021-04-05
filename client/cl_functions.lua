@@ -50,7 +50,13 @@ function notifyStorePrompt(garage, id)
         end
         if Config.esxNotify then
             print("esxGoBrr")
-            ESX.ShowHelpNotification("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", true, true) -- Time won't matter. The max is already.
+            Citizen.CreateThread(function()
+                while activeNotification do
+                    Citizen.Wait(10)
+                    local coords = GetEntityCoords(vehicle)
+                    ShowFloatingHelpNotification("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", vector3(coords.x, coords.y, coords.z + 1))
+                end
+            end)
         end
         activeNotification = true
         Wait(Delay)
@@ -87,14 +93,6 @@ function notifyRetrievePrompt(garage, id)
                 queue = "id"
             })
         end
-        if Config.esxNotify then
-            ESX.ShowHelpNotification(
-                "Press ~y~["..Config.retrieveKey.."]~w~ To Retrieve Vehicle", 
-                false, 
-                false, 
-                1000 * Config.esxNotifyLength
-            )
-        end
         activeNotification = true
         Wait(Delay)
     end
@@ -110,10 +108,6 @@ function notifyEnd(id)
         end
         if Config.mythicNotify then
             exports['mythic_notify']:PersistentAlert('end', id)
-        end
-
-        if Config.esxNotify then
-            ESX.ShowHelpNotification("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", true, true)
         end
         activeNotification = false
         Wait(Delay)
