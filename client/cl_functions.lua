@@ -188,6 +188,10 @@ function getVehicleCondition(vehicle) -- make async export
         for i = 0,3 do
             Condition.tireHealth[i] = GetVehicleWheelHealth(vehicle, i)
         end
+        Condition.tireBurstState = {}
+        for i = 0,5 do
+            Condition.tireBurstState[i] = IsVehicleTyreBurst(vehicle, i, false)
+        end
         return Condition
     else
         return
@@ -266,6 +270,17 @@ function setVehicleCondition(vehicle, vehicleCondition) -- make async export
                 SetVehicleDirtLevel(vehicle, Value)
             end
             if Condition == 'tireHealth' then
+                for wheelIndex, health in pairs(Value) do
+                    SetVehicleWheelHealth(vehicle, wheelIndex, health)
+                end
+            end
+            if Condition == 'tireBurstState' then
+                for wheelIndex, burstState in pairs(Value) do
+                    --print(wheelIndex, burstState)
+                    if burstState then 
+                        --SetVehicleTyreBurst(vehicle, wheelIndex, false, 1000.0)
+                    end
+                end
             end
         end
     end
@@ -277,6 +292,13 @@ function setVehicleProperties(vehicle, plate, vehicleProperties) -- make async e
         SetVehicleNumberPlateText(vehicle, plate)
 
         for Property, Value in pairs(vehicleProperties) do
+            if Property == 'vehicleMods' then
+                for modType, modIndex in pairs(Value) do
+                    SetVehicleModKit(vehicle, 0)
+                    Wait(10)
+                    SetVehicleMod(vehicle, modType, modIndex, false)
+                end
+            end
             if Property == 'turboPurchased' then
                 SetVehicleModKit(vehicle, 0)
                 ToggleVehicleMod(vehicle, 18, Value)
@@ -286,7 +308,7 @@ function setVehicleProperties(vehicle, plate, vehicleProperties) -- make async e
                 ToggleVehicleMod(vehicle, 20, Value)
             end
             if Property == 'xenonEnabled' then
-                print(Value)
+                --print(Value)
                 SetVehicleModKit(vehicle, 0)
                 ToggleVehicleMod(vehicle, 22, Value)
             end
