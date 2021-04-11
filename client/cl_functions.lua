@@ -193,6 +193,10 @@ function getVehicleCondition(vehicle) -- make async export
         for i = 0,5 do
             Condition.tireBurstState[i] = IsVehicleTyreBurst(vehicle, i, false)
         end
+        Condition.tireBurstCompletely = {}
+        for i = 0,5 do
+            Condition.tireBurstCompletely[i] = IsVehicleTyreBurst(vehicle, i, true)
+        end
         return Condition
     else
         return
@@ -227,7 +231,6 @@ function getVehicleProperties(vehicle) -- make async export
         Property.dashboardColor = GetVehicleDashboardColour(vehicle)
         Property.wheelSize = GetVehicleWheelSize(vehicle)
         Property.wheelWidth = GetVehicleWheelWidth(vehicle)
-        Property.wheelType = GetVehicleWheelType(vehicle)
         Property.windowTint = GetVehicleWindowTint(vehicle)
         return Property
     else
@@ -329,12 +332,18 @@ function setVehicleCondition(vehicle, vehicleCondition) -- make async export
             end
             if Condition == 'tireBurstState' then
                 for wheelIndex, burstState in pairs(Value) do
-                    --print(wheelIndex, burstState)
                     if burstState then 
-                        --SetVehicleTyreBurst(vehicle, wheelIndex, false, 1000.0)
+                        SetVehicleTyreBurst(vehicle, tonumber(wheelIndex), false, 1000.0)
                     end
                 end
             end
+            if Condition == 'tireBurstCompletely' then
+                for wheelIndex, burstState in pairs(Value) do
+                    if burstState then 
+                        SetVehicleTyreBurst(vehicle, tonumber(wheelIndex), true, 1000.0)
+                    end
+                end
+            end 
         end
     end
 end
@@ -360,24 +369,53 @@ function setVehicleProperties(vehicle, plate, vehicleProperties) -- make async e
                 end
             end
             if Property == 'neonColor' then
-                for neonColor, Value in pairs(Value) do
-                   --print(neonColor, Value)
-                    --SetVehicleNeonLightsColour(vehicle, k.r, k.g, k.b)
+                for k, Value in pairs(Value) do
+                    if k == 'r' then
+                        r = Value
+                    end
+                    if k == 'g' then
+                        g = Value
+                    end
+                    if k == 'b' then
+                        b = Value
+                    end
+                    SetVehicleNeonLightsColour(vehicle, r, g, b)
                 end
             end
             if Property == 'smokeColor' then
-                for smokeColor, Value in pairs(Value) do
-
+                for k, Value in pairs(Value) do
+                    if k == 'r' then
+                        r = Value
+                    end
+                    if k == 'g' then
+                        g = Value
+                    end
+                    if k == 'b' then
+                        b = Value
+                    end
+                    SetVehicleTyreSmokeColor(vehicle, r, g, b)
                 end
             end
             if Property == 'vehicleColor' then
-                for vehicleColor, Value in pairs(Value) do
-
+                for k, Value in pairs(Value) do
+                    if k == 'primary' then
+                        colorPrimary = Value
+                    end
+                    if k == 'secondary' then
+                        colorSecondary = Value
+                    end
+                    SetVehicleColours(vehicle, colorPrimary, colorSecondary)
                 end
             end
             if Property == 'extraColor' then
                 for extraColor, Value in pairs(Value) do
-
+                    if k == 'pearlescentColor' then
+                        pearlescentColor = Value
+                    end
+                    if k == 'wheelColor' then
+                        wheelColor = Value
+                    end
+                    SetVehicleExtraColours(vehicle, pearlescentColor, wheelColor)
                 end
             end
             if Property == 'plateIndex' then
@@ -393,13 +431,10 @@ function setVehicleProperties(vehicle, plate, vehicleProperties) -- make async e
                 SetVehicleDashboardColour(vehicle, Value)
             end
             if Property == 'wheelSize' then
-                
+                SetVehicleWheelSize(vehicle, Value)
             end
             if Property == 'wheelWidth' then
-                
-            end
-            if Property == 'wheelType' then
-                
+                SetVehicleWheelWidth(vehicle, Value)
             end
             if Property == 'windowTint' then
                 SetVehicleWindowTint(vehicle, Value)
@@ -441,7 +476,7 @@ function setVehicleMods(vehicle, vehicleMods)
             if modType == 'backWheels' then SetVehicleMod(vehicle, 24, modIndex, false) end
             if modType == 'plateHolder' then SetVehicleMod(vehicle, 25, modIndex, false) end
             if modType == 'VanityPlate' then SetVehicleMod(vehicle, 26, modIndex, false) end
-            if modType == 'TrimA' then SetVehicleMod(vehicle, 27, 5, false) end
+            if modType == 'TrimA' then SetVehicleMod(vehicle, 27, modIndex, false) end
             if modType == 'Ornaments' then SetVehicleMod(vehicle, 28, modIndex, false) end
             if modType == 'Dashboard' then SetVehicleMod(vehicle, 29, modIndex, false) end
             if modType == 'Dial' then SetVehicleMod(vehicle, 30, modIndex, false) end
