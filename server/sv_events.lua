@@ -43,7 +43,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
     end
 end)
 
-RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition)
+RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
     local source = source
     for k, v in ipairs(GetPlayerIdentifiers(source)) do 
         if string.match(v, Config.identifier) then
@@ -59,15 +59,15 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
             }, function(results)
                 if results[1] then
                     if results[1].owner == identifier then
-                        --print(json.encode(vehicleProperties))
-                        MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition WHERE plate = @plate', { 
+                        MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
                             ['@owner']                  = identifier, 
                             ['@modelHash']              = modelHash,
                             ['@localizedName']          = localizedName,
                             ['@plate']                  = plate, 
                             ['@garage']                 = garageName,
                             ['@vehicleProperties']      = json.encode(vehicleProperties),
-                            ['@vehicleCondition']       = json.encode(vehicleCondition)
+                            ['@vehicleCondition']       = json.encode(vehicleCondition),
+                            ['@vehicleMods']            = json.encode(vehicleMods)
                         }, function(affectedRows)
                         end)             
                         TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
@@ -76,14 +76,15 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                         TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
                     elseif results[1].owner ~= identifier then
                         if not Config.ownerRestricted then
-                            MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition WHERE plate = @plate', { 
+                            MySQL.Async.execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
                                 ['@owner']                  = identifier, 
                                 ['@modelHash']              = modelHash,
                                 ['@localizedName']          = localizedName,
                                 ['@plate']                  = plate, 
                                 ['@garage']                 = garageName,
                                 ['@vehicleProperties']      = json.encode(vehicleProperties),
-                                ['@vehicleCondition']       = json.encode(vehicleCondition)
+                                ['@vehicleCondition']       = json.encode(vehicleCondition),
+                                ['@vehicleMods']            = json.encode(vehicleMods)
                             }, function(affectedRows)
                             end)                      
                             TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
@@ -127,13 +128,13 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
                 plate               = results[1].plate
                 vehicleProperties   = json.decode(results[1].vehicleProperties)
                 vehicleCondition    = json.decode(results[1].vehicleCondition)
-                print(vehicleProperties)
+                vehicleMods         = json.decode(results[1].vehicleMods)
                 local plyPed = GetPlayerPed(source)
                 local vehNet, veh = createVehicle(source, plyPed, modelHash, GetEntityCoords(plyPed))
                 if not vehNet then 
                     return 
                 end
-                TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, plate, vehicleProperties, vehicleCondition)
+                TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, plate, vehicleProperties, vehicleCondition, vehicleMods)
 
                 Wait(100)
                 if not DoesEntityExist(veh) then 

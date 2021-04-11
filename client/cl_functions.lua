@@ -132,13 +132,14 @@ function storeVehicle(vehicle, garageName)
         inProgress = true
         local vehicleProperties = getVehicleProperties(vehicle)
         local vehicleCondition = getVehicleCondition(vehicle)
+        local vehicleMods = getVehicleMods(vehicle)
         local plate = GetVehicleNumberPlateText(vehicle)
         local modelHash = GetEntityModel(vehicle)
         local modelName = GetDisplayNameFromVehicleModel(modelHash)
         local localizedName = GetLabelText(modelName)
 
         if garageName ~= nil then
-            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition)
+            TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
             inProgress = false
         elseif garageName ~= nil then
             message = 'Invalid Garage!'
@@ -203,13 +204,9 @@ function getVehicleProperties(vehicle) -- make async export
     if DoesEntityExist(vehicle) then
         local Property = {}
 
-        Property.vehicleMods = {}
-        for i = 0,49 do
-            Property.vehicleMods[i] = GetVehicleMod(vehicle, i)
-        end
         Property.Extras = {}
         for i = 1,14 do
-            Property.Extras[i] = DoesExtraExist(vehicle, i)
+            Property.Extras[i] = IsVehicleExtraTurnedOn(vehicle, i)
         end
         Property.Neons = {}
         for i = 0,3 do
@@ -224,16 +221,10 @@ function getVehicleProperties(vehicle) -- make async export
         Property.extraColor = {}
         Property.extraColor.pearlescentColor, Property.extraColor.wheelColor = GetVehicleExtraColours(vehicle)
 
-        Property.turboPurchased = IsToggleModOn(vehicle, 18)
-        Property.smokePurchased = IsToggleModOn(vehicle, 20)
-        Property.xenonEnabled = IsToggleModOn(vehicle, 22)
-
         Property.plateIndex = GetVehicleNumberPlateTextIndex(vehicle)
         Property.headlightColor = GetVehicleHeadlightsColour(vehicle) -- Formally known as GetVehicleHeadlightsColour
         Property.interiorColor = GetVehicleInteriorColour(vehicle)
         Property.dashboardColor = GetVehicleDashboardColour(vehicle)
-        Property.Livery  = (GetVehicleLiveryCount(vehicle) == -1 and GetVehicleMod(vehicle, 48)) or GetVehicleLivery(vehicle) -- AvarianKnight
-        Property.liveryRoof = GetVehicleRoofLivery(vehicle)
         Property.wheelSize = GetVehicleWheelSize(vehicle)
         Property.wheelWidth = GetVehicleWheelWidth(vehicle)
         Property.wheelType = GetVehicleWheelType(vehicle)
@@ -244,6 +235,68 @@ function getVehicleProperties(vehicle) -- make async export
     end
 end
 exports('getVehicleProperties', getVehicleProperties)
+
+function getVehicleMods(vehicle) -- make async export 
+    if DoesEntityExist(vehicle) then
+        local Mods = {}
+
+        Mods.Spoiler        = GetVehicleMod(vehicle, 0)
+        Mods.frontBumper    = GetVehicleMod(vehicle, 1)
+        Mods.rearBumper     = GetVehicleMod(vehicle, 2)
+        Mods.sideSkirt      = GetVehicleMod(vehicle, 3)
+        Mods.Exhaust        = GetVehicleMod(vehicle, 4)
+        Mods.Frame          = GetVehicleMod(vehicle, 5)
+        Mods.Grille         = GetVehicleMod(vehicle, 6)
+        Mods.Hood           = GetVehicleMod(vehicle, 7)
+        Mods.Fender         = GetVehicleMod(vehicle, 8)
+        Mods.rightFender    = GetVehicleMod(vehicle, 9)
+        Mods.Roof           = GetVehicleMod(vehicle, 10)
+        Mods.Engine         = GetVehicleMod(vehicle, 11)
+        Mods.Brakes         = GetVehicleMod(vehicle, 12)
+        Mods.Transmission   = GetVehicleMod(vehicle, 13)
+        Mods.Horns          = GetVehicleMod(vehicle, 14)
+        Mods.Suspension     = GetVehicleMod(vehicle, 15)
+        Mods.Armor          = GetVehicleMod(vehicle, 16)
+        Mods.ModKit17       = GetVehicleMod(vehicle, 17)
+        Mods.turboPurchased = IsToggleModOn(vehicle, 18)
+        Mods.modKit19       = GetVehicleMod(vehicle, 19)
+        Mods.smokePurchased = IsToggleModOn(vehicle, 20)
+        Mods.modKit21       = GetVehicleMod(vehicle, 21)
+        Mods.xenonEnabled   = IsToggleModOn(vehicle, 22)
+        Mods.frontWheels    = GetVehicleMod(vehicle, 23)
+        Mods.backWheels     = GetVehicleMod(vehicle, 24)
+        Mods.plateHolder    = GetVehicleMod(vehicle, 25)
+        Mods.VanityPlate    = GetVehicleMod(vehicle, 26)
+        Mods.TrimA          = GetVehicleMod(vehicle, 27)
+        Mods.Ornaments      = GetVehicleMod(vehicle, 28)
+        Mods.Dashboard      = GetVehicleMod(vehicle, 29)
+        Mods.Dial           = GetVehicleMod(vehicle, 30)
+        Mods.doorSpeaker    = GetVehicleMod(vehicle, 31)
+        Mods.Seats          = GetVehicleMod(vehicle, 32)
+        Mods.steeringWheel  = GetVehicleMod(vehicle, 33)
+        Mods.shifterLeavers = GetVehicleMod(vehicle, 34)
+        Mods.Plaques        = GetVehicleMod(vehicle, 35)
+        Mods.Speakers       = GetVehicleMod(vehicle, 36)
+        Mods.Trunk          = GetVehicleMod(vehicle, 37)
+        Mods.Hydrolic       = GetVehicleMod(vehicle, 38)
+        Mods.engineBlock    = GetVehicleMod(vehicle, 39)
+        Mods.airFilter      = GetVehicleMod(vehicle, 40)
+        Mods.Struts         = GetVehicleMod(vehicle, 41)
+        Mods.archCover      = GetVehicleMod(vehicle, 42)
+        Mods.Aerials        = GetVehicleMod(vehicle, 43)
+        Mods.TrimB          = GetVehicleMod(vehicle, 44)
+        Mods.Tank           = GetVehicleMod(vehicle, 45)
+        Mods.Windows        = GetVehicleMod(vehicle, 46)
+        Mods.modKit47       = GetVehicleMod(vehicle, 47)
+        Mods.Livery         = (GetVehicleLiveryCount(vehicle) == -1 and GetVehicleMod(vehicle, 48)) or GetVehicleLivery(vehicle) -- AvarianKnight
+        Mods.modKit49       = GetVehicleMod(vehicle, 49)
+        Mods.liveryRoof     = GetVehicleRoofLivery(vehicle)
+        return Mods
+    else
+        return
+    end
+end
+exports('getVehicleMods', getVehicleMods)
 
 -- Setters
 
@@ -292,25 +345,43 @@ function setVehicleProperties(vehicle, plate, vehicleProperties) -- make async e
         SetVehicleNumberPlateText(vehicle, plate)
 
         for Property, Value in pairs(vehicleProperties) do
-            if Property == 'vehicleMods' then
-                for modType, modIndex in pairs(Value) do
-                    SetVehicleModKit(vehicle, 0)
-                    Wait(10)
-                    SetVehicleMod(vehicle, modType, modIndex, false)
+            if Property == 'Extras' then
+                for extraId, disable in pairs(Value) do
+                    if disable == 1 then
+                        SetVehicleExtra(vehicle, extraId, 0)
+                    else
+                        SetVehicleExtra(vehicle, extraId, 1)
+                    end
                 end
             end
-            if Property == 'turboPurchased' then
-                SetVehicleModKit(vehicle, 0)
-                ToggleVehicleMod(vehicle, 18, Value)
+            if Property == 'Neons' then
+                for neonIndex, toggle in pairs(Value) do
+                    SetVehicleNeonLightEnabled(vehicle, tonumber(neonIndex), toggle)
+                end
             end
-            if Property == 'smokePurchased' then
-                SetVehicleModKit(vehicle, 0)
-                ToggleVehicleMod(vehicle, 20, Value)
+            if Property == 'neonColor' then
+                for neonColor, Value in pairs(Value) do
+                   --print(neonColor, Value)
+                    --SetVehicleNeonLightsColour(vehicle, k.r, k.g, k.b)
+                end
             end
-            if Property == 'xenonEnabled' then
-                --print(Value)
-                SetVehicleModKit(vehicle, 0)
-                ToggleVehicleMod(vehicle, 22, Value)
+            if Property == 'smokeColor' then
+                for smokeColor, Value in pairs(Value) do
+
+                end
+            end
+            if Property == 'vehicleColor' then
+                for vehicleColor, Value in pairs(Value) do
+
+                end
+            end
+            if Property == 'extraColor' then
+                for extraColor, Value in pairs(Value) do
+
+                end
+            end
+            if Property == 'plateIndex' then
+                SetVehicleNumberPlateTextIndex(vehicle, Value)
             end
             if Property == 'headlightColor' then
                 SetVehicleHeadlightsColour(vehicle, Value)
@@ -321,13 +392,82 @@ function setVehicleProperties(vehicle, plate, vehicleProperties) -- make async e
             if Property == 'dashboardColor' then
                 SetVehicleDashboardColour(vehicle, Value)
             end
-            if Property == 'Livery' then
-                SetVehicleModKit(vehicle, 0)
-                SetVehicleMod(vehicle, 48, value, false)
-                SetVehicleLivery(vehicle, value)
-                SetVehicleRoofLivery(vehicle, value)
+            if Property == 'wheelSize' then
+                
+            end
+            if Property == 'wheelWidth' then
+                
+            end
+            if Property == 'wheelType' then
+                
+            end
+            if Property == 'windowTint' then
+                SetVehicleWindowTint(vehicle, Value)
             end
         end
     end
 end
 exports('setVehicleProperties', setVehicleProperties)
+
+function setVehicleMods(vehicle, vehicleMods)
+    if DoesEntityExist(vehicle) then
+
+        for modType, modIndex in pairs(vehicleMods) do
+            SetVehicleModKit(vehicle, 0)
+            if modType == 'Spoiler' then SetVehicleMod(vehicle, 0, modIndex, false) end
+            if modType == 'frontBumper' then SetVehicleMod(vehicle, 1, modIndex, false) end
+            if modType == 'rearBumper' then SetVehicleMod(vehicle, 2, modIndex, false) end
+            if modType == 'sideSkirt' then SetVehicleMod(vehicle, 3, modIndex, false) end
+            if modType == 'Exhaust' then SetVehicleMod(vehicle, 4, modIndex, false) end
+            if modType == 'Frame' then SetVehicleMod(vehicle, 5, modIndex, false) end
+            if modType == 'Grille' then SetVehicleMod(vehicle, 6, modIndex, false) end
+            if modType == 'Hood' then SetVehicleMod(vehicle, 7, modIndex, false) end
+            if modType == 'Fender' then SetVehicleMod(vehicle, 8, modIndex, false) end
+            if modType == 'rightFender' then SetVehicleMod(vehicle, 9, modIndex, false) end
+            if modType == 'Roof' then SetVehicleMod(vehicle, 10, modIndex, false) end
+            if modType == 'Engine' then SetVehicleMod(vehicle, 11, modIndex, false) end
+            if modType == 'Brakes' then SetVehicleMod(vehicle, 12, modIndex, false) end
+            if modType == 'Transmission' then SetVehicleMod(vehicle, 13, modIndex, false) end
+            if modType == 'Horns' then SetVehicleMod(vehicle, 14, modIndex, false) end
+            if modType == 'Suspension' then SetVehicleMod(vehicle, 15, modIndex, false) end
+            if modType == 'Armor' then SetVehicleMod(vehicle, 16, modIndex, false) end
+            --if modType == 'ModKit17' then SetVehicleMod(vehicle, 17, modIndex, false) end
+            if modType == 'turboPurchased' then ToggleVehicleMod(vehicle, 18, modIndex) end
+            --if modType == 'modKit19' then SetVehicleMod(vehicle, 19, modIndex, false) end
+            if modType == 'smokePurchased' then ToggleVehicleMod(vehicle, 20, modIndex) end
+            --if modType == 'modKit21' then SetVehicleMod(vehicle, 21, modIndex, false) end
+            if modType == 'xenonEnabled' then ToggleVehicleMod(vehicle, 22, modIndex) end
+            if modType == 'frontWheels' then SetVehicleMod(vehicle, 23, modIndex, false) end
+            if modType == 'backWheels' then SetVehicleMod(vehicle, 24, modIndex, false) end
+            if modType == 'plateHolder' then SetVehicleMod(vehicle, 25, modIndex, false) end
+            if modType == 'VanityPlate' then SetVehicleMod(vehicle, 26, modIndex, false) end
+            if modType == 'TrimA' then SetVehicleMod(vehicle, 27, 5, false) end
+            if modType == 'Ornaments' then SetVehicleMod(vehicle, 28, modIndex, false) end
+            if modType == 'Dashboard' then SetVehicleMod(vehicle, 29, modIndex, false) end
+            if modType == 'Dial' then SetVehicleMod(vehicle, 30, modIndex, false) end
+            if modType == 'doorSpeaker' then SetVehicleMod(vehicle, 31, modIndex, false) end
+            if modType == 'Seats' then SetVehicleMod(vehicle, 32, modIndex, false) end
+            if modType == 'steeringWheel' then SetVehicleMod(vehicle, 33, modIndex, false) end
+            if modType == 'shifterLeavers' then SetVehicleMod(vehicle, 34, modIndex, false) end
+            if modType == 'Plaques' then SetVehicleMod(vehicle, 35, modIndex, false) end
+            if modType == 'Speakers' then SetVehicleMod(vehicle, 36, modIndex, false) end
+            if modType == 'Trunk' then SetVehicleMod(vehicle, 37, modIndex, false) end
+            if modType == 'Hydrolic' then SetVehicleMod(vehicle, 38, modIndex, false) end
+            if modType == 'engineBlock' then SetVehicleMod(vehicle, 39, modIndex, false) end
+            if modType == 'airFilter' then SetVehicleMod(vehicle, 40, modIndex, false) end
+            if modType == 'Struts' then SetVehicleMod(vehicle, 41, modIndex, false) end
+            if modType == 'archCover' then SetVehicleMod(vehicle, 42, modIndex, false) end
+            if modType == 'Aerials' then SetVehicleMod(vehicle, 43, modIndex, false) end
+            if modType == 'TrimB' then SetVehicleMod(vehicle, 44, modIndex, false) end
+            if modType == 'Tank' then SetVehicleMod(vehicle, 45, modIndex, false) end
+            if modType == 'Windows' then SetVehicleMod(vehicle, 46, modIndex, false) end
+            --if modType == 'modKit47' then SetVehicleMod(vehicle, 47, modIndex, false) end
+            if modType == 'Livery' then SetVehicleMod(vehicle, 48, modIndex, false) SetVehicleLivery(vehicle, modIndex) end
+            --if modType == 'modKit49' then SetVehicleMod(vehicle, 49, modIndex, false) end
+            if modType == 'liveryRoof' then
+                SetVehicleRoofLivery(vehicle, modIndex)
+            end
+        end
+    end
+end
+exports('setVehicleMods', setVehicleMods)
