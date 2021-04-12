@@ -6,5 +6,9 @@ CREATE TABLE `ngwd_vehicles` (
     `localizedName` varchar(55) DEFAULT NULL,
     `plate` varchar(12) NOT NULL,
     `garage` varchar(60) DEFAULT 'Legion',
+    `preview` varchar(255) DEFAULT 'https://i.imgur.com/CHmtRZL.png',
+    `vehicleCondition` longtext,
+    `vehicleProperties` longtext,
+    `vehicleMods` longtext,
     PRIMARY KEY (`id`)
 );

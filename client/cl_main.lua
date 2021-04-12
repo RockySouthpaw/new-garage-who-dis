@@ -57,14 +57,16 @@ Citizen.CreateThread(function()
 end)
 
 local propsToDelete = Config.barrierProps
+local propDeleted = false
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5000)
-        if Config.deleteBariers then
+        if Config.deleteBarriers then
             local plyPos = GetEntityCoords(PlayerPedId())
             for i = 1, #Config.barrierLocations do
                 local zone = Config.barrierLocations[i]
-                if #(plyPos - zone.pos) then
+                local barrierDistance = #(plyPos - zone.pos)
+                if not propDeleted and barrierDistance <= 100 then
                     local objTbl = GetGamePool('CObject')
                     for i = 1, #objTbl do
                         local obj = objTbl[i]
@@ -72,8 +74,11 @@ Citizen.CreateThread(function()
                             SetEntityAsMissionEntity(obj, true, true)
                             DeleteObject(obj)
                             SetEntityAsNoLongerNeeded(obj)
+                            propDeleted = true
                         end
                     end
+                else
+                    propDeleted = false
                 end
             end
         end

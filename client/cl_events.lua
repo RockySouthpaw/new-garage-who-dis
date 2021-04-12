@@ -1,3 +1,15 @@
+if Config.esxNotify then
+    ESX              = nil
+    local PlayerData = {}
+
+    Citizen.CreateThread(function()
+        while ESX == nil do
+            TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+            Citizen.Wait(0)
+        end
+    end)
+end
+
 RegisterNetEvent('NGWD:notifySuccess')
 AddEventHandler('NGWD:notifySuccess', function(message)
     notifyEnd("garageNotify")
@@ -7,7 +19,7 @@ AddEventHandler('NGWD:notifySuccess', function(message)
         exports['t-notify']:Alert({
             style  =  'success',
             message  =  "✔️ " .. message,
-            length = Config.successLength * 1000
+            length = length
         })
     end
     if Config.mythicNotify then
@@ -18,11 +30,19 @@ AddEventHandler('NGWD:notifySuccess', function(message)
         exports.pNotify:SendNotification({
             text = "✔️ " .. message,
             type = "success",
-            timeout = 1000 * Config.Duration,
-            layout = Config.Layout,
-            theme = Config.Theme,
+            timeout = length,
+            layout = Config.layout,
+            theme = Config.theme,
             queue = "id"
         })
+    end
+    if Config.esxNotify then
+        ESX.ShowNotification(
+            "✔️ " .. message, 
+            false, 
+            false, 
+            140
+        )
     end
 end)
 
@@ -30,7 +50,7 @@ RegisterNetEvent('NGWD:notifyError')
 AddEventHandler('NGWD:notifyError', function(message)
     notifyEnd("garageNotify")
     Wait(150) -- Ensures all notifications are removed in time before creating new ones.
-    length = Config.successLength * 1000
+    length = Config.errorLength * 1000
     if Config.tNotify then 
         exports['t-notify']:Alert({
             style  =  'error',
@@ -46,56 +66,36 @@ AddEventHandler('NGWD:notifyError', function(message)
         exports.pNotify:SendNotification({
             text = "❌ " .. message,
             type = "error",
-            timeout = 1000 * Config.Duration,
-            layout = Config.Layout,
-            theme = Config.Theme,
+            timeout = length,
+            layout = Config.layout,
+            theme = Config.theme,
             queue = "id"
         })
     end
+    if Config.esxNotify then
+        ESX.ShowNotification(
+            "❌ " .. message, 
+            false, 
+            false, 
+            140
+        )
+    end
 end)
 
-RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, vehProperties)
+RegisterNetEvent('NGWD:openMenu')
+AddEventHandler('NGWD:openMenu', function(garageName)
+    print(garageName)
+end)
+
+RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehicleProperties, vehicleCondition, vehicleMods)
     while not NetworkDoesEntityExistWithNetworkId(vehNet) do
         -- vehicles wont instantly exist on the client, even though they exist on the server.
         Wait(50)
     end
-
-    -- handle vehProperties
-end)
-
-RegisterNetEvent('NGWD:spawnVehicle')
-AddEventHandler('NGWD:spawnVehicle', function(modelHash, plate)
-    if IsModelInCdimage(modelHash) then
-        RequestModel(modelHash)
-        while not HasModelLoaded(modelHash) do
-            Citizen.Wait(1)
-        end
-        local ped = PlayerPedId()
-        local playerCoords = GetEntityCoords(ped)
-        for k, v in pairs(Config.spawnLocations) do
-            local spawnZone = vector3(v.x, v.y, v.z)
-            local spawnDistance = #(playerCoords - spawnZone)
-
-            if spawnDistance <= Config.spawnRange then
-                local conflictVehicle = GetClosestVehicle(v.x, v.y, v.z,  2.0,  0,  71)
-                if DoesEntityExist(conflictVehicle) then
-                  deleteVehicle(conflictVehicle)
-                end
-                if not IsPedInAnyVehicle(ped, false) then
-                    local vehicle = CreateVehicle(modelHash, v.x, v.y, v.z, heading, true, false)
-                    local fuel = 100.00
-                    vehicleUtils(vehicle)
-                    vehicleSetters(vehicle, fuel, plate)
-                    TaskWarpPedIntoVehicle(ped, vehicle, -1)
-                    TriggerEvent('NGWD:notifySuccess', "" .. modelHash .. " has spawned successfully.")
-                else
-                    TriggerEvent('NGWD:notifyError', "Action unavailable while in a vehiclce.")
-                end
-            end
-        end
-    else
-        print("Error: Failed to spawn vehicle")
-    end
+    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    setVehicleProperties(vehicle, plate, vehicleProperties)
+    setVehicleCondition(vehicle, vehicleCondition)
+    setVehicleMods(vehicle, vehicleMods)
 end)
 
 RegisterNetEvent('NGWD:leaveVehicle')
@@ -107,6 +107,11 @@ AddEventHandler('NGWD:leaveVehicle', function(vehicle)
     end
     Wait(1500)
     --deleteVehicle(vehicle)
+    if not DoesEntityExist(vehicle) then
+        print("^5[INFO] Vehicle delete successfully.")
+    else
+        print("^2[ERROR] Vehicle was not deleted.")
+    end
 end)
 
 RegisterNetEvent('NGWD:previewVehicle')
@@ -143,7 +148,7 @@ RegisterCommand('sell', function(source, args, rawCommand)
 end, false)
 
 RegisterCommand('spawn', function(source, args, rawCommand)
-    local plate = "29NDG376"
-
-    TriggerServerEvent('NGWD:spawnVehicle', plate)
+    local plate = '23HSO859'
+    local garageName = 'Legion'
+    TriggerServerEvent('NGWD:spawnVehicle', plate, garageName)
 end, false)
