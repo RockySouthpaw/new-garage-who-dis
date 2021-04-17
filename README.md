@@ -25,4 +25,4 @@
 - [Git Kraken](https://app.gitkraken.com/glo/board/YEU_GRdxdwARhoP7)
 
 # Contributing
-Please make all pull request towards the [**Dev Branch**](https://github.com/project-error/new-garage-who-dis/tree/dev). If you have any suggestions for improvements please contact `ROCKY_southpaw#6771` on **Discord** or in the **[Project Error Discord**](https://discord.gg/HYwBjTbAY5).
+Please make all pull request towards the [**Dev Branch**](https://github.com/project-error/new-garage-who-dis/tree/dev). If you have any suggestions for improvements please contact `ROCKY_southpaw#6771` on **Discord** or in the [**Project Error Discord**](https://discord.gg/HYwBjTbAY5).
