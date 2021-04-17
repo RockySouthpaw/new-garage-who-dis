@@ -291,7 +291,7 @@ function getVehicleMods(vehicle) -- make async export
         Mods.Tank           = GetVehicleMod(vehicle, 45)
         Mods.Windows        = GetVehicleMod(vehicle, 46)
         Mods.modKit47       = GetVehicleMod(vehicle, 47)
-        Mods.Livery         = (GetVehicleLiveryCount(vehicle) == -1 and GetVehicleMod(vehicle, 48)) or GetVehicleLivery(vehicle) -- AvarianKnight
+        Mods.Livery         = (GetVehicleLiveryCount(vehicle) == -1 and GetVehicleMod(vehicle, 48)) or GetVehicleLivery(vehicle) -- Provided by AvarianKnight.
         Mods.modKit49       = GetVehicleMod(vehicle, 49)
         Mods.liveryRoof     = GetVehicleRoofLivery(vehicle)
         return Mods
