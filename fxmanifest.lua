@@ -6,6 +6,7 @@ lua54 'yes'
 description 'New-Garage-Who-Dis'
 
 server_scripts {
+	'@mysql-async/lib/MySQL.lua', -- Comment out if using ghmattimysql.
 	'config/sv_config.lua',
 	'server/*.lua'
 }
@@ -18,6 +19,7 @@ client_scripts {
 }
 
 dependencies {
-    'ghmattimysql',
-    'PolyZone' -- https://github.com/mkafrin/PolyZone
-} 
+	--'mysql-async', -- https://github.com/brouznouf/fivem-mysql-async
+	--'ghmattimysql', -- https://github.com/GHMatti/ghmattimysql
+	'PolyZone' -- https://github.com/mkafrin/PolyZone
+}
