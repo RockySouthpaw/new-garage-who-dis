@@ -12,11 +12,12 @@ Config.ownerRestricted      = false -- Only allow vehicle owner to store vehicle
 Config.purchaseNotification = true
 
 -- Config Variables (Spawning)
-Config.spawnRange = 15 -- Distance of the player to the spawn range. 10 is roughly 3 parking spaces.
+Config.spawnRange           = 15 -- Distance of the player to the spawn range. 10 is roughly 3 parking spaces.
 
-Config.spawnLocations = { -- The index number corresponds to the garage number.
-    {name = "Legion", pos = vector(227.46, -811.34, 29.52)},
-	{name = "Pink Cage", pos = vector(286.78, -345.68, 43.94)}
+Config.spawnLocations       = { 
+    -- Cant use vector4 here since we're comparing it to entity coords which is vector3.
+    {name = "Legion", pos = vector3(227.46, -811.34, 29.52), heading = 153.00},
+	{name = "Pink Cage", pos = vector3(286.78, -345.68, 43.94), heading = 160.00}
 }
 
 Debug = {}
