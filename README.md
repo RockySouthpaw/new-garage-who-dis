@@ -1,8 +1,11 @@
 # STILL WIP DO NOT USE
 
+## Project Error Discord
+- Join the [Discord](https://discord.gg/HYwBjTbAY5) to follow current development of the project.
+
 # Dependencies
 - [PolyZone](https://github.com/mkafrin/PolyZone) This ensures the lowest resource use possible as the resource currently uses `0.01 ms` due to no threads being used outside of blips and barrier deletion (Config based). This dependency will exist for the forseable future.
-
+- [Mysql-Async](https://github.com/brouznouf/fivem-mysql-async) (Currently working on adding compatability with [Ghmattisql](https://github.com/GHMatti/ghmattimysql) as well.)
 # Current Dev Commands
 - `buy` Will insert the vehicle you're currently sitting in into the NGWD vehicles table.
 - `sell` Will delete the vehicle you're currently sitting in from the SQL.
@@ -20,3 +23,6 @@
 # Documentation
 - WIP
 - [Git Kraken](https://app.gitkraken.com/glo/board/YEU_GRdxdwARhoP7)
+
+# Contributing
+Please make all pull request towards the [**Dev Branch**](https://github.com/project-error/new-garage-who-dis/tree/dev). If you have any suggestions for improvements please contact `ROCKY_southpaw#6771` on **Discord** or in the discord,
