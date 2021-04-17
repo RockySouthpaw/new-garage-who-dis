@@ -78,7 +78,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                             ['vehicleProperties']      = json.encode(vehicleProperties),
                             ['vehicleCondition']       = json.encode(vehicleCondition),
                             ['vehicleMods']            = json.encode(vehicleMods)
-                        }, function() end)             
+                        })             
                         TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
                         Utils.Debug('inform', "Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. " Garage")
                         Wait(1000)
@@ -94,7 +94,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                                 ['vehicleProperties']      = json.encode(vehicleProperties),
                                 ['vehicleCondition']       = json.encode(vehicleCondition),
                                 ['vehicleMods']            = json.encode(vehicleMods)
-                            }, function() end)                      
+                            })                      
                             TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
                             Wait(1000)
                             TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
