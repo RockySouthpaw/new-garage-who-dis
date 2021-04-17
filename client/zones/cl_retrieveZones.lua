@@ -1,7 +1,7 @@
 -- Varibles
 local retrieveNotification = false -- Becomes true when the player is in a zone.
 local notificationID = "garageNotify" -- The unique ID for garage notifications.
-local garageName = nil
+local garageName
 
 -- Keymappings
 RegisterKeyMapping("Retrieve", "Retrieve Player Vehicle", 'keyboard', Config.retrieveKey)
