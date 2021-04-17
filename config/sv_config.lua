@@ -16,8 +16,25 @@ Config.spawnRange           = 15 -- Distance of the player to the spawn range. 1
 
 Config.spawnLocations       = { 
     -- Cant use vector4 here since we're comparing it to entity coords which is vector3.
-    {name = "Legion", pos = vector3(227.46, -811.34, 29.52), heading = 153.00},
-	{name = "Pink Cage", pos = vector3(286.78, -345.68, 43.94), heading = 160.00}
+    {pos = vector3(227.46, -811.34, 29.52),     heading = 153.00,   name = "Legion"},
+	{pos = vector3(286.78, -345.68, 43.94),     heading = 160.00,   name = "Pink Cage"}, 
+    {pos = vector3(1025.36, -760.92, 56.97),    heading = 319.11,   name = "Mirror Park"},
+	{pos = vector3(36.05, -848.34, 29.77),      heading = 249.56,   name = "Pillbox Hill"},
+	{pos = vector3(458.49, -902.96, 34.97),     heading = 355.45,   name = "Mission Row"},
+	{pos = vector3(-279.47, -901.86, 30.08),    heading = 345.24,   name = "Alta Street"},
+	{pos = vector3(457.03, -1161.03, 30.29),    heading = 357.38,   name = "Speedophile"},
+	{pos = vector3(982.46, -214.80, 69.63),     heading = 327.12,   name = "East Vinewood"},
+	{pos = vector3(156.18, -720.32, 32.13),     heading = 251.75,   name = "Underground"},
+	{pos = vector3(-52.22, -1835.40, 25.53),    heading = 316.13,   name = "Davis"},
+	{pos = vector3(-37.91, -2085.91, 15.70),    heading = 107.48,   name = "Banning"},
+	{pos = vector3(-68.75, -1996.15, 17.01),    heading = 80.74,    name = "PlaceHolder1"},
+	{pos = vector3(-1185.27, -1499.89, 3.37),   heading = 214.26,   name = "Vespuci Beach"},
+	{pos = vector3(-2036.04, -469.62, 10.35),   heading = 227.84,   name = "Del Perro"},
+	{pos = vector3(-564.25, 326.40, 83.40),     heading = 263.92,   name = "West Vinewood"},
+	{pos = vector3(-337.99, 274.48, 84.77),     heading = 184.58,   name = "Last Train Diner"},
+	{pos = vector3(365.60, 291.04, 102.40),     heading = 157.92,   name = "SuperMarket"},
+	{pos = vector3(643.51, 196.67, 95.21),      heading = 342.71,   name = "Downtown Vinewood"},
+	{pos = vector3(58.69, -612.58, 30.63),      heading = 331.78,   name = "Union Depository"},
 }
 
 Debug = {}
