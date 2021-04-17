@@ -5,7 +5,9 @@
 
 # Dependencies
 - [PolyZone](https://github.com/mkafrin/PolyZone) This ensures the lowest resource use possible as the resource currently uses `0.01 ms` due to no threads being used outside of blips and barrier deletion (Config based). This dependency will exist for the forseable future.
-- [Mysql-Async](https://github.com/brouznouf/fivem-mysql-async) (Currently working on adding compatability with [Ghmattisql](https://github.com/GHMatti/ghmattimysql) as well.)
+- [Mysql-Async](https://github.com/brouznouf/fivem-mysql-async) **or** [Ghmattisql](https://github.com/GHMatti/ghmattimysql) You will need to set the config to `true`/`false` within the [sv_config.lua](https://github.com/project-error/new-garage-who-dis/blob/main/config/sv_config.lua). 
+If using `Ghmattisql`, be sure to comment out `'@mysql-async/lib/MySQL.lua',` within the [fxmanifest](https://github.com/project-error/new-garage-who-dis/blob/7d47586ada8f2275ab0f6497c782d05d3e32144c/fxmanifest.lua#L9).
+
 # Current Dev Commands
 - `buy` Will insert the vehicle you're currently sitting in into the NGWD vehicles table.
 - `sell` Will delete the vehicle you're currently sitting in from the SQL.

@@ -1,11 +1,11 @@
 local CreateAutomobile = GetHashKey("CREATE_AUTOMOBILE")
 
 function createVehicle(source, plyPed, modelHash, coords)
-    for k, v in pairs(Config.spawnLocations) do
-        local heading = GetEntityHeading(plyPed)
-        local spawnZone = vector3(v.x, v.y, v.z)
-        local spawnDistance = #(GetEntityCoords(plyPed) - spawnZone)
+    for i = 1, #Config.spawnLocations do
+        local spawnZone = Config.spawnLocations[i]
+        local spawnDistance = #(GetEntityCoords(plyPed) - spawnZone.pos)
         local inVehicle = GetVehiclePedIsIn(plyPed)
+
         if spawnDistance <= Config.spawnRange then
             if inVehicle ~= 0 then
                 DeleteEntity(inVehicle)
@@ -14,7 +14,7 @@ function createVehicle(source, plyPed, modelHash, coords)
             else
                 Utils.Debug('inform', "Player was not in a vehicle.")
             end
-            local veh = Citizen.InvokeNative(CreateAutomobile, modelHash, v.x, v.y, v.z, heading, true, false)
+            local veh = Citizen.InvokeNative(CreateAutomobile, modelHash, spawnZone.pos, spawnZone.heading, true, false)
             if not DoesEntityExist(veh) then 
                 return nil 
             end
@@ -32,6 +32,7 @@ function createVehicle(source, plyPed, modelHash, coords)
             end
             if GetVehiclePedIsIn(plyPed) == veh then
                 Utils.Debug('success', "" .. modelHash .. " has spawned successfully.")
+                Utils.Debug('inform', "" .. GetPlayerName(source) .. " has spawned a vehicle " .. spawnDistance .. " units away.")
             end
             return NetworkGetNetworkIdFromEntity(veh), veh 
         end

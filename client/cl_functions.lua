@@ -6,10 +6,10 @@ if Config.esxNotify then
     ESX              = nil
     local PlayerData = {}
 
-    Citizen.CreateThread(function()
+    CreateThread(function()
         while ESX == nil do
             TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-            Citizen.Wait(0)
+            Wait(0)
         end
     end)
 end
@@ -38,18 +38,18 @@ function notifyStorePrompt(garage, id)
             exports['mythic_notify']:PersistentAlert('start',id,'inform', text, { ['background-color'] = Config.backgroundColor })
         end
         if Config.pNotify then
-            Citizen.CreateThread(function()
+            CreateThread(function()
                 while activeNotification do
-                    Citizen.Wait(10)
+                    Wait(10)
                     local coords = GetEntityCoords(vehicle)
                     floatingNotification("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", vector3(coords.x, coords.y, coords.z + 1))
                 end
             end)
         end
         if Config.esxNotify then
-            Citizen.CreateThread(function()
+            CreateThread(function()
                 while activeNotification do
-                    Citizen.Wait(10)
+                    Wait(10)
                     local coords = GetEntityCoords(vehicle)
                     floatingNotification("Press ~y~["..Config.storageKey.."]~w~ To Park Vehicle", vector3(coords.x, coords.y, coords.z + 1))
                 end
@@ -80,18 +80,18 @@ function notifyRetrievePrompt(garage, id)
             exports['mythic_notify']:PersistentAlert('start',id,'inform', text, { ['background-color'] = Config.backgroundColor })
         end
         if Config.pNotify then
-            Citizen.CreateThread(function()
+            CreateThread(function()
                 while activeNotification do
-                    Citizen.Wait(10)
+                    Wait(10)
                     local coords = GetEntityCoords(PlayerPedId())
                     floatingNotification("Press ~y~["..Config.retrieveKey.."]~w~ To Retrieve Vehicle", vector3(coords.x, coords.y, coords.z + 1))
                 end
             end)
         end
         if Config.esxNotify then
-            Citizen.CreateThread(function()
+            CreateThread(function()
                 while activeNotification do
-                    Citizen.Wait(10)
+                    Wait(10)
                     local coords = GetEntityCoords(PlayerPedId())
                     floatingNotification("Press ~y~["..Config.retrieveKey.."]~w~ To Retrieve Vehicle", vector3(coords.x, coords.y, coords.z + 1))
                 end
@@ -291,7 +291,7 @@ function getVehicleMods(vehicle) -- make async export
         Mods.Tank           = GetVehicleMod(vehicle, 45)
         Mods.Windows        = GetVehicleMod(vehicle, 46)
         Mods.modKit47       = GetVehicleMod(vehicle, 47)
-        Mods.Livery         = (GetVehicleLiveryCount(vehicle) == -1 and GetVehicleMod(vehicle, 48)) or GetVehicleLivery(vehicle) -- AvarianKnight
+        Mods.Livery         = (GetVehicleLiveryCount(vehicle) == -1 and GetVehicleMod(vehicle, 48)) or GetVehicleLivery(vehicle) -- Provided by AvarianKnight.
         Mods.modKit49       = GetVehicleMod(vehicle, 49)
         Mods.liveryRoof     = GetVehicleRoofLivery(vehicle)
         return Mods

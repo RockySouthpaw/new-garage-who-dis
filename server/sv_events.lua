@@ -1,4 +1,12 @@
-local execute = exports.ghmattimysql.execute
+if Config.useMysqlAsync then
+    execute   = MySQL.Async.execute
+    fetchAll  = MySQL.Async.fetchAll
+end
+
+if Config.useGhmattimysql then
+    execute   = exports.ghmattimysql.execute
+    fetchAll  = exports.ghmattimysql.execute 
+end
 
 RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedName) -- Should also pass the modelName maybe?
     local source = source
@@ -11,7 +19,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
     if identifier then
         if plate ~= nil and modelHash ~= nil then
             -- can also add a distance check for the dealership cords and trigger a kick event..
-            execute('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, localizedName, plate) = (@owner, @modelHash, @localizedName, @plate)', {
+            fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, localizedName, plate) = (@owner, @modelHash, @localizedName, @plate)', {
                 ['owner']          = identifier,
                 ['modelHash']      = modelHash,
                 ['localizedName']  = localizedName,
@@ -55,7 +63,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
     end
     if identifier then
         if plate ~= nil and modelHash ~= nil then
-            execute('SELECT * FROM ngwd_vehicles WHERE (modelHash, plate) = (@modelHash, @plate)', {
+            fetchAll('SELECT * FROM ngwd_vehicles WHERE (modelHash, plate) = (@modelHash, @plate)', {
                 ['modelHash']  = modelHash,
                 ['plate']      = plate,
             }, function(results)
@@ -70,7 +78,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                             ['vehicleProperties']      = json.encode(vehicleProperties),
                             ['vehicleCondition']       = json.encode(vehicleCondition),
                             ['vehicleMods']            = json.encode(vehicleMods)
-                        }, function() end)             
+                        })             
                         TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
                         Utils.Debug('inform', "Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. " Garage")
                         Wait(1000)
@@ -86,7 +94,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                                 ['vehicleProperties']      = json.encode(vehicleProperties),
                                 ['vehicleCondition']       = json.encode(vehicleCondition),
                                 ['vehicleMods']            = json.encode(vehicleMods)
-                            }, function() end)                      
+                            })                      
                             TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
                             Wait(1000)
                             TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
@@ -118,7 +126,7 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
         end
     end
     if plate ~= nil then
-        execute('SELECT * FROM ngwd_vehicles WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
+        fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
             ['owner']              = identifier,
             ['plate']              = plate,
             ['garage']             = garageName
@@ -158,7 +166,7 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
         end
     end
     if plate ~= nil then
-        execute('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
+        fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
             ['owner']      = identifier,
             ['modelHash']  = modelHash,
             ['plate']      = plate,
