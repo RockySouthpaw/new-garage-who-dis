@@ -35,12 +35,12 @@ local retrievePinkCage = PolyZone:Create({
     vector2(275.0364074707, -343.41534423828),
     vector2(274.0022277832, -346.30093383789)
   }, {
-    name="retrievePinkCage",
+    name= "retrievePinkCage",
     minZ = 44.203404693604,
     maxZ = 47.0,
-    lazyGrid=true,
-    debugPoly=false
-  })
+    lazyGrid= true,
+    debugPoly= false
+})
 
 retrievePinkCage:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
     if isPointInside then
@@ -70,9 +70,9 @@ local retrieveLegion = PolyZone:Create({
     name="retrieveLegion",
     minZ = 30.044890670776, 
     maxZ = 32.8,
-    lazyGrid=true,
-    debugPoly=false
-  })
+    lazyGrid= true,
+    debugPoly= false
+})
 
 retrieveLegion:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
     if isPointInside then
