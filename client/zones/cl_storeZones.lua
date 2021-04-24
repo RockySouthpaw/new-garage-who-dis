@@ -197,3 +197,86 @@ combo:onPlayerInOut(function(isPointInside, point, zone)
         end
     end
 end)
+
+local MirrorPark_3A = PolyZone:Create({
+    vector2(1026.1635742188, -755.64068603516),
+    vector2(1022.3745117188, -751.93786621094),
+    vector2(1011.0908813477, -761.84887695312),
+    vector2(1014.7746582031, -766.05047607422)
+}, {
+    name="MirrorPark_3A",
+    minZ = 56.89493560791,
+    maxZ = 64.010898590088
+})
+
+local MirrorPark_3B = PolyZone:Create({
+    vector2(1016.6245117188, -767.57232666016),
+    vector2(1012.3276977539, -770.99658203125),
+    vector2(1029.1196289062, -791.78857421875),
+    vector2(1033.498046875, -788.13354492188)
+}, {
+    name="MirrorPark_3B",
+    minZ = 56.89493560791,
+    maxZ = 64.010898590088
+})
+
+local MirrorPark_3C = PolyZone:Create({
+    vector2(1043.8983154297, -788.32757568359),
+    vector2(1043.9318847656, -794.59698486328),
+    vector2(1035.6424560547, -794.72576904297),
+    vector2(1035.6108398438, -788.53625488281)
+}, {
+    name="MirrorPark_3C",
+    minZ = 56.89493560791,
+    maxZ = 64.010898590088
+})
+
+local MirrorPark_3D = PolyZone:Create({
+    vector2(1043.7899169922, -787.76214599609),
+    vector2(1049.7750244141, -787.66522216797),
+    vector2(1049.8513183594, -772.39605712891),
+    vector2(1043.5042724609, -772.48425292969)
+}, {
+    name="MirrorPark_3D",
+    minZ = 56.89493560791,
+    maxZ = 64.010898590088
+})
+
+local MirrorPark_3E = PolyZone:Create({
+  vector2(1031.0963134766, -776.68933105469),
+  vector2(1034.60546875, -772.17150878906),
+  vector2(1028.0316162109, -767.33837890625),
+  vector2(1024.5526123047, -772.09527587891)
+}, {
+    name="MirrorPark_3E",
+    minZ = 56.89493560791,
+    maxZ = 64.010898590088
+})
+
+local MirrorPark_3F = PolyZone:Create({
+  vector2(1025.8822021484, -763.8466796875),
+  vector2(1030.9379882812, -767.32965087891),
+  vector2(1033.1702880859, -764.11083984375),
+  vector2(1028.2648925781, -760.72698974609)
+}, {
+    name="MirrorPark_3F",
+    minZ = 56.89493560791,
+    maxZ = 64.010898590088
+})
+
+local combo = ComboZone:Create({MirrorPark_3A, MirrorPark_3B, MirrorPark_3C, MirrorPark_3D, MirrorPark_3E, MirrorPark_3F}, {name="Mirror Park", debugPoly=false})
+combo:onPlayerInOut(function(isPointInside, point, zone)
+    if isPointInside then
+        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
+            local garageName = "Mirror Park"
+            notifyStorePrompt(garageName, notificationID)
+            activeNotification = true
+        end
+    else
+        if activeNotification then 
+            notifyEnd(notificationID)
+            activeNotification = false
+        end
+    end
+end)
