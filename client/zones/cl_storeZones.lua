@@ -18,7 +18,7 @@ RegisterCommand("Store", function()
             local zone = Config.blipLocations[i]
             local blipDistance = #(playerCoords - zone.pos)
 
-            if blipDistance <= Config.blipRange then
+            if blipDistance <= Config.polyBlipRange then
                 if not storing then
                     storing = true
                     garageName = zone.name
