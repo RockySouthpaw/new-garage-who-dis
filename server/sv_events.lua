@@ -19,14 +19,14 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
     if identifier then
         if plate ~= nil and modelHash ~= nil then
             -- can also add a distance check for the dealership cords and trigger a kick event..
-            fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, localizedName, plate) = (@owner, @modelHash, @localizedName, @plate)', {
+            fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, modelHash, localizedName, plate) = (@owner, @modelHash, @localizedName, @plate)', {
                 ['owner']          = identifier,
                 ['modelHash']      = modelHash,
                 ['localizedName']  = localizedName,
                 ['plate']          = plate,
             }, function(results)
                 if results == nil or results[1] == nil then
-                    execute('INSERT INTO ngwd_vehicles (owner, modelHash, localizedName, plate) VALUES (@owner, @modelHash, @localizedName, @plate)',
+                    execute('INSERT INTO '..Config.databaseName..' (owner, modelHash, localizedName, plate) VALUES (@owner, @modelHash, @localizedName, @plate)',
                     {
                         ['owner']          = identifier, 
                         ['modelHash']       = modelHash,
@@ -63,13 +63,13 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
     end
     if identifier then
         if plate ~= nil and modelHash ~= nil then
-            fetchAll('SELECT * FROM ngwd_vehicles WHERE (modelHash, plate) = (@modelHash, @plate)', {
+            fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
                 ['modelHash']  = modelHash,
                 ['plate']      = plate,
             }, function(results)
                 if results and results[1] then
                     if results[1].owner == identifier then
-                        execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
+                        execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
                             ['owner']                  = identifier, 
                             ['modelHash']              = modelHash,
                             ['localizedName']          = localizedName,
@@ -85,7 +85,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                         TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
                     elseif results[1].owner ~= identifier then
                         if not Config.ownerRestricted then
-                            execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
+                            execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
                                 ['owner']                  = identifier, 
                                 ['modelHash']              = modelHash,
                                 ['localizedName']          = localizedName,
@@ -126,7 +126,7 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
         end
     end
     if plate ~= nil then
-        fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
+        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
             ['owner']              = identifier,
             ['plate']              = plate,
             ['garage']             = garageName
@@ -166,13 +166,13 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
         end
     end
     if plate ~= nil then
-        fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
+        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
             ['owner']      = identifier,
             ['modelHash']  = modelHash,
             ['plate']      = plate,
         }, function(results)
             if results then
-                execute('DELETE FROM ngwd_vehicles WHERE owner = @identifier AND plate = @plate',
+                execute('DELETE FROM '..Config.databaseName..' WHERE owner = @identifier AND plate = @plate',
                 {
                     ['identifier'] = identifier,
                     ['plate']      = plate
