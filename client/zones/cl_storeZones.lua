@@ -280,3 +280,125 @@ combo:onPlayerInOut(function(isPointInside, point, zone)
         end
     end
 end)
+
+local combo = ComboZone:Create({PinkCage_2A, PinkCage_2B, PinkCage_2C}, {name="Pink Cage", debugPoly=false})
+combo:onPlayerInOut(function(isPointInside, point, zone)
+    if isPointInside then
+        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
+            local garageName = "Pink Cage"
+            notifyStorePrompt(garageName, notificationID)
+            activeNotification = true
+        end
+    else
+        if activeNotification then 
+            notifyEnd(notificationID)
+            activeNotification = false
+        end
+    end
+end)
+
+local PillboxHill_4A = PolyZone:Create({
+    vector2(53.467384338379, -843.26733398438),
+    vector2(65.854461669922, -847.89172363281),
+    vector2(63.844863891602, -853.22985839844),
+    vector2(51.296298980713, -849.01501464844)
+}, {
+    name="PillboxHill_4A",
+    minZ = 29.194978027344,
+    maxZ = 35.0
+})
+
+local PillboxHill_4B = PolyZone:Create({
+    vector2(31.484914779663, -841.16790771484),
+    vector2(33.333824157715, -835.93426513672),
+    vector2(43.38655090332, -839.57238769531),
+    vector2(41.611515045166, -844.84643554688)
+}, {
+    name="PillboxHill_4B",
+    minZ = 29.194978027344,
+    maxZ = 35.0
+})
+
+local PillboxHill_4C = PolyZone:Create({
+    vector2(63.05704498291, -864.78692626953),
+    vector2(61.306499481201, -869.79345703125),
+    vector2(44.406902313232, -863.56854248047),
+    vector2(46.324794769287, -858.39123535156)
+}, {
+    name="PillboxHill_4C",
+    minZ = 29.194978027344,
+    maxZ = 35.0
+})
+
+local PillboxHill_4D = PolyZone:Create({
+    vector2(38.158592224121, -855.50073242188),
+    vector2(36.129657745361, -860.87603759766),
+    vector2(25.597166061401, -856.97967529297),
+    vector2(27.62721824646, -851.75415039062)
+}, {
+    name="PillboxHill_4D",
+    minZ = 29.194978027344,
+    maxZ = 35.0
+})
+
+local PillboxHill_4E = PolyZone:Create({
+  vector2(22.461700439453, -865.71166992188),
+  vector2(24.274568557739, -860.67993164062),
+  vector2(34.512107849121, -864.42529296875),
+  vector2(32.704425811768, -869.49084472656)
+}, {
+    name="PillboxHill_4E",
+    minZ = 29.194978027344,
+    maxZ = 35.0
+})
+
+local PillboxHill_4F = PolyZone:Create({
+  vector2(43.185997009277, -867.38488769531),
+  vector2(53.46354675293, -871.28082275391),
+  vector2(51.65705871582, -876.25512695312),
+  vector2(41.301704406738, -872.51385498047)
+}, {
+    name="PillboxHill_4F",
+    minZ = 29.194978027344,
+    maxZ = 35.0
+})
+
+local PillboxHill_4G = PolyZone:Create({
+  vector2(38.35803604126, -880.29174804688),
+  vector2(55.383159637451, -886.13659667969),
+  vector2(52.07666015625, -895.15252685547),
+  vector2(35.235614776611, -889.18109130859)
+}, {
+    name="PillboxHill_4G",
+    minZ = 29.194978027344,
+    maxZ = 35.0
+})
+
+local PillboxHill_4H = PolyZone:Create({
+  vector2(26.87938117981, -885.966796875),
+  vector2(30.170251846313, -876.88568115234),
+  vector2(19.784814834595, -873.25531005859),
+  vector2(16.573041915894, -882.13824462891)
+}, {
+    name="PillboxHill_4H",
+    minZ = 29.194978027344,
+    maxZ = 35.0
+})
+
+local combo = ComboZone:Create({PillboxHill_4A, PillboxHill_4B, PillboxHill_4C, PillboxHill_4D, PillboxHill_4E, PillboxHill_4F, PillboxHill_4G, PillboxHill_4H}, {name="Pillbox Hill", debugPoly=true})
+combo:onPlayerInOut(function(isPointInside, point, zone)
+    if isPointInside then
+        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
+            local garageName = "Pillbox Hill"
+            notifyStorePrompt(garageName, notificationID)
+            activeNotification = true
+        end
+    else
+        if activeNotification then 
+            notifyEnd(notificationID)
+            activeNotification = false
+        end
+    end
+end)

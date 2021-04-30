@@ -125,20 +125,30 @@ retrieveMirrorPark:onPointInOut(PolyZone.getPlayerPosition, function(isPointInsi
 end)
 
 -- Garage 4 (Pillbox Hill)
-local retrievePillboxHill = PolyZone:Create({
-  vector2(1036.0249023438, -761.74932861328),
-  vector2(1034.5002441406, -764.32208251953),
-  vector2(1036.2073974609, -765.41540527344),
-  vector2(1037.7620849609, -762.74090576172)
+local retrievePillboxHill_1A = PolyZone:Create({
+  vector2(42.819358825684, -843.56762695312),
+  vector2(44.635879516602, -844.22735595703),
+  vector2(45.683044433594, -841.39312744141),
+  vector2(43.852592468262, -840.77014160156)
 }, {
-  name="retrievePillboxHill",
-  minZ = 57.023011474609,
-  maxZ = 59.80,
-  lazyGrid= true,
-  debugPoly= false
+  name="retrievePillboxHill_1A",
+  minZ = 30.348017959595,
+  maxZ = 33.0
 })
 
-retrievePillboxHill:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
+local retrievePillboxHill_1B = PolyZone:Create({
+  vector2(56.866386413574, -877.7958984375),
+  vector2(57.566600799561, -875.96771240234),
+  vector2(54.694995880127, -874.93200683594),
+  vector2(54.020576477051, -876.76055908203)
+}, {
+  name="retrievePillboxHill_1B",
+  minZ = 29.50,
+  maxZ = 32.0
+})
+
+local combo = ComboZone:Create({retrievePillboxHill_1A, retrievePillboxHill_1B}, {name= "Pillbox Hill", debugPoly= false})
+combo:onPlayerInOut(function(isPointInside, point, zone)
     if isPointInside then
         local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
         if not IsPedInVehicle(PlayerPedId(), vehicle, true) then
@@ -157,57 +167,90 @@ retrievePillboxHill:onPointInOut(PolyZone.getPlayerPosition, function(isPointIns
 end)
 
 -- Garage 5 (Mission Row)
-local retrieveMissionRow_1A = PolyZone:Create({
-  vector2(430.81958007813, -978.23529052734),
-  vector2(440.17370605469, -978.34918212891),
-  vector2(440.18566894531, -973.60400390625),
-  vector2(430.88815307617, -973.71490478516)
-}, {
-  name="retrieveMissionRow_1A",
-  minZ = 25.699966430664,
-  maxZ = 28.699991226196
-})
+if Config.useGabzPD then
+    local retrieveMissionRow_1A = PolyZone:Create({
+    vector2(430.81958007813, -978.23529052734),
+    vector2(440.17370605469, -978.34918212891),
+    vector2(440.18566894531, -973.60400390625),
+    vector2(430.88815307617, -973.71490478516)
+    }, {
+    name="retrieveMissionRow_1A",
+    minZ = 25.699966430664,
+    maxZ = 28.699991226196
+    })
 
-local retrieveMissionRow_1B = PolyZone:Create({
-  vector2(445.49438476563, -973.66314697266),
-  vector2(454.85049438477, -973.65393066406),
-  vector2(454.90621948242, -978.29162597656),
-  vector2(445.43908691406, -978.16223144531)
-}, {
-  name="retrieveMissionRow_1B",
-  minZ = 25.699966430664,
-  maxZ = 28.699991226196
-})
+    local retrieveMissionRow_1B = PolyZone:Create({
+    vector2(445.49438476563, -973.66314697266),
+    vector2(454.85049438477, -973.65393066406),
+    vector2(454.90621948242, -978.29162597656),
+    vector2(445.43908691406, -978.16223144531)
+    }, {
+    name="retrieveMissionRow_1B",
+    minZ = 25.699966430664,
+    maxZ = 28.699991226196
+    })
 
-local retrieveMissionRow_1C = PolyZone:Create({
-  vector2(456.52249145508, -987.78070068359),
-  vector2(456.48892211914, -997.32092285156),
-  vector2(461.12734985352, -997.23706054688),
-  vector2(461.08880615234, -987.77709960938)
-}, {
-  name="retrieveMissionRow_1C",
-  minZ = 25.699966430664,
-  maxZ = 28.699991226196
-})
+    local retrieveMissionRow_1C = PolyZone:Create({
+    vector2(456.52249145508, -987.78070068359),
+    vector2(456.48892211914, -997.32092285156),
+    vector2(461.12734985352, -997.23706054688),
+    vector2(461.08880615234, -987.77709960938)
+    }, {
+    name="retrieveMissionRow_1C",
+    minZ = 25.699966430664,
+    maxZ = 28.699991226196
+    })
 
-local combo = ComboZone:Create({retrieveMissionRow_1A, retrieveMissionRow_1B, retrieveMissionRow_1C}, {name= "Mission Row", debugPoly= false})
-combo:onPlayerInOut(function(isPointInside, point, zone)
-    if isPointInside then
-        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-        if not IsPedInVehicle(PlayerPedId(), vehicle, true) then
-            if not retrieveNotification then
-                local garageName = "Mission Row"
-                notifyRetrievePrompt(garageName, notificationID)
-                retrieveNotification = true
+    local combo = ComboZone:Create({retrieveMissionRow_1A, retrieveMissionRow_1B, retrieveMissionRow_1C}, {name= "Mission Row", debugPoly= true})
+    combo:onPlayerInOut(function(isPointInside, point, zone)
+        if isPointInside then
+            local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+            if not IsPedInVehicle(PlayerPedId(), vehicle, true) then
+                if not retrieveNotification then
+                    local garageName = "Mission Row"
+                    notifyRetrievePrompt(garageName, notificationID)
+                    retrieveNotification = true
+                end
+            end
+        else
+            if retrieveNotification then 
+                notifyEnd(notificationID)
+                retrieveNotification = false
             end
         end
-    else
-        if retrieveNotification then 
-            notifyEnd(notificationID)
-            retrieveNotification = false
+    end)
+else
+    local retrieveMissionRow = PolyZone:Create({
+    vector2(423.20452880859, -1010.2774047852),
+    vector2(426.62112426758, -1010.2744140625),
+    vector2(426.60101318359, -1016.8680419922),
+    vector2(422.82382202148, -1016.8801879883)
+    }, {
+    name="retrieveMissionRow",
+    minZ = 28.111378936768,
+    maxZ = 31.0,
+    lazyGrid= true,
+    debugPoly= false
+    })
+
+    retrieveMissionRow:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
+        if isPointInside then
+            local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+            if not IsPedInVehicle(PlayerPedId(), vehicle, true) then
+                if not retrieveNotification then
+                    local garageName = "Mission Row"
+                    notifyRetrievePrompt(garageName, notificationID)
+                    retrieveNotification = true
+                end
+            end
+        else
+            if retrieveNotification then 
+                notifyEnd(notificationID)
+                retrieveNotification = false
+            end
         end
-    end
-end)
+    end)
+end
 
 -- Garage 6 (Alta Street)
 local retrieveAltaStreet_1A = PolyZone:Create({
@@ -303,70 +346,6 @@ retrieveEastVinewood:onPointInOut(PolyZone.getPlayerPosition, function(isPointIn
         if not IsPedInVehicle(PlayerPedId(), vehicle, true) then
             if not retrieveNotification then
                 local garageName = "East Vinewood"
-                notifyRetrievePrompt(garageName, notificationID)
-                retrieveNotification = true
-            end
-        end
-    else
-        if retrieveNotification then 
-            notifyEnd(notificationID)
-            retrieveNotification = false
-        end
-    end
-end)
-
--- Garage 9
-local retrieveUnderground = PolyZone:Create({
-  vector2(168.24911499023, -729.39636230469),
-  vector2(171.10313415527, -730.43572998047),
-  vector2(171.77505493164, -728.61193847656),
-  vector2(168.90367126465, -727.56109619141)
-}, {
-  name="retrieveUnderground",
-  minZ = 32.162690429688,
-  maxZ = 35.00,
-  lazyGrid= true,
-  debugPoly= false
-})
-
-retrieveUnderground:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
-    if isPointInside then
-        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-        if not IsPedInVehicle(PlayerPedId(), vehicle, true) then
-            if not retrieveNotification then
-                local garageName = "Underground"
-                notifyRetrievePrompt(garageName, notificationID)
-                retrieveNotification = true
-            end
-        end
-    else
-        if retrieveNotification then 
-            notifyEnd(notificationID)
-            retrieveNotification = false
-        end
-    end
-end)
-
--- Garage 10
-local retrieveDavis = PolyZone:Create({
-  vector2(-67.607772827148, -1840.0817871094),
-  vector2(-66.096221923828, -1841.3348388672),
-  vector2(-64.104537963867, -1838.9539794922),
-  vector2(-65.615837097168, -1837.7052001953)
-}, {
-  name="retrieveDavis",
-  minZ = 26.058434753418,
-  maxZ = 28.80,
-  lazyGrid= true,
-  debugPoly= false
-})
-
-retrieveDavis:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
-    if isPointInside then
-        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-        if not IsPedInVehicle(PlayerPedId(), vehicle, true) then
-            if not retrieveNotification then
-                local garageName = "Davis"
                 notifyRetrievePrompt(garageName, notificationID)
                 retrieveNotification = true
             end

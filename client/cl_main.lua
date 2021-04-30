@@ -22,23 +22,6 @@ CreateThread(function()
                 local zone = Config.blipLocations[i]
                 local blipDistance = #(playerCoords - zone.pos)
 
-                if not Config.enableRangedBlip then
-                    -- Shows all blips if they don't already exist
-                    blip = AddBlipForCoord(zone.pos)
-                    SetBlipDisplay(blip, Config.blipDisplay)
-                    SetBlipSprite(blip, 357)
-                    SetBlipColour(blip, Config.blipColor)
-                    BeginTextCommandSetBlipName("STRING")
-                    if Config.enableBlipNames then
-                        AddTextComponentString(zone.name .. " Garage")
-                    else
-                        AddTextComponentString("Garage")
-                    end
-                    EndTextCommandSetBlipName(blip)
-                    if DoesBlipExist(blip) then
-                        blipCreated = true
-                    end
-                end
                 if Config.enableRangedBlip then
                     -- Show only blips in range.
                     if blipDistance <= Config.blipRange then
@@ -60,6 +43,23 @@ CreateThread(function()
                     elseif blipDistance >= Config.blipRange then
                         -- Curently assumes you're out of range for ALL blips. :Deskchan:
                         RemoveBlip(activeGarage)
+                    end
+                elseif not Config.enableRangedBlip then
+                    -- Shows all blips if they don't already exist
+                    blip = AddBlipForCoord(zone.pos)
+                    SetBlipDisplay(blip, Config.blipDisplay)
+                    SetBlipSprite(blip, 357)
+                    SetBlipColour(blip, Config.blipColor)
+                    --SetBlipCategory(blip, 2)
+                    BeginTextCommandSetBlipName("STRING")
+                    if Config.enableBlipNames then
+                        AddTextComponentString(zone.name .. " Garage")
+                    else
+                        AddTextComponentString("Garage")
+                    end
+                    EndTextCommandSetBlipName(blip)
+                    if DoesBlipExist(blip) then
+                        blipCreated = true
                     end
                 end
             end
@@ -92,6 +92,7 @@ CreateThread(function()
     end
 end)
 
+--[[
 local hashedObj = GetHashKey('prop_parking_hut_2')
 local lastZone = nil
 CreateThread(function()
@@ -102,7 +103,7 @@ CreateThread(function()
             local zone = Config.parkingPropsLocations[i]
             local parkingPropDistance = #(plyPos - zone.pos)
             currentZone = zone.name
-            if parkingPropDistance <= 100 and lastZone ~= currentZone then
+            if parkingPropDistance <= 50 and lastZone ~= currentZone then
                 RequestModel(hashedObj)
                 if HasModelLoaded(hashedObj) then
                     if obj == nil then
@@ -116,3 +117,4 @@ CreateThread(function()
         end
     end
 end)
+]]
