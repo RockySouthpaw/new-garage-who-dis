@@ -97,12 +97,6 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                 else
                     Utils.Debug('error', "Unable to find the modelHash " .. modelHash .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
                     TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be Stored")
-                    TriggerClientEvent('t-notify:client:Alert',source, {
-                        style  		=  'error',
-                        duration  	=  5500,
-                        message 	= 'yes',
-                        sound  		=  true
-                    })
                 end
             end)
         else
