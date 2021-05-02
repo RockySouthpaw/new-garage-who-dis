@@ -9,13 +9,8 @@ if Config.useGhmattimysql then
 end
 
 RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedName) -- Should also pass the modelName maybe?
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.identifier) then
-            identifier = v
-            break
-        end
-    end
+    local source        = source
+    local identifier    = Utils.getPlayerIdentifier(source)
     if identifier then
         if plate ~= nil and modelHash ~= nil then
             -- can also add a distance check for the dealership cords and trigger a kick event..
@@ -54,13 +49,8 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
 end)
 
 RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.identifier) then
-            identifier = v
-            break
-        end
-    end
+    local source        = source
+    local identifier    = Utils.getPlayerIdentifier(source)
     if identifier then
         if plate ~= nil and modelHash ~= nil then
             fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
@@ -107,6 +97,12 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                 else
                     Utils.Debug('error', "Unable to find the modelHash " .. modelHash .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
                     TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be Stored")
+                    TriggerClientEvent('t-notify:client:Alert',source, {
+                        style  		=  'error',
+                        duration  	=  5500,
+                        message 	= 'yes',
+                        sound  		=  true
+                    })
                 end
             end)
         else
@@ -118,13 +114,8 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
 end)
 
 RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.identifier) then
-            identifier = v
-            break
-        end
-    end
+    local source        = source
+    local identifier    = Utils.getPlayerIdentifier(source)
     if plate ~= nil then
         fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
             ['owner']              = identifier,
@@ -158,13 +149,8 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
 end)
 
 RegisterNetEvent('NGWD:sellVehicle', function(plate)
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.identifier) then
-            identifier = v
-            break
-        end
-    end
+    local source        = source
+    local identifier    = Utils.getPlayerIdentifier(source)
     if plate ~= nil then
         fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
             ['owner']      = identifier,

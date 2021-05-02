@@ -14,6 +14,17 @@ Utils.Debug = function(class, message)
     end
 end
 
+Utils.getPlayerIdentifier = function(source)
+    local identifier
+    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
+		if string.match(v, Config.Identifier) then
+			identifier = v
+			break
+		end
+    end
+    return identifier
+end
+
 CreateThread(function()
 	local updatePath = '/project-error/new-garage-who-dis'
 	local resourceName = "^5["..GetCurrentResourceName().."]^2"
