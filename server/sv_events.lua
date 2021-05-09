@@ -1,6 +1,7 @@
 if Config.useMysqlAsync then
-    execute   = MySQL.Async.execute
-    fetchAll  = MySQL.Async.fetchAll
+    execute     = MySQL.Async.execute
+    fetchAll    = MySQL.Async.fetchAll
+    fetchScalar = MySQL.Async.fetchScalar
 end
 
 if Config.useGhmattimysql then
@@ -14,26 +15,24 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
     if identifier then
         if plate ~= nil and modelHash ~= nil then
             -- can also add a distance check for the dealership cords and trigger a kick event..
-            fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, modelHash, localizedName, plate) = (@owner, @modelHash, @localizedName, @plate)', {
+            fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
                 ['owner']          = identifier,
-                ['modelHash']      = modelHash,
-                ['localizedName']  = localizedName,
                 ['plate']          = plate,
             }, function(results)
-                if results == nil or results[1] == nil then
+                if results == nil then
                     execute('INSERT INTO '..Config.databaseName..' (owner, modelHash, localizedName, plate) VALUES (@owner, @modelHash, @localizedName, @plate)',
                     {
                         ['owner']          = identifier, 
-                        ['modelHash']       = modelHash,
+                        ['modelHash']      = modelHash,
                         ['localizedName']  = localizedName,
                         ['plate']          = plate;
                     })
-                    Utils.Debug('success', "".. identifier .. " Purchased a vehicle with the plate " .. plate .. ".")
+                    Utils.Debug('success', " ".. identifier .. " Purchased a vehicle with the plate " .. plate .. ".")
                     if Config.purchaseNotification then
                         TriggerClientEvent('NGWD:notifySuccess', source, "" .. modelHash .. " Was purchased successfully.")
                     end
                 else
-                    Utils.Debug('error', "Duplicate Entry for " .. modelHash .. ". User: ".. identifier .. "")
+                    Utils.Debug('error', "Duplicate Entry for ^1[" ..plate.. "]^0 owned by: ^3[".. identifier .. "]^0")
                     if Config.purchaseNotification then
                         TriggerClientEvent('NGWD:notifyError', source, "Vehicle can't be purchased.")
                     end

@@ -386,7 +386,7 @@ local PillboxHill_4H = PolyZone:Create({
     maxZ = 35.0
 })
 
-local combo = ComboZone:Create({PillboxHill_4A, PillboxHill_4B, PillboxHill_4C, PillboxHill_4D, PillboxHill_4E, PillboxHill_4F, PillboxHill_4G, PillboxHill_4H}, {name="Pillbox Hill", debugPoly=true})
+local combo = ComboZone:Create({PillboxHill_4A, PillboxHill_4B, PillboxHill_4C, PillboxHill_4D, PillboxHill_4E, PillboxHill_4F, PillboxHill_4G, PillboxHill_4H}, {name="Pillbox Hill", debugPoly=false})
 combo:onPlayerInOut(function(isPointInside, point, zone)
     if isPointInside then
         local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
