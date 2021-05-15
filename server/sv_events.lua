@@ -1,6 +1,7 @@
 if Config.useMysqlAsync then
-    execute   = MySQL.Async.execute
-    fetchAll  = MySQL.Async.fetchAll
+    execute     = MySQL.Async.execute
+    fetchAll    = MySQL.Async.fetchAll
+    fetchScalar = MySQL.Async.fetchScalar
 end
 
 if Config.useGhmattimysql then
@@ -9,36 +10,29 @@ if Config.useGhmattimysql then
 end
 
 RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedName) -- Should also pass the modelName maybe?
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.identifier) then
-            identifier = v
-            break
-        end
-    end
+    local source        = source
+    local identifier    = Utils.getPlayerIdentifier(source)
     if identifier then
         if plate ~= nil and modelHash ~= nil then
             -- can also add a distance check for the dealership cords and trigger a kick event..
-            fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, localizedName, plate) = (@owner, @modelHash, @localizedName, @plate)', {
+            fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
                 ['owner']          = identifier,
-                ['modelHash']      = modelHash,
-                ['localizedName']  = localizedName,
                 ['plate']          = plate,
             }, function(results)
-                if results == nil or results[1] == nil then
-                    execute('INSERT INTO ngwd_vehicles (owner, modelHash, localizedName, plate) VALUES (@owner, @modelHash, @localizedName, @plate)',
+                if results == nil then
+                    execute('INSERT INTO '..Config.databaseName..' (owner, modelHash, localizedName, plate) VALUES (@owner, @modelHash, @localizedName, @plate)',
                     {
                         ['owner']          = identifier, 
-                        ['modelHash']       = modelHash,
+                        ['modelHash']      = modelHash,
                         ['localizedName']  = localizedName,
                         ['plate']          = plate;
                     })
-                    Utils.Debug('success', "".. identifier .. " Purchased a vehicle with the plate " .. plate .. ".")
+                    Utils.Debug('success', " ".. identifier .. " Purchased a vehicle with the plate " .. plate .. ".")
                     if Config.purchaseNotification then
                         TriggerClientEvent('NGWD:notifySuccess', source, "" .. modelHash .. " Was purchased successfully.")
                     end
                 else
-                    Utils.Debug('error', "Duplicate Entry for " .. modelHash .. ". User: ".. identifier .. "")
+                    Utils.Debug('error', "Duplicate Entry for ^1[" ..plate.. "]^0 owned by: ^3[".. identifier .. "]^0")
                     if Config.purchaseNotification then
                         TriggerClientEvent('NGWD:notifyError', source, "Vehicle can't be purchased.")
                     end
@@ -54,22 +48,17 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
 end)
 
 RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.identifier) then
-            identifier = v
-            break
-        end
-    end
+    local source        = source
+    local identifier    = Utils.getPlayerIdentifier(source)
     if identifier then
         if plate ~= nil and modelHash ~= nil then
-            fetchAll('SELECT * FROM ngwd_vehicles WHERE (modelHash, plate) = (@modelHash, @plate)', {
+            fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
                 ['modelHash']  = modelHash,
                 ['plate']      = plate,
             }, function(results)
                 if results and results[1] then
                     if results[1].owner == identifier then
-                        execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
+                        execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
                             ['owner']                  = identifier, 
                             ['modelHash']              = modelHash,
                             ['localizedName']          = localizedName,
@@ -85,7 +74,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                         TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
                     elseif results[1].owner ~= identifier then
                         if not Config.ownerRestricted then
-                            execute('UPDATE ngwd_vehicles SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
+                            execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
                                 ['owner']                  = identifier, 
                                 ['modelHash']              = modelHash,
                                 ['localizedName']          = localizedName,
@@ -118,15 +107,10 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
 end)
 
 RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.identifier) then
-            identifier = v
-            break
-        end
-    end
+    local source        = source
+    local identifier    = Utils.getPlayerIdentifier(source)
     if plate ~= nil then
-        fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
+        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
             ['owner']              = identifier,
             ['plate']              = plate,
             ['garage']             = garageName
@@ -158,21 +142,16 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
 end)
 
 RegisterNetEvent('NGWD:sellVehicle', function(plate)
-    local source = source
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
-        if string.match(v, Config.identifier) then
-            identifier = v
-            break
-        end
-    end
+    local source        = source
+    local identifier    = Utils.getPlayerIdentifier(source)
     if plate ~= nil then
-        fetchAll('SELECT * FROM ngwd_vehicles WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
+        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
             ['owner']      = identifier,
             ['modelHash']  = modelHash,
             ['plate']      = plate,
         }, function(results)
             if results then
-                execute('DELETE FROM ngwd_vehicles WHERE owner = @identifier AND plate = @plate',
+                execute('DELETE FROM '..Config.databaseName..' WHERE owner = @identifier AND plate = @plate',
                 {
                     ['identifier'] = identifier,
                     ['plate']      = plate
