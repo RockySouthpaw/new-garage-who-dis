@@ -3,13 +3,13 @@ Utils = {}
 Utils.Debug = function(class, message)
     if Debug.debugLevel >= 1 then
         if class == "error" and Debug.debugLevel >= 1 then
-            print(Debug.errorDebugColor.."[ERROR]:".. message)
+            print(Debug.errorDebugColor.."[ERROR]:".. message .. "^7")
         elseif class == "success" and Debug.debugLevel >= 2 then
-            print(Debug.successDebugColor.."[SUCCESS]:".. message)
+            print(Debug.successDebugColor.."[SUCCESS]:".. message .. "^7")
         elseif class == "inform" and Debug.debugLevel == 3 then
-            print(Debug.informDebugColor.."[INFO]:".. message)
+            print(Debug.informDebugColor.."[INFO]:".. message .. "^7")
         elseif class ~= "error" and class ~= "success" and class ~= "inform" then
-            print("^1  [ERROR]: Invalid Debug Class: ^0".. class .. "^1 Please use 'error', 'success' or 'inform'.")
+            print("^1  [ERROR]: Invalid Debug Class: ^0".. class .. "^1 Please use 'error', 'success' or 'inform'.^7")
         end
     end
 end
