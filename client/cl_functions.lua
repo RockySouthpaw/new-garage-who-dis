@@ -138,10 +138,10 @@ function storeVehicle(vehicle, garageName)
         local modelName = GetDisplayNameFromVehicleModel(modelHash)
         local localizedName = GetLabelText(modelName)
 
-        if garageName ~= nil then
+        if garageName then
             TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
             inProgress = false
-        elseif garageName ~= nil then
+        else
             message = 'Invalid Garage!'
             TriggerEvent('NGWD:notifyError', message)
             inProgress = false

@@ -13,7 +13,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
     local source        = source
     local identifier    = Utils.getPlayerIdentifier(source)
     if identifier then
-        if plate ~= nil and modelHash ~= nil then
+        if plate and modelHash then
             -- can also add a distance check for the dealership cords and trigger a kick event..
             fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
                 ['owner']          = identifier,
@@ -27,7 +27,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
                         ['localizedName']  = localizedName,
                         ['plate']          = plate;
                     })
-                    Utils.Debug('success', " ".. identifier .. " Purchased a vehicle with the plate " .. plate .. ".")
+                    Utils.Debug('success', "".. identifier .. " Purchased a vehicle with the plate " .. plate .. ".")
                     if Config.purchaseNotification then
                         TriggerClientEvent('NGWD:notifySuccess', source, "" .. modelHash .. " Was purchased successfully.")
                     end
@@ -51,7 +51,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
     local source        = source
     local identifier    = Utils.getPlayerIdentifier(source)
     if identifier then
-        if plate ~= nil and modelHash ~= nil then
+        if plate and modelHash then
             fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
                 ['modelHash']  = modelHash,
                 ['plate']      = plate,
@@ -109,13 +109,13 @@ end)
 RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
     local source        = source
     local identifier    = Utils.getPlayerIdentifier(source)
-    if plate ~= nil then
-        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
+    if plate then
+        fetchAll('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
             ['owner']              = identifier,
             ['plate']              = plate,
             ['garage']             = garageName
         }, function(results)
-            if results ~= nil then
+            if results then
                 modelHash           = results[1].modelHash
                 plate               = results[1].plate
                 vehicleProperties   = json.decode(results[1].vehicleProperties)
@@ -144,8 +144,8 @@ end)
 RegisterNetEvent('NGWD:sellVehicle', function(plate)
     local source        = source
     local identifier    = Utils.getPlayerIdentifier(source)
-    if plate ~= nil then
-        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
+    if plate then
+        fetchAll('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
             ['owner']      = identifier,
             ['modelHash']  = modelHash,
             ['plate']      = plate,
@@ -158,7 +158,7 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
                 }, function(rowsChanged) 
                     if rowsChanged ~= 0 then
                         if Debug.debugLevel >= 2 then
-                            Utils.Debug('success', "Deleted " .. rowsChanged.. " vehicles owned by: ".. identifier .. " with the plate " .. plate .. ".")
+                            Utils.Debug('success', "Sold "..rowsChanged.." vehicle owned by: ".. identifier .. " with the plate " .. plate .. ".")
                         end                 
                     else
                         Utils.Debug('error', "No vehicle found with the plate: " .. plate .. "")  
