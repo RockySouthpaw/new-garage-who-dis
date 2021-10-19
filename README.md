@@ -82,12 +82,12 @@ combo:onPlayerInOut(function(isPointInside, point, zone)
         if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
             local garageName = "Mirror Park"
             -- This is the name of the garage. This denotes what garage the vehicle is stored at within the SQL and notifications.
-            notifyStorePrompt(garageName, notificationID)
+            notifyStorePrompt(garageName, NotificationId)
             activeNotification = true
         end
     else
         if activeNotification then 
-            notifyEnd(notificationID)
+            notifyEnd(NotificationId)
             activeNotification = false
         end
     end
@@ -121,17 +121,17 @@ retrieveLegion:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, 
     if isPointInside then
         local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
         if not IsPedInVehicle(PlayerPedId(), vehicle, true) then
-            if not retrieveNotification then
+            if not RetrieveNotification then
                 local garageName = "Legion"
                 -- This is the name of the garage. This denotes what garage the player is accessing.
-                notifyRetrievePrompt(garageName, notificationID)
-                retrieveNotification = true
+                notifyRetrievePrompt(garageName, NotificationId)
+                RetrieveNotification = true
             end
         end
     else
-        if retrieveNotification then 
-            notifyEnd(notificationID)
-            retrieveNotification = false
+        if RetrieveNotification then 
+            notifyEnd(NotificationId)
+            RetrieveNotification = false
         end
     end
 end)

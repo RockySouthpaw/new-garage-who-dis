@@ -106,6 +106,7 @@ AddEventHandler('NGWD:leaveVehicle', function(vehicle)
         notifyEnd("garageNotify")
     end
     Wait(1500)
+    -- wrap delete vehicle in a config later
     --deleteVehicle(vehicle)
     if not DoesEntityExist(vehicle) then
         print("^5[INFO] Vehicle delete successfully.")
