@@ -9,7 +9,7 @@ Utils.Debug = function(class, message)
         elseif class == "inform" and Debug.debugLevel == 3 then
             print(Debug.informDebugColor.."[INFO]:".. message .. "^7")
         elseif class ~= "error" and class ~= "success" and class ~= "inform" then
-            print("^1  [ERROR]: Invalid Debug Class: ^0".. class .. "^1 Please use 'error', 'success' or 'inform'.^7")
+            print("^1[ERROR]: Invalid Debug Class: ^0".. class .. "^1 Please use 'error', 'success' or 'inform'.^7")
         end
     end
 end
@@ -42,9 +42,9 @@ CreateThread(function()
 			Utils.Debug("inform","You may be using a pre-release of ^8["..GetCurrentResourceName().."]^5 or the GitHub went offline.")
 		else
 			if GetConvar('onesync') == "on" then
-				Utils.Debug("success"," ".. resourceName .. ' (v' .. responseText .. ") is up to date and has started.")
+				Utils.Debug("success","".. resourceName .. ' (v' .. responseText .. ") is up to date and has started.")
 			else
-				Utils.Debug("error"," ".. resourceName .. ' (v' .. responseText .. ")^1 is up to date but ^2[OneSync]^1 isn't enabled.\n ^1This resource requires ^2[OneSync]^1 to function correctly.")
+				Utils.Debug("error","".. resourceName .. ' (v' .. responseText .. ")^1 is up to date but ^2[OneSync]^1 isn't enabled.\n ^1This resource requires ^2[OneSync]^1 to function correctly.")
 			end
 		end
 	end
