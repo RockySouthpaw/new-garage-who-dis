@@ -110,7 +110,7 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
     local source        = source
     local identifier    = Utils.getPlayerIdentifier(source)
     if plate then
-        fetchAll('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
+        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
             ['owner']              = identifier,
             ['plate']              = plate,
             ['garage']             = garageName
