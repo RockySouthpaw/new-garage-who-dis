@@ -84,7 +84,7 @@ end)
 
 RegisterNetEvent('NGWD:openMenu')
 AddEventHandler('NGWD:openMenu', function(garageName)
-    print(garageName)
+    TriggerServerEvent('NGWD:getOwnedVehicles', garageName)
 end)
 
 RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehicleProperties, vehicleCondition, vehicleMods)
@@ -93,9 +93,16 @@ RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehiclePro
         Wait(50)
     end
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-    setVehicleProperties(vehicle, plate, vehicleProperties)
-    setVehicleCondition(vehicle, vehicleCondition)
-    setVehicleMods(vehicle, vehicleMods)
+    -- Shouldn't be needed after storing vehicle but will toss a nil erorr otherwise.
+    if vehicleProperties then
+        setVehicleProperties(vehicle, plate, vehicleProperties)
+    end
+    if vehicleCondition then
+        setVehicleCondition(vehicle, vehicleCondition)
+    end
+    if vehicleMods then
+        setVehicleMods(vehicle, vehicleMods)
+    end
 end)
 
 RegisterNetEvent('NGWD:leaveVehicle')
