@@ -28,7 +28,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
             end
         end)
     else
-        Utils.Debug('error', "Purchasing Vehicle: Model and plate not found.")
+        Utils.Debug('error', "Unable to purchase vehicle, model and plate not found.")
     end
 end)
 
@@ -42,7 +42,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
             ['modelHash']  = modelHash,
             ['plate']      = plate,
         }, function(results)
-            if results then
+            if results and results[1] then
                 if results[1].owner == identifier then
                     MySQL.Async.execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
                         ['owner']                  = identifier, 
@@ -134,20 +134,21 @@ RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
     if type(garageName) ~= "string" then return Utils.Debug('error', "Unable to get owned vehicles. Data other than string found for garage.") end
     if not identifier then return Utils.Debug('error', "Unable to fetch vehicles, identifier not found.") end
 
-    MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE owner= @owner', {
+    MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE owner = @owner', {
         ['owner']   = identifier,
     }, function(results)
         if results and results[1] then
             Utils.Debug('inform', "Vehicles found.")
             local count = 0
             for _,v in pairs(results) do
+                --print(v.plate, v.modelHash, v.garage, v.vehicleCondition)
                 print(v.plate, v.modelHash, v.garage)
                 if v.garage == garageName then
                     count = count + 1
                 end
             end
-            print(""..count.." Vehicles stored at "..garageName.." Garage")
-            -- Should also return the vehicle pr
+            Utils.Debug('inform', ""..count.." Vehicles stored at "..garageName.." Garage")
+            -- Should also return the vehicle condition to nui here too.
         else
             TriggerClientEvent('NGWD:notifyError', playerId, "You don't own any vehicles!") return Utils.Debug('error', "No vehicle found owned by: "..identifier.."") 
         end
