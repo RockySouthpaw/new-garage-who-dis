@@ -49,18 +49,11 @@ Config.spawnLocations       = {
 
 Debug = {}
 
-Debug.debugLevel           = 3
---[[
-    This sets the debug level which controls the prints you get in the console:
-    0 - Disabled (Not Recomended)
-    1 - Only errors
-    2 - Errors and Success
-    3 - Errors, Success and Informs (Everything)
-]]
+Debug.setActive             = true -- Enables/Disables debug prints.
 
-Debug.successDebugColor    = "^2"
-Debug.informDebugColor     = "^5"
-Debug.errorDebugColor      = "^1"
+Debug.successDebugColor     = "^2"
+Debug.informDebugColor      = "^5"
+Debug.errorDebugColor       = "^1"
 
 --[[
 Example: Utils.Debug('error', "hello")

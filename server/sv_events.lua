@@ -170,9 +170,7 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
                     ['plate'] = plate,
                 }, function(rowsChanged) 
                     if rowsChanged ~= 0 then
-                        if Debug.debugLevel >= 2 then
-                            Utils.Debug('success', "Sold "..rowsChanged.." vehicle owned by: ".. identifier .. " with the plate " .. plate .. ".")
-                        end                 
+                        Utils.Debug('success', "Sold "..rowsChanged.." vehicle owned by: ".. identifier .. " with the plate " .. plate .. ".")                 
                     else
                         Utils.Debug('error', "Error deleting vehicle from "..Config.databaseName..". No rows changed.")  
                     end
