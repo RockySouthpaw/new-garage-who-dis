@@ -14,15 +14,26 @@ Utils.Debug = function(class, message)
     end
 end
 
-Utils.getPlayerIdentifier = function(source)
+Utils.getPlayerIdentifier = function(playerId)
     local identifier
-    for k, v in ipairs(GetPlayerIdentifiers(source)) do 
+    for k, v in ipairs(GetPlayerIdentifiers(playerId)) do 
 		if string.match(v, Config.Identifier) then
 			identifier = v
 			break
 		end
     end
     return identifier
+end
+
+Utils.getVehicleModelName = function(playerId, modelHash)
+    if not modelHash or modelHash == 0 then
+        return "On Foot?"
+    end
+    for _, v in pairs(Model.hashList) do
+        if modelHash == v.modelHash then
+            return v.modelName
+        end
+    end
 end
 
 CreateThread(function()

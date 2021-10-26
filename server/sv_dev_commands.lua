@@ -24,3 +24,11 @@ RegisterCommand('spawn', function(source, args, rawCommand)
     TriggerEvent('NGWD:spawnVehicle', source, plate, garageName)
 end, false)
 ]]
+
+RegisterCommand('getModel', function(source, args, rawCommand)
+    local playerId <const> = source
+    local vehicle = GetVehiclePedIsIn(GetPlayerPed(playerId), false)
+    local modelHash = GetEntityModel(vehicle)
+    local modelName = Utils.getVehicleModelName(playerId, modelHash)
+    Utils.Debug('inform', "Model Hash: "..tostring(modelHash).." Model Name: "..tostring(modelName).."")  
+end, false)

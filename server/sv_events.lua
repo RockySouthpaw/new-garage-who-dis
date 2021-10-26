@@ -155,7 +155,6 @@ RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
     end)
 end)
 
-
 RegisterNetEvent('NGWD:sellVehicle', function(plate)
     local playerId      = source
     local identifier    = Utils.getPlayerIdentifier(playerId)
