@@ -133,30 +133,3 @@ AddEventHandler('onResourceStop', function(resource)
         notifyEnd("garageNotify")
     end
 end)
-
--- only exist for testing. Will be removed
-RegisterCommand('buy', function(source, args, rawCommand)
-    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-    local plate = GetVehicleNumberPlateText(vehicle)
-    local modelHash = GetEntityModel(vehicle)
-    local displayName = GetDisplayNameFromVehicleModel(modelHash)
-    local localizedName = GetLabelText(displayName)
-    --local properties = getVehicleProperties(vehicle)
-    --local condition = getVehicleCondition(vehicle)
-
-    TriggerServerEvent('NGWD:purchaseVehicle', plate, modelHash, localizedName)
-end, false)
-
-RegisterCommand('sell', function(source, args, rawCommand)
-    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-    local plate = GetVehicleNumberPlateText(vehicle)
-    local modelHash = GetEntityModel(vehicle)
-
-    TriggerServerEvent('NGWD:sellVehicle', plate, modelHash)
-end, false)
-
-RegisterCommand('spawn', function(source, args, rawCommand)
-    local plate = '23HSO859'
-    local garageName = 'Legion'
-    TriggerServerEvent('NGWD:spawnVehicle', plate, garageName)
-end, false)
