@@ -16,12 +16,12 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
                     ['localizedName']  = localizedName,
                     ['plate']          = plate,
                 })
-                Utils.Debug('success', "".. identifier .. " Purchased a vehicle with the plate " .. plate .. ".")
+                Utils.Debug('success', ""..identifier.." Purchased a vehicle with the plate "..plate..".")
                 if Config.purchaseNotification then
-                    TriggerClientEvent('NGWD:notifySuccess', playerId, "" .. modelHash .. " Was purchased successfully.")
+                    TriggerClientEvent('NGWD:notifySuccess', playerId, ""..modelHash.." Was purchased successfully.")
                 end
             else
-                Utils.Debug('error', "Duplicate Entry for ^1[" ..plate.. "]^0 owned by: ^3[".. identifier .. "]^0")
+                Utils.Debug('error', "Duplicate Entry for ^1["..plate.."]^0 owned by: ^3["..identifier.."]^0")
                 if Config.purchaseNotification then
                     TriggerClientEvent('NGWD:notifyError', playerId, "Vehicle can't be purchased.")
                 end
@@ -55,9 +55,9 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                         ['vehicleMods']            = json.encode(vehicleMods),
                     })             
                     TriggerClientEvent('NGWD:leaveVehicle', playerId, vehicle)
-                    Utils.Debug('inform', "Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. " Garage")
+                    Utils.Debug('inform', "Vehicle owned by: ^5"..results[1].owner.."^2 with the plate ^5"..plate.."^2 has been stored at ^5"..garageName.." Garage")
                     Wait(1000)
-                    TriggerClientEvent('NGWD:notifySuccess', playerId, "Vehicle Stored Successfully at " .. garageName .. " Garage")
+                    TriggerClientEvent('NGWD:notifySuccess', playerId, "Vehicle Stored Successfully at "..garageName.." Garage")
                 elseif results[1].owner ~= identifier then
                     if not Config.ownerRestricted then
                         MySQL.Async.execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
@@ -72,15 +72,15 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                         })                      
                         TriggerClientEvent('NGWD:leaveVehicle', playerId, vehicle)
                         Wait(1000)
-                        TriggerClientEvent('NGWD:notifySuccess', playerId, "Vehicle Stored Successfully at " .. garageName .. " Garage")
-                        Utils.Debug('inform', "Vehicle owned by: ^2".. results[1].owner .. "^3 with the plate ^2" .. plate .. "^3 has been stored at ^2" .. garageName .. " Garage")
+                        TriggerClientEvent('NGWD:notifySuccess', playerId, "Vehicle Stored Successfully at "..garageName.." Garage")
+                        Utils.Debug('inform', "Vehicle owned by: ^2"..results[1].owner.."^3 with the plate ^2"..plate.."^3 has been stored at ^2"..garageName.." Garage")
                     else
                         TriggerClientEvent('NGWD:notifyError', playerId, "Ownership Required")
-                        Utils.Debug('inform', "Prevented User ^5" .. identifier .. "^1 from storing ^2" .. results[1].owner .. "'s ^1 vehicle")
+                        Utils.Debug('inform', "Prevented User ^5"..identifier.."^1 from storing ^2"..results[1].owner.."'s ^1 vehicle")
                     end
                 end
             else
-                Utils.Debug('error', "Unable to find the modelHash " .. modelHash .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
+                Utils.Debug('error', "Unable to find the modelHash "..modelHash.." owned by: "..identifier.." with the plate "..plate..".")
                 TriggerClientEvent('NGWD:notifyError', playerId, "Vehicle Can't be Stored")
             end
         end)
@@ -118,7 +118,7 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
                     return 
                 end
             else
-                Utils.Debug('error', "No vehicle found owned by: " .. identifier .. " With Plate " .. plate .. "") 
+                Utils.Debug('error', "No vehicle found owned by: "..identifier.." With Plate "..plate.."") 
             end
         end)
     else
@@ -147,8 +147,9 @@ RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
                 end
             end
             print(""..count.." Vehicles stored at "..garageName.." Garage")
+            -- Should also return the vehicle pr
         else
-            TriggerClientEvent('NGWD:notifyError', playerId, "You don't own any vehicles!") return Utils.Debug('error', "No vehicle found owned by: " .. identifier .. "") 
+            TriggerClientEvent('NGWD:notifyError', playerId, "You don't own any vehicles!") return Utils.Debug('error', "No vehicle found owned by: "..identifier.."") 
         end
     end)
 end)
@@ -170,13 +171,13 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
                     ['plate'] = plate,
                 }, function(rowsChanged) 
                     if rowsChanged ~= 0 then
-                        Utils.Debug('success', "Sold "..rowsChanged.." vehicle owned by: ".. identifier .. " with the plate " .. plate .. ".")                 
+                        Utils.Debug('success', "Sold "..rowsChanged.." vehicle owned by: "..identifier.." with the plate "..plate..".")                 
                     else
                         Utils.Debug('error', "Error deleting vehicle from "..Config.databaseName..". No rows changed.")  
                     end
                 end)
             else
-                Utils.Debug('error', "No vehicle found owned by: " .. identifier .. " With Plate " .. plate .. "")
+                Utils.Debug('error', "No vehicle found owned by: "..identifier.." With Plate "..plate.."")
             end
         end)
     else

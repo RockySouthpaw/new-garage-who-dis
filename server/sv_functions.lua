@@ -31,8 +31,8 @@ function createVehicle(source, plyPed, modelHash, coords)
                 Wait(50)
             end
             if GetVehiclePedIsIn(plyPed) == veh then
-                Utils.Debug('success', "" .. modelHash .. " has spawned successfully.")
-                Utils.Debug('inform', "" .. GetPlayerName(source) .. " has spawned a vehicle " .. spawnDistance .. " units away.")
+                Utils.Debug('success', ""..modelHash.." has spawned successfully.")
+                Utils.Debug('inform', ""..GetPlayerName(source).." has spawned a vehicle "..spawnDistance.." units away.")
             end
             return NetworkGetNetworkIdFromEntity(veh), veh 
         end

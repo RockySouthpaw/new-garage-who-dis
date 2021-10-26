@@ -18,17 +18,17 @@ AddEventHandler('NGWD:notifySuccess', function(message)
     if Config.tNotify then 
         exports['t-notify']:Alert({
             style  =  'success',
-            message  =  "✔️ " .. message,
+            message  =  "✔️ "..message,
             length = length
         })
     end
     if Config.mythicNotify then
-        exports['mythic_notify']:SendAlert('success', "✔️ " .. message, length)
+        exports['mythic_notify']:SendAlert('success', "✔️ "..message, length)
     end
     if Config.pNotify then
         exports.pNotify:SetQueueMax(id, 1)
         exports.pNotify:SendNotification({
-            text = "✔️ " .. message,
+            text = "✔️ "..message,
             type = "success",
             timeout = length,
             layout = Config.layout,
@@ -38,7 +38,7 @@ AddEventHandler('NGWD:notifySuccess', function(message)
     end
     if Config.esxNotify then
         ESX.ShowNotification(
-            "✔️ " .. message, 
+            "✔️ "..message, 
             false, 
             false, 
             140
@@ -54,17 +54,17 @@ AddEventHandler('NGWD:notifyError', function(message)
     if Config.tNotify then 
         exports['t-notify']:Alert({
             style  =  'error',
-            message  =  "❌ " .. message,
+            message  =  "❌ "..message,
             length = length
         })
     end
     if Config.mythicNotify then
-        exports['mythic_notify']:SendAlert('error', "❌ " .. message, length)
+        exports['mythic_notify']:SendAlert('error', "❌ "..message, length)
     end
     if Config.pNotify then
         exports.pNotify:SetQueueMax(id, 1)
         exports.pNotify:SendNotification({
-            text = "❌ " .. message,
+            text = "❌ "..message,
             type = "error",
             timeout = length,
             layout = Config.layout,
@@ -74,7 +74,7 @@ AddEventHandler('NGWD:notifyError', function(message)
     end
     if Config.esxNotify then
         ESX.ShowNotification(
-            "❌ " .. message, 
+            "❌ "..message, 
             false, 
             false, 
             140

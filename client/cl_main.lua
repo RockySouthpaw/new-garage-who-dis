@@ -31,7 +31,7 @@ CreateThread(function()
                         SetBlipColour(blip, Config.blipColor)
                         BeginTextCommandSetBlipName("STRING")
                         if Config.enableBlipNames then
-                            AddTextComponentString(zone.name .. " Garage")
+                            AddTextComponentString(zone.name.." Garage")
                         else
                             AddTextComponentString("Garage")
                         end
@@ -53,7 +53,7 @@ CreateThread(function()
                     --SetBlipCategory(blip, 2)
                     BeginTextCommandSetBlipName("STRING")
                     if Config.enableBlipNames then
-                        AddTextComponentString(zone.name .. " Garage")
+                        AddTextComponentString(zone.name.." Garage")
                     else
                         AddTextComponentString("Garage")
                     end
