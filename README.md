@@ -5,8 +5,7 @@
 
 # Dependencies
 - [PolyZone](https://github.com/mkafrin/PolyZone) This ensures the lowest resource use possible as the resource currently uses `0.01 ms` due to no threads being used outside of blips and barrier deletion (Config based). This dependency will exist for the forseable future.
-- [Mysql-Async](https://github.com/brouznouf/fivem-mysql-async) **or** [Ghmattisql](https://github.com/GHMatti/ghmattimysql) You will need to set the config to `true`/`false` within the [sv_config.lua](https://github.com/project-error/new-garage-who-dis/blob/main/config/sv_config.lua). 
-If using `Ghmattisql`, be sure to comment out `'@mysql-async/lib/MySQL.lua',` within the [fxmanifest](https://github.com/project-error/new-garage-who-dis/blob/7d47586ada8f2275ab0f6497c782d05d3e32144c/fxmanifest.lua#L9).
+- [Mysql-Async](https://github.com/brouznouf/fivem-mysql-async) Strongly recommend using [Oxmysql](https://github.com/overextended/oxmysql) instead.
 
 # Current Dev Commands
 - `buy` Will insert the vehicle you're currently sitting in into the NGWD vehicles table.
@@ -30,9 +29,13 @@ If using `Ghmattisql`, be sure to comment out `'@mysql-async/lib/MySQL.lua',` wi
 Please make all pull request towards the [**Dev Branch**](https://github.com/project-error/new-garage-who-dis/tree/dev). If you have any suggestions for improvements please contact `ROCKY_southpaw#6771` on **Discord** or in the [**Project Error Discord**](https://discord.gg/HYwBjTbAY5).
 
 # Creating Additional Zones
+** Oudated as of 10/26/2021
 This is mostly quick and easy thanks to `Polyzone` having an easy way to create zones.
 
 ## Generating The Zone
+
+** Oudated as of 10/26/2021
+
 **Step 1**: Within your chat resource, run the command `/pzcreate poly`. Enter a name for your zone. Example: `Legion_1A` 1 corresponds to the blip number found in `cl_config.lua` and `A` denotes its the first zone.
 
 **Step 2**: Move the cursor via the arrow keys on your keyboard and run `/pzadd` when the marker is where you want it.
@@ -53,6 +56,9 @@ PolyZone:Create({
 ```
 
 ## Adding Zone (Vehicle Store)
+
+** Oudated as of 10/26/2021
+
 **Step 1**: Navigate to `new-garage-who-dis/client/zones/` and open `cl_storeZones.lua` This is the file pertaining to the zones for storing the player vehicle.
 
 **Step 2**: Navigate to the bottomn of the file and paste the zone you created previously. (Found in `polyzone_created_zones.txt`) Begin formatting it the same as the example below:
@@ -94,6 +100,9 @@ combo:onPlayerInOut(function(isPointInside, point, zone)
 end)
 ```
 ## Adding Zone (Vehicle Retrieve)
+
+** Oudated as of 10/26/2021
+
 **Step 1**: Navigate to `new-garage-who-dis/client/zones/` and open `cl_retrieveZones.lua` This is the file pertaining to the zones for retrieving the player vehicle.
 
 **Step 2**: Navigate to the bottomn of the file and paste the zone you created previously. (Found in `polyzone_created_zones.txt`) Begin formatting it the same as the example below:
