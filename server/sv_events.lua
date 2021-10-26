@@ -1,26 +1,15 @@
-if Config.useMysqlAsync then
-    execute     = MySQL.Async.execute
-    fetchAll    = MySQL.Async.fetchAll
-    fetchScalar = MySQL.Async.fetchScalar
-end
-
-if Config.useGhmattimysql then
-    execute   = exports.ghmattimysql.execute
-    fetchAll  = exports.ghmattimysql.execute 
-end
-
 RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedName) -- Should also pass the modelName maybe?
     local playerId      = source
     local identifier    = Utils.getPlayerIdentifier(playerId)
     if not identifier then TriggerClientEvent('NGWD:notifyError', playerId, "Unable to purchase vehicle.") return Utils.Debug('error', "Unable to purchase vehicle, identifier not found.") end
     if plate and modelHash then
         -- can also add a distance check for the dealership cords and trigger a kick event..
-        fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
+        MySQL.Async.fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
             ['owner']          = identifier,
             ['plate']          = plate,
         }, function(result)
             if not result then
-                execute('INSERT INTO '..Config.databaseName..' (owner, modelHash, localizedName, plate) VALUES (@owner, @modelHash, @localizedName, @plate)',
+                MySQL.Async.execute('INSERT INTO '..Config.databaseName..' (owner, modelHash, localizedName, plate) VALUES (@owner, @modelHash, @localizedName, @plate)',
                 {
                     ['owner']          = identifier, 
                     ['modelHash']      = modelHash,
@@ -49,13 +38,13 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
     if not identifier then TriggerClientEvent('NGWD:notifyError', playerId, "Error storing vehicle.") return Utils.Debug('error', "Unable to store vehicle, identifier not found.") end
     
     if plate and modelHash then
-        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
+        MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
             ['modelHash']  = modelHash,
             ['plate']      = plate,
         }, function(results)
             if results then
                 if results[1].owner == identifier then
-                    execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
+                    MySQL.Async.execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
                         ['owner']                  = identifier, 
                         ['modelHash']              = modelHash,
                         ['localizedName']          = localizedName,
@@ -71,7 +60,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                     TriggerClientEvent('NGWD:notifySuccess', playerId, "Vehicle Stored Successfully at " .. garageName .. " Garage")
                 elseif results[1].owner ~= identifier then
                     if not Config.ownerRestricted then
-                        execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
+                        MySQL.Async.execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
                             ['owner']                  = identifier, 
                             ['modelHash']              = modelHash,
                             ['localizedName']          = localizedName,
@@ -106,7 +95,7 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
     if not identifier then return Utils.Debug('error', "Unable to spawn vehicle, identifier not found.") end
 
     if plate then
-        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
+        MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
             ['owner']   = identifier,
             ['plate']   = plate,
             ['garage']  = garageName,
@@ -145,7 +134,7 @@ RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
     if type(garageName) ~= "string" then return Utils.Debug('error', "Unable to get owned vehicles. Data other than string found for garage.") end
     if not identifier then return Utils.Debug('error', "Unable to fetch vehicles, identifier not found.") end
 
-    fetchAll('SELECT * FROM '..Config.databaseName..' WHERE owner= @owner', {
+    MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE owner= @owner', {
         ['owner']   = identifier,
     }, function(results)
         if results and results[1] then
@@ -171,12 +160,12 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
     if not identifier then return Utils.Debug('error', "Unable to sell vehicle, identifier not found.") end
 
     if plate then
-        fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
+        MySQL.Async.fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
             ['owner'] = identifier,
             ['plate'] = plate,
         }, function(result)
             if result then
-                execute('DELETE FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
+                MySQL.Async.execute('DELETE FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
                     ['owner'] = identifier,
                     ['plate'] = plate,
                 }, function(rowsChanged) 

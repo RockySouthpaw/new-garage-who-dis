@@ -1,8 +1,6 @@
 Config = {}
 
 -- Config Variables (Database)
-Config.useMysqlAsync        = true
-Config.useGhmattimysql      = false
 Config.Identifier           = 'license:'
 Config.databaseName         = 'ngwd_vehicles'
 
