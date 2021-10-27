@@ -25,7 +25,7 @@ RegisterCommand('spawn', function(source, args, rawCommand)
 end, false)
 ]]
 
-RegisterCommand('getModel', function(source, args, rawCommand)
+RegisterCommand('getmodel', function(source, args, rawCommand)
     local playerId <const> = source
     local vehicle = GetVehiclePedIsIn(GetPlayerPed(playerId), false)
     local modelHash = GetEntityModel(vehicle)

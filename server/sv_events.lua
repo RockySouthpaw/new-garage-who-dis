@@ -133,7 +133,7 @@ RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
     if not garageName then return Utils.Debug('error', "Unable to fetch vehicles, no garage specified.") end
     if type(garageName) ~= "string" then return Utils.Debug('error', "Unable to get owned vehicles. Data other than string found for garage.") end
     if not identifier then return Utils.Debug('error', "Unable to fetch vehicles, identifier not found.") end
-
+    
     MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE owner = @owner', {
         ['owner']   = identifier,
     }, function(results)
