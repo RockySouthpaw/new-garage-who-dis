@@ -29,6 +29,6 @@ RegisterCommand('getmodel', function(source, args, rawCommand)
     local playerId <const> = source
     local vehicle = GetVehiclePedIsIn(GetPlayerPed(playerId), false)
     local modelHash = GetEntityModel(vehicle)
-    local modelName = Utils.getVehicleModelName(playerId, modelHash)
+    local modelName = Utils.getVehicleModelName(modelHash)
     Utils.Debug('inform', "Model Hash: "..tostring(modelHash).." Model Name: "..tostring(modelName).."")  
 end, false)

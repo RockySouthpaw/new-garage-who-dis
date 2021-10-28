@@ -5,7 +5,8 @@ Config.Identifier           = 'license:'
 Config.databaseName         = 'ngwd_vehicles'
 
 -- Config Variables (Storing)
-Config.ownerRestricted      = false -- Only allow vehicle owner to store vehicle.
+Config.purchasedRestricted  = true -- Only allow vehicles to be stored that have been purchased.
+Config.ownerRestricted      = true -- Only allow the vehicle owner to store their vehicle.
 
 -- Config Variables (Purchasing)
 Config.purchaseNotification = true

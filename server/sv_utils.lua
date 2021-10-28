@@ -25,7 +25,7 @@ Utils.getPlayerIdentifier = function(playerId)
     return identifier
 end
 
-Utils.getVehicleModelName = function(playerId, modelHash)
+Utils.getVehicleModelName = function(modelHash)
     if not modelHash or modelHash == 0 then
         return "On Foot?"
     end
