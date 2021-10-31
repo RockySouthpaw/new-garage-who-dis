@@ -1,4 +1,4 @@
-RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedName) -- Should also pass the modelName maybe?
+RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, modelClass, localizedName) -- Should also pass the modelName maybe?
     local playerId      = source
     local identifier    = Utils.getPlayerIdentifier(playerId)
     local modelName     = Utils.getVehicleModelName(modelHash)
@@ -11,11 +11,12 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedNam
             ['plate']          = plate,
         }, function(result)
             if not result then
-                MySQL.Async.execute('INSERT INTO '..Config.databaseName..' (owner, modelHash, modelName, localizedName, plate) VALUES (@owner, @modelHash, @modelName, @localizedName, @plate)',
+                MySQL.Async.execute('INSERT INTO '..Config.databaseName..' (owner, modelHash, modelName, modelClass, localizedName, plate) VALUES (@owner, @modelHash, @modelName, @modelClass, @localizedName, @plate)',
                 {
                     ['owner']          = identifier, 
                     ['modelHash']      = modelHash,
                     ['modelName']      = modelName,
+                    ['modelClass']     = modelClass,
                     ['localizedName']  = localizedName,
                     ['plate']          = plate,
                 })

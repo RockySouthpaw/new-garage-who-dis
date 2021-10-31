@@ -4,9 +4,9 @@ RegisterCommand('buy', function(source, args, rawCommand)
     local modelHash = GetEntityModel(vehicle)
     local displayName = GetDisplayNameFromVehicleModel(modelHash)
     local localizedName = GetLabelText(displayName)
+    local modelClass = GetVehicleClass(vehicle)
 
-    print(localizedName)
-    TriggerServerEvent('NGWD:purchaseVehicle', plate, modelHash, localizedName)
+    TriggerServerEvent('NGWD:purchaseVehicle', plate, modelHash, modelClass, localizedName)
 end)
 
 RegisterCommand('sell', function(source, args, rawCommand)
