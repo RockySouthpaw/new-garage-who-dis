@@ -57,10 +57,19 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                             ['vehicleCondition']       = json.encode(vehicleCondition),
                             ['vehicleMods']            = json.encode(vehicleMods),
                         })             
-                        TriggerClientEvent('NGWD:leaveVehicle', playerId, vehicle)
+                        --TriggerClientEvent('NGWD:leaveVehicle', playerId, vehicle)
                         Wait(1000)
                         TriggerClientEvent('NGWD:notifySuccess', playerId, "Vehicle Stored Successfully at "..garageName.." Garage")
                         Utils.Debug('inform', "Vehicle owned by: ^5"..results[1].owner.."^2 with the plate ^5"..plate.."^2 has been stored at ^5"..garageName.." Garage")
+                        if Config.deleteVehicle then
+                            --[[print(vehicle)
+                            DeleteEntity(NetworkGetNetworkIdFromEntity(vehicle))
+                            if not DoesEntityExist(vehicle) then
+                                Utils.Debug('success', "Vehicle deleted successfully.")
+                            else
+                                Utils.Debug('error', "Vehicle was not deleted.")
+                            end]]
+                        end
                     else
                         Utils.Debug('error', "Unable to find the modelHash "..modelHash.." owned by: "..identifier.." with the plate "..plate..".")
                         TriggerClientEvent('NGWD:notifyError', playerId, "You do not own this vehicle!")
