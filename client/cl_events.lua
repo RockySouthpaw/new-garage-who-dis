@@ -92,7 +92,7 @@ RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehiclePro
         -- vehicles wont instantly exist on the client, even though they exist on the server.
         Wait(50)
     end
-    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    local vehicle = NetworkGetEntityFromNetworkId(vehNet)
     -- Shouldn't be needed after storing vehicle but will toss a nil erorr otherwise.
     if vehicleProperties then
         setVehicleProperties(vehicle, plate, vehicleProperties)
@@ -111,14 +111,6 @@ AddEventHandler('NGWD:leaveVehicle', function(vehicle)
         ped = GetPedInVehicleSeat(vehicle, i)
         TaskLeaveVehicle(ped, vehicle, 0)
         notifyEnd("garageNotify")
-    end
-    Wait(1500)
-    -- wrap delete vehicle in a config later
-    --deleteVehicle(vehicle)
-    if not DoesEntityExist(vehicle) then
-        print("^5[INFO] Vehicle delete successfully.")
-    else
-        print("^2[ERROR] Vehicle was not deleted.")
     end
 end)
 
