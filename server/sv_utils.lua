@@ -36,13 +36,6 @@ Utils.getVehicleModelName = function(modelHash)
     end
 end
 
-Utils.getVehicleClassName = function(classInteger)
-    if not classInteger then
-        return "Not Found"
-    end
-    -- soon
-end
-
 CreateThread(function()
 	local updatePath = '/project-error/new-garage-who-dis'
 	local resourceName = "^5["..GetCurrentResourceName().."]^2"

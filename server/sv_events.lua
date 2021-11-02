@@ -4,6 +4,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, modelClass, 
     local modelName     = Utils.getVehicleModelName(modelHash)
     if not identifier then TriggerClientEvent('NGWD:notifyError', playerId, "Unable to purchase vehicle.") return Utils.Debug('error', "Unable to purchase vehicle, identifier not found.") end
     if not modelName then modelName = 'Not Found' end
+    if type(modelClass) ~= "number" then return Utils.Debug('error', "Unable to purchase vehicle, invalid modelClass.") end
     if plate and modelHash then
         -- can also add a distance check for the dealership cords and trigger a kick event..
         MySQL.Async.fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
