@@ -1,3 +1,5 @@
+local devPlate = '23HSO859'
+
 RegisterCommand('buy', function(source, args, rawCommand)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local plate = GetVehicleNumberPlateText(vehicle)
@@ -18,14 +20,14 @@ RegisterCommand('sell', function(source, args, rawCommand)
 end)
 
 RegisterCommand('spawn', function(source, args, rawCommand)
-    local plate = '23HSO859'
+    local plate = devPlate
     local garageName = 'Legion'
 
     TriggerServerEvent('NGWD:spawnVehicle', plate, garageName)
 end)
 
 RegisterCommand('dp_name', function(source, args, rawCommand)
-    local plate = '23HSO859'
+    local plate = devPlate
     local garageName = 'Legion'
     
     TriggerServerEvent('NGWD:spawnVehicle', plate, garageName)
