@@ -38,8 +38,9 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, modelClass, 
 end)
 
 RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
-    local playerId      = source
-    local identifier    = Utils.getPlayerIdentifier(playerId)
+    local playerId          = source
+    local identifier        = Utils.getPlayerIdentifier(playerId)
+    local currentVehicle    = GetVehiclePedIsIn(GetPlayerPed(playerId), false) 
     if not identifier then TriggerClientEvent('NGWD:notifyError', playerId, "Error storing vehicle.") return Utils.Debug('error', "Unable to store vehicle, identifier not found.") end
     
     if plate and modelHash then
@@ -56,14 +57,20 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                             ['vehicleProperties']      = json.encode(vehicleProperties),
                             ['vehicleCondition']       = json.encode(vehicleCondition),
                             ['vehicleMods']            = json.encode(vehicleMods),
-                        })             
+                        })           
                         TriggerClientEvent('NGWD:leaveVehicle', playerId, vehicle)
+                        Wait(1500) -- Gives time for the player to leave the vehicle.
                         if Config.deleteVehicle then
-                            print(vehicle)
-                            -- Delete Vehicle
-                            -- Check if it still exist
+                            DeleteEntity(currentVehicle)
+                            Wait(100)
+                            if not DoesEntityExist(currentVehicle) then
+                                Utils.Debug('success', "Vehicle deleted successfully.")
+                            else
+                                Utils.Debug('error', "Failed to delete vehicle.")
+                            end
+                        else
+                            -- lock vehicle + set invincible
                         end
-                        Wait(1000)
                         TriggerClientEvent('NGWD:notifySuccess', playerId, "Vehicle Stored Successfully at "..garageName.." Garage")
                         Utils.Debug('inform', "Vehicle owned by: ^5"..results[1].owner.."^2 with the plate ^5"..plate.."^2 has been stored at ^5"..garageName.." Garage")
                     else
