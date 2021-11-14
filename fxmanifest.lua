@@ -19,10 +19,10 @@ client_scripts {
 	'client/**/*.lua',
 }
 
-ui_page 'html/ui.html'
+ui_page 'html/index.html'
 
 files {
-	'html/ui.html',
+	'html/index.html',
 	'html/js/*.js',
 	'html/css/*.css',
 	'html/img/*.png'
