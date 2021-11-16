@@ -20,7 +20,7 @@ RegisterCommand("Retrieve", function()
                 if not retrieving then
                     retrieving = true
                     garageName = zone.name
-                    TriggerEvent('NGWD:openMenu', garageName)
+                    TriggerServerEvent('NGWD:getOwnedVehicles', garageName)
                     Wait(keyDelay)
                     retrieving = false
                 end

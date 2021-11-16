@@ -83,8 +83,33 @@ AddEventHandler('NGWD:notifyError', function(message)
 end)
 
 RegisterNetEvent('NGWD:openMenu')
-AddEventHandler('NGWD:openMenu', function(garageName)
-    TriggerServerEvent('NGWD:getOwnedVehicles', garageName)
+AddEventHandler('NGWD:openMenu', function(garage_Data)
+    for _, v in pairs(garage_Data) do
+        print(v.modelName)
+        print(v.modelHash)
+        print(v.modelClass)
+        print(v.localizedName)
+        print(v.plate)
+        print(v.garage)
+        print(v.preview)
+    end
+    --[[SendNUIMessage({
+        action = 'display',
+        display = false,
+        garageData = {
+			model = 'Random 1',
+			garage = 'Pink Cage',
+			class = 0,
+			plate = '12A9JKAD',
+			engineState= 'Decent',
+			bodyState= 'Fabulous',
+			purchasedDay = 'Thursday',
+			purchasedMonth = 'April',
+			purchasedDate = '2nd',
+			isVehicleImpounded = true,
+			vehicleImage = ''}
+    })
+    SetNuiFocus(true, true)]]
 end)
 
 RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehicleProperties, vehicleCondition, vehicleMods)

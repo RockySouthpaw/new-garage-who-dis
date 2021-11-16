@@ -150,7 +150,7 @@ RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
                 end
             end
             Utils.Debug('inform', ""..count.." Vehicles stored at "..garageName.." Garage")
-            -- Should also return the vehicle condition to nui here too.
+            TriggerClientEvent('NGWD:openMenu', playerId, results)
         else
             TriggerClientEvent('NGWD:notifyError', playerId, "You don't own any vehicles!") return Utils.Debug('error', "No vehicle found owned by: "..identifier.."") 
         end
