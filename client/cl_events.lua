@@ -10,8 +10,7 @@ if Config.esxNotify then
     end)
 end
 
-RegisterNetEvent('NGWD:notifySuccess')
-AddEventHandler('NGWD:notifySuccess', function(message)
+RegisterNetEvent('NGWD:notifySuccess', function(message)
     notifyEnd("garageNotify")
     Wait(150) -- Ensures all notifications are removed in time before creating new ones.
     length = Config.successLength * 1000
@@ -46,8 +45,7 @@ AddEventHandler('NGWD:notifySuccess', function(message)
     end
 end)
 
-RegisterNetEvent('NGWD:notifyError')
-AddEventHandler('NGWD:notifyError', function(message)
+RegisterNetEvent('NGWD:notifyError', function(message)
     notifyEnd("garageNotify")
     Wait(150) -- Ensures all notifications are removed in time before creating new ones.
     length = Config.errorLength * 1000
@@ -82,8 +80,7 @@ AddEventHandler('NGWD:notifyError', function(message)
     end
 end)
 
-RegisterNetEvent('NGWD:openMenu')
-AddEventHandler('NGWD:openMenu', function(garageData)
+RegisterNetEvent('NGWD:openMenu', function (garageData)
     for _, v in pairs(garageData) do
         print(v.modelName)
         print(v.modelHash)
@@ -130,8 +127,7 @@ RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehiclePro
     end
 end)
 
-RegisterNetEvent('NGWD:leaveVehicle')
-AddEventHandler('NGWD:leaveVehicle', function(vehicle)
+RegisterNetEvent('NGWD:leaveVehicle', function(vehicle)
     for i = -1, 7 do
         ped = GetPedInVehicleSeat(vehicle, i)
         TaskLeaveVehicle(ped, vehicle, 0)
@@ -139,8 +135,7 @@ AddEventHandler('NGWD:leaveVehicle', function(vehicle)
     end
 end)
 
-RegisterNetEvent('NGWD:previewVehicle')
-AddEventHandler('NGWD:previewVehicle', function(garageName)
+RegisterNetEvent('NGWD:previewVehicle', function(garageName)
     -- Triggered by the menu to spawn vehicle
     print(garageName)
 end)
