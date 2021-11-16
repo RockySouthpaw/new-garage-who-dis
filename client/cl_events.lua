@@ -83,8 +83,8 @@ AddEventHandler('NGWD:notifyError', function(message)
 end)
 
 RegisterNetEvent('NGWD:openMenu')
-AddEventHandler('NGWD:openMenu', function(garage_Data)
-    for _, v in pairs(garage_Data) do
+AddEventHandler('NGWD:openMenu', function(garageData)
+    for _, v in pairs(garageData) do
         print(v.modelName)
         print(v.modelHash)
         print(v.modelClass)
