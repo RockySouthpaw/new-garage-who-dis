@@ -10,25 +10,24 @@ if Config.esxNotify then
     end)
 end
 
-RegisterNetEvent('NGWD:notifySuccess')
-AddEventHandler('NGWD:notifySuccess', function(message)
+RegisterNetEvent('NGWD:notifySuccess', function(message)
     notifyEnd("garageNotify")
     Wait(150) -- Ensures all notifications are removed in time before creating new ones.
     length = Config.successLength * 1000
     if Config.tNotify then 
         exports['t-notify']:Alert({
             style  =  'success',
-            message  =  "✔️ " .. message,
+            message  =  "✔️ "..message,
             length = length
         })
     end
     if Config.mythicNotify then
-        exports['mythic_notify']:SendAlert('success', "✔️ " .. message, length)
+        exports['mythic_notify']:SendAlert('success', "✔️ "..message, length)
     end
     if Config.pNotify then
         exports.pNotify:SetQueueMax(id, 1)
         exports.pNotify:SendNotification({
-            text = "✔️ " .. message,
+            text = "✔️ "..message,
             type = "success",
             timeout = length,
             layout = Config.layout,
@@ -38,7 +37,7 @@ AddEventHandler('NGWD:notifySuccess', function(message)
     end
     if Config.esxNotify then
         ESX.ShowNotification(
-            "✔️ " .. message, 
+            "✔️ "..message, 
             false, 
             false, 
             140
@@ -46,25 +45,24 @@ AddEventHandler('NGWD:notifySuccess', function(message)
     end
 end)
 
-RegisterNetEvent('NGWD:notifyError')
-AddEventHandler('NGWD:notifyError', function(message)
+RegisterNetEvent('NGWD:notifyError', function(message)
     notifyEnd("garageNotify")
     Wait(150) -- Ensures all notifications are removed in time before creating new ones.
     length = Config.errorLength * 1000
     if Config.tNotify then 
         exports['t-notify']:Alert({
             style  =  'error',
-            message  =  "❌ " .. message,
+            message  =  "❌ "..message,
             length = length
         })
     end
     if Config.mythicNotify then
-        exports['mythic_notify']:SendAlert('error', "❌ " .. message, length)
+        exports['mythic_notify']:SendAlert('error', "❌ "..message, length)
     end
     if Config.pNotify then
         exports.pNotify:SetQueueMax(id, 1)
         exports.pNotify:SendNotification({
-            text = "❌ " .. message,
+            text = "❌ "..message,
             type = "error",
             timeout = length,
             layout = Config.layout,
@@ -74,7 +72,7 @@ AddEventHandler('NGWD:notifyError', function(message)
     end
     if Config.esxNotify then
         ESX.ShowNotification(
-            "❌ " .. message, 
+            "❌ "..message, 
             false, 
             false, 
             140
@@ -82,9 +80,33 @@ AddEventHandler('NGWD:notifyError', function(message)
     end
 end)
 
-RegisterNetEvent('NGWD:openMenu')
-AddEventHandler('NGWD:openMenu', function(garageName)
-    print(garageName)
+RegisterNetEvent('NGWD:openMenu', function (garageData)
+    for _, v in pairs(garageData) do
+        print(v.modelName)
+        print(v.modelHash)
+        print(v.modelClass)
+        print(v.localizedName)
+        print(v.plate)
+        print(v.garage)
+        print(v.preview)
+    end
+    --[[SendNUIMessage({
+        action = 'display',
+        display = false,
+        garageData = {
+			model = 'Random 1',
+			garage = 'Pink Cage',
+			class = 0,
+			plate = '12A9JKAD',
+			engineState= 'Decent',
+			bodyState= 'Fabulous',
+			purchasedDay = 'Thursday',
+			purchasedMonth = 'April',
+			purchasedDate = '2nd',
+			isVehicleImpounded = true,
+			vehicleImage = ''}
+    })
+    SetNuiFocus(true, true)]]
 end)
 
 RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehicleProperties, vehicleCondition, vehicleMods)
@@ -92,30 +114,28 @@ RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehiclePro
         -- vehicles wont instantly exist on the client, even though they exist on the server.
         Wait(50)
     end
-    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-    setVehicleProperties(vehicle, plate, vehicleProperties)
-    setVehicleCondition(vehicle, vehicleCondition)
-    setVehicleMods(vehicle, vehicleMods)
+    local vehicle = NetworkGetEntityFromNetworkId(vehNet)
+    -- Shouldn't be needed after storing vehicle but will toss a nil erorr otherwise.
+    if vehicleProperties then
+        setVehicleProperties(vehicle, plate, vehicleProperties)
+    end
+    if vehicleCondition then
+        setVehicleCondition(vehicle, vehicleCondition)
+    end
+    if vehicleMods then
+        setVehicleMods(vehicle, vehicleMods)
+    end
 end)
 
-RegisterNetEvent('NGWD:leaveVehicle')
-AddEventHandler('NGWD:leaveVehicle', function(vehicle)
+RegisterNetEvent('NGWD:leaveVehicle', function(vehicle)
     for i = -1, 7 do
         ped = GetPedInVehicleSeat(vehicle, i)
         TaskLeaveVehicle(ped, vehicle, 0)
         notifyEnd("garageNotify")
     end
-    Wait(1500)
-    --deleteVehicle(vehicle)
-    if not DoesEntityExist(vehicle) then
-        print("^5[INFO] Vehicle delete successfully.")
-    else
-        print("^2[ERROR] Vehicle was not deleted.")
-    end
 end)
 
-RegisterNetEvent('NGWD:previewVehicle')
-AddEventHandler('NGWD:previewVehicle', function(garageName)
+RegisterNetEvent('NGWD:previewVehicle', function(garageName)
     -- Triggered by the menu to spawn vehicle
     print(garageName)
 end)
@@ -125,30 +145,3 @@ AddEventHandler('onResourceStop', function(resource)
         notifyEnd("garageNotify")
     end
 end)
-
--- only exist for testing. Will be removed
-RegisterCommand('buy', function(source, args, rawCommand)
-    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-    local plate = GetVehicleNumberPlateText(vehicle)
-    local modelHash = GetEntityModel(vehicle)
-    local displayName = GetDisplayNameFromVehicleModel(modelHash)
-    local localizedName = GetLabelText(displayName)
-    --local properties = getVehicleProperties(vehicle)
-    --local condition = getVehicleCondition(vehicle)
-
-    TriggerServerEvent('NGWD:purchaseVehicle', plate, modelHash, localizedName)
-end, false)
-
-RegisterCommand('sell', function(source, args, rawCommand)
-    local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-    local plate = GetVehicleNumberPlateText(vehicle)
-    local modelHash = GetEntityModel(vehicle)
-
-    TriggerServerEvent('NGWD:sellVehicle', plate, modelHash)
-end, false)
-
-RegisterCommand('spawn', function(source, args, rawCommand)
-    local plate = '23HSO859'
-    local garageName = 'Legion'
-    TriggerServerEvent('NGWD:spawnVehicle', plate, garageName)
-end, false)

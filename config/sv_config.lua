@@ -1,14 +1,13 @@
 Config = {}
 
 -- Config Variables (Database)
-Config.useMysqlAsync        = true
-Config.useGhmattimysql      = false
 Config.Identifier           = 'license:'
 Config.databaseName         = 'ngwd_vehicles'
 
 -- Config Variables (Storing)
-Config.ownerRestricted      = false -- Only allow vehicle owner to store vehicle.
-
+Config.purchasedRestricted  = true -- Only allow vehicles to be stored that have been purchased.
+Config.ownerRestricted      = true -- Only allow the vehicle owner to store their vehicle.
+Config.deleteVehicle        = true -- On vehicle storing, delete vehicle.
 -- Config Variables (Purchasing)
 Config.purchaseNotification = true
 
@@ -51,18 +50,11 @@ Config.spawnLocations       = {
 
 Debug = {}
 
-Debug.debugLevel           = 3
---[[
-    This sets the debug level which controls the prints you get in the console:
-    0 - Disabled (Not Recomended)
-    1 - Only errors
-    2 - Errors and Success
-    3 - Errors, Success and Informs (Everything)
-]]
+Debug.setActive             = true -- Enables/Disables debug prints.
 
-Debug.successDebugColor    = "^2"
-Debug.informDebugColor     = "^5"
-Debug.errorDebugColor      = "^1"
+Debug.successDebugColor     = "^2"
+Debug.informDebugColor      = "^5"
+Debug.errorDebugColor       = "^1"
 
 --[[
 Example: Utils.Debug('error', "hello")

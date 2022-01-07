@@ -31,7 +31,7 @@ CreateThread(function()
                         SetBlipColour(blip, Config.blipColor)
                         BeginTextCommandSetBlipName("STRING")
                         if Config.enableBlipNames then
-                            AddTextComponentString(zone.name .. " Garage")
+                            AddTextComponentString(zone.name.." Garage")
                         else
                             AddTextComponentString("Garage")
                         end
@@ -53,7 +53,7 @@ CreateThread(function()
                     --SetBlipCategory(blip, 2)
                     BeginTextCommandSetBlipName("STRING")
                     if Config.enableBlipNames then
-                        AddTextComponentString(zone.name .. " Garage")
+                        AddTextComponentString(zone.name.." Garage")
                     else
                         AddTextComponentString("Garage")
                     end
@@ -91,30 +91,3 @@ CreateThread(function()
         end
     end
 end)
-
---[[
-local hashedObj = GetHashKey('prop_parking_hut_2')
-local lastZone = nil
-CreateThread(function()
-    while true do
-        Wait(5000)
-        local plyPos = GetEntityCoords(PlayerPedId())
-        for i = 1, #Config.parkingPropsLocations do
-            local zone = Config.parkingPropsLocations[i]
-            local parkingPropDistance = #(plyPos - zone.pos)
-            currentZone = zone.name
-            if parkingPropDistance <= 50 and lastZone ~= currentZone then
-                RequestModel(hashedObj)
-                if HasModelLoaded(hashedObj) then
-                    if obj == nil then
-                        local obj = CreateObject(hashedObj,zone.pos,true,true,false)
-                        SetEntityHeading(obj, zone.heading)
-                        SetEntityAsNoLongerNeeded(obj)
-                        lastZone = zone.name
-                    end
-                end
-            end
-        end
-    end
-end)
-]]

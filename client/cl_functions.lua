@@ -25,7 +25,7 @@ function notifyStorePrompt(garage, id)
                 step = 'start',
                 options = {
                     style = 'message',
-                    title = garage.. ' Parking',
+                    title = garage..' Parking',
                     sound = true,
                     message = "Press **~c~["..Config.storageKey.."]~c~** To Park Vehicle",
                     position = Config.tLocation
@@ -68,7 +68,7 @@ function notifyRetrievePrompt(garage, id)
                 step = 'start',
                 options = {
                     style = 'message',
-                    title = garage.. ' Parking',
+                    title = garage..' Parking',
                     sound = true,
                     message = "Press **~c~["..Config.retrieveKey.."]~c~** To Retrieve Vehicle",
                     position = Config.tLocation
@@ -138,10 +138,10 @@ function storeVehicle(vehicle, garageName)
         local modelName = GetDisplayNameFromVehicleModel(modelHash)
         local localizedName = GetLabelText(modelName)
 
-        if garageName ~= nil then
+        if garageName then
             TriggerServerEvent('NGWD:storeVehicle', vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
             inProgress = false
-        elseif garageName ~= nil then
+        else
             message = 'Invalid Garage!'
             TriggerEvent('NGWD:notifyError', message)
             inProgress = false

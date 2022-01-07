@@ -1,6 +1,6 @@
 local CreateAutomobile = GetHashKey("CREATE_AUTOMOBILE")
 
-function createVehicle(source, plyPed, modelHash, coords)
+function createVehicle(playerId, plyPed, modelHash, coords)
     for i = 1, #Config.spawnLocations do
         local spawnZone = Config.spawnLocations[i]
         local spawnDistance = #(GetEntityCoords(plyPed) - spawnZone.pos)
@@ -19,7 +19,7 @@ function createVehicle(source, plyPed, modelHash, coords)
                 return nil 
             end
             local entState = Entity(veh).state
-            entState:set('owner', GetPlayerName(source), true)
+            entState:set('owner', GetPlayerName(playerId), true)
             entState:set('finishedSpawning', false, true)
         
             while GetVehiclePedIsIn(plyPed) ~= veh do
@@ -27,12 +27,12 @@ function createVehicle(source, plyPed, modelHash, coords)
                 SetPedIntoVehicle(plyPed, veh, -1)
             end
         
-            while NetworkGetEntityOwner(veh) ~= source do
+            while NetworkGetEntityOwner(veh) ~= playerId do
                 Wait(50)
             end
             if GetVehiclePedIsIn(plyPed) == veh then
-                Utils.Debug('success', "" .. modelHash .. " has spawned successfully.")
-                Utils.Debug('inform', "" .. GetPlayerName(source) .. " has spawned a vehicle " .. spawnDistance .. " units away.")
+                Utils.Debug('success', ""..modelHash.." has spawned successfully.")
+                Utils.Debug('inform', ""..GetPlayerName(playerId).." has spawned a vehicle "..spawnDistance.." units away.")
             end
             return NetworkGetNetworkIdFromEntity(veh), veh 
         end

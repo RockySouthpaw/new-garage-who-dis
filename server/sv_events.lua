@@ -1,139 +1,126 @@
-if Config.useMysqlAsync then
-    execute     = MySQL.Async.execute
-    fetchAll    = MySQL.Async.fetchAll
-    fetchScalar = MySQL.Async.fetchScalar
-end
-
-if Config.useGhmattimysql then
-    execute   = exports.ghmattimysql.execute
-    fetchAll  = exports.ghmattimysql.execute 
-end
-
-RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, localizedName) -- Should also pass the modelName maybe?
-    local source        = source
-    local identifier    = Utils.getPlayerIdentifier(source)
-    if identifier then
-        if plate ~= nil and modelHash ~= nil then
-            -- can also add a distance check for the dealership cords and trigger a kick event..
-            fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
-                ['owner']          = identifier,
-                ['plate']          = plate,
-            }, function(results)
-                if results == nil then
-                    execute('INSERT INTO '..Config.databaseName..' (owner, modelHash, localizedName, plate) VALUES (@owner, @modelHash, @localizedName, @plate)',
-                    {
-                        ['owner']          = identifier, 
-                        ['modelHash']      = modelHash,
-                        ['localizedName']  = localizedName,
-                        ['plate']          = plate;
-                    })
-                    Utils.Debug('success', " ".. identifier .. " Purchased a vehicle with the plate " .. plate .. ".")
-                    if Config.purchaseNotification then
-                        TriggerClientEvent('NGWD:notifySuccess', source, "" .. modelHash .. " Was purchased successfully.")
-                    end
-                else
-                    Utils.Debug('error', "Duplicate Entry for ^1[" ..plate.. "]^0 owned by: ^3[".. identifier .. "]^0")
-                    if Config.purchaseNotification then
-                        TriggerClientEvent('NGWD:notifyError', source, "Vehicle can't be purchased.")
-                    end
+RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, modelClass, localizedName) -- Should also pass the modelName maybe?
+    local playerId      = source
+    local identifier    = Utils.getPlayerIdentifier(playerId)
+    local modelName     = Utils.getVehicleModelName(modelHash)
+    if not identifier then TriggerClientEvent('NGWD:notifyError', playerId, "Unable to purchase vehicle.") return Utils.Debug('error', "Unable to purchase vehicle, identifier not found.") end
+    if not modelName then modelName = 'Not Found' end
+    if type(modelClass) ~= "number" then return Utils.Debug('error', "Unable to purchase vehicle, invalid modelClass.") end
+    if plate and modelHash then
+        -- can also add a distance check for the dealership cords and trigger a kick event..
+        MySQL.Async.fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
+            ['owner']          = identifier,
+            ['plate']          = plate,
+        }, function(result)
+            if not result then
+                MySQL.Async.execute('INSERT INTO '..Config.databaseName..' (owner, modelHash, modelName, modelClass, localizedName, plate) VALUES (@owner, @modelHash, @modelName, @modelClass, @localizedName, @plate)',
+                {
+                    ['owner']          = identifier, 
+                    ['modelHash']      = modelHash,
+                    ['modelName']      = modelName,
+                    ['modelClass']     = modelClass,
+                    ['localizedName']  = localizedName,
+                    ['plate']          = plate,
+                })
+                Utils.Debug('success', ""..identifier.." Purchased a vehicle with the plate "..plate..".")
+                if Config.purchaseNotification then
+                    TriggerClientEvent('NGWD:notifySuccess', playerId, ""..modelHash.." Was purchased successfully.")
                 end
-            end)
-        else
-            Utils.Debug('error', "Purchasing Vehicle: Model and plate not found.")
-        end
+            else
+                Utils.Debug('error', "Duplicate Entry for ^1["..plate.."]^0 owned by: ^3["..identifier.."]^0")
+                if Config.purchaseNotification then
+                    TriggerClientEvent('NGWD:notifyError', playerId, "Vehicle can't be purchased.")
+                end
+            end
+        end)
     else
-        TriggerClientEvent('NGWD:notifyError', source, "Vehicle Wasn't Purchased")
-        Utils.Debug('error', "Purchasing Vehicle, Identifier Not Found.")
+        Utils.Debug('error', "Unable to purchase vehicle, model and plate not found.")
     end
 end)
 
 RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
-    local source        = source
-    local identifier    = Utils.getPlayerIdentifier(source)
-    if identifier then
-        if plate ~= nil and modelHash ~= nil then
-            fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
+    local playerId          = source
+    local identifier        = Utils.getPlayerIdentifier(playerId)
+    local currentVehicle    = GetVehiclePedIsIn(GetPlayerPed(playerId), false) 
+    if not identifier then TriggerClientEvent('NGWD:notifyError', playerId, "Error storing vehicle.") return Utils.Debug('error', "Unable to store vehicle, identifier not found.") end
+    
+    if plate and modelHash then
+        if Config.purchasedRestricted then
+            MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
                 ['modelHash']  = modelHash,
                 ['plate']      = plate,
             }, function(results)
                 if results and results[1] then
-                    if results[1].owner == identifier then
-                        execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
-                            ['owner']                  = identifier, 
-                            ['modelHash']              = modelHash,
-                            ['localizedName']          = localizedName,
+                    if not Config.ownerRestricted or results[1].owner == identifier then
+                        MySQL.Async.execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
                             ['plate']                  = plate, 
                             ['garage']                 = garageName,
                             ['vehicleProperties']      = json.encode(vehicleProperties),
                             ['vehicleCondition']       = json.encode(vehicleCondition),
-                            ['vehicleMods']            = json.encode(vehicleMods)
-                        })             
-                        TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
-                        Utils.Debug('inform', "Vehicle owned by: ^5".. results[1].owner .. "^2 with the plate ^5" .. plate .. "^2 has been stored at ^5" .. garageName .. " Garage")
-                        Wait(1000)
-                        TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
-                    elseif results[1].owner ~= identifier then
-                        if not Config.ownerRestricted then
-                            execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
-                                ['owner']                  = identifier, 
-                                ['modelHash']              = modelHash,
-                                ['localizedName']          = localizedName,
-                                ['plate']                  = plate, 
-                                ['garage']                 = garageName,
-                                ['vehicleProperties']      = json.encode(vehicleProperties),
-                                ['vehicleCondition']       = json.encode(vehicleCondition),
-                                ['vehicleMods']            = json.encode(vehicleMods)
-                            })                      
-                            TriggerClientEvent('NGWD:leaveVehicle', source, vehicle)
-                            Wait(1000)
-                            TriggerClientEvent('NGWD:notifySuccess', source, "Vehicle Stored Successfully at " .. garageName .. " Garage")
-                            Utils.Debug('inform', "Vehicle owned by: ^2".. results[1].owner .. "^3 with the plate ^2" .. plate .. "^3 has been stored at ^2" .. garageName .. " Garage")
+                            ['vehicleMods']            = json.encode(vehicleMods),
+                        })           
+                        TriggerClientEvent('NGWD:leaveVehicle', playerId, vehicle)
+                        Wait(1500) -- Gives time for the player to leave the vehicle.
+                        if Config.deleteVehicle then
+                            DeleteEntity(currentVehicle)
+                            Wait(100)
+                            if not DoesEntityExist(currentVehicle) then
+                                Utils.Debug('success', "Vehicle deleted successfully.")
+                            else
+                                Utils.Debug('error', "Failed to delete vehicle.")
+                            end
                         else
-                            TriggerClientEvent('NGWD:notifyError', source, "Ownership Required")
-                            Utils.Debug('inform', "Prevented User ^5" .. identifier .. "^1 from storing ^2" .. results[1].owner .. "'s ^1 vehicle")
+                            -- lock vehicle + set invincible
                         end
+                        TriggerClientEvent('NGWD:notifySuccess', playerId, "Vehicle Stored Successfully at "..garageName.." Garage")
+                        Utils.Debug('inform', "Vehicle owned by: ^5"..results[1].owner.."^2 with the plate ^5"..plate.."^2 has been stored at ^5"..garageName.." Garage")
+                    else
+                        Utils.Debug('error', "Unable to find the modelHash "..modelHash.." owned by: "..identifier.." with the plate "..plate..".")
+                        TriggerClientEvent('NGWD:notifyError', playerId, "You do not own this vehicle!")
                     end
                 else
-                    Utils.Debug('error', "Unable to find the modelHash " .. modelHash .. " owned by: ".. identifier .. " with the plate " .. plate .. ".")
-                    TriggerClientEvent('NGWD:notifyError', source, "Vehicle Can't be Stored")
+                    Utils.Debug('error', "Unable to find a vehicle owner with modelHash: "..modelHash.." and "..plate..".")
+                    TriggerClientEvent('NGWD:notifyError', playerId, "This vehicle is un-owned!")
                 end
             end)
         else
-            Utils.Debug('error', "Unable to store vehicle, plate or modelHash is nil")
+            --  todo
+            Utils.Debug('inform', "No Purchase Necessary")
         end
     else
-        Utils.Debug('error', "Unable to store vehicle, identifier not found.")
+        Utils.Debug('error', "Unable to store vehicle, plate or modelHash not found.")
     end
 end)
 
 RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
-    local source        = source
-    local identifier    = Utils.getPlayerIdentifier(source)
-    if plate ~= nil then
-        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
-            ['owner']              = identifier,
-            ['plate']              = plate,
-            ['garage']             = garageName
+    local playerId      = source
+    local identifier    = Utils.getPlayerIdentifier(playerId)
+    if not identifier then return Utils.Debug('error', "Unable to spawn vehicle, identifier not found.") end
+
+    if plate then
+        MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
+            ['owner']   = identifier,
+            ['plate']   = plate,
+            ['garage']  = garageName,
         }, function(results)
-            if results ~= nil then
+            if results and results[1] then
                 modelHash           = results[1].modelHash
                 plate               = results[1].plate
                 vehicleProperties   = json.decode(results[1].vehicleProperties)
                 vehicleCondition    = json.decode(results[1].vehicleCondition)
                 vehicleMods         = json.decode(results[1].vehicleMods)
-                local plyPed = GetPlayerPed(source)
-                local vehNet, veh = createVehicle(source, plyPed, modelHash, GetEntityCoords(plyPed))
+                local plyPed = GetPlayerPed(playerId)
+                local vehNet, veh = createVehicle(playerId, plyPed, modelHash, GetEntityCoords(plyPed))
                 if not vehNet then 
                     return 
                 end
-                TriggerClientEvent('NGWD:setVehicleProperties', source, vehNet, plate, vehicleProperties, vehicleCondition, vehicleMods)
+                TriggerClientEvent('NGWD:setVehicleProperties', playerId, vehNet, plate, vehicleProperties, vehicleCondition, vehicleMods)
 
                 Wait(100)
                 if not DoesEntityExist(veh) then 
                     return 
                 end
             else
-                Utils.Debug('error', "No vehicle found owned by: " .. identifier .. " With Plate " .. plate .. "") 
+                Utils.Debug('error', "No vehicle found owned by: "..identifier.." With Plate "..plate.."") 
             end
         end)
     else
@@ -141,29 +128,58 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
     end
 end)
 
+RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
+    -- Add distance check with kick event?
+    local playerId      = source
+    local identifier    = Utils.getPlayerIdentifier(playerId)
+    if not garageName then return Utils.Debug('error', "Unable to fetch vehicles, no garage specified.") end
+    if type(garageName) ~= "string" then return Utils.Debug('error', "Unable to get owned vehicles. Data other than string found for garage.") end
+    if not identifier then return Utils.Debug('error', "Unable to fetch vehicles, identifier not found.") end
+    
+    MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE owner = @owner', {
+        ['owner']   = identifier,
+    }, function(results)
+        if results and results[1] then
+            Utils.Debug('inform', "Vehicles found.")
+            local count = 0
+            for _,v in pairs(results) do
+                --print(v.plate, v.modelHash, v.garage, v.vehicleCondition)
+                print(v.plate, v.modelHash, v.garage)
+                if v.garage == garageName then
+                    count = count + 1
+                end
+            end
+            Utils.Debug('inform', ""..count.." Vehicles stored at "..garageName.." Garage")
+            TriggerClientEvent('NGWD:openMenu', playerId, results)
+        else
+            TriggerClientEvent('NGWD:notifyError', playerId, "You don't own any vehicles!") return Utils.Debug('error', "No vehicle found owned by: "..identifier.."") 
+        end
+    end)
+end)
+
 RegisterNetEvent('NGWD:sellVehicle', function(plate)
-    local source        = source
-    local identifier    = Utils.getPlayerIdentifier(source)
-    if plate ~= nil then
-        fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, modelHash, plate) = (@owner, @modelHash, @plate)', {
-            ['owner']      = identifier,
-            ['modelHash']  = modelHash,
-            ['plate']      = plate,
-        }, function(results)
-            if results then
-                execute('DELETE FROM '..Config.databaseName..' WHERE owner = @identifier AND plate = @plate',
-                {
-                    ['identifier'] = identifier,
-                    ['plate']      = plate
+    local playerId      = source
+    local identifier    = Utils.getPlayerIdentifier(playerId)
+    if not identifier then return Utils.Debug('error', "Unable to sell vehicle, identifier not found.") end
+
+    if plate then
+        MySQL.Async.fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
+            ['owner'] = identifier,
+            ['plate'] = plate,
+        }, function(result)
+            if result then
+                MySQL.Async.execute('DELETE FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
+                    ['owner'] = identifier,
+                    ['plate'] = plate,
                 }, function(rowsChanged) 
                     if rowsChanged ~= 0 then
-                        if Debug.debugLevel >= 2 then
-                            Utils.Debug('success', "Deleted " .. rowsChanged.. " vehicles owned by: ".. identifier .. " with the plate " .. plate .. ".")
-                        end                 
+                        Utils.Debug('success', "Sold "..rowsChanged.." vehicle owned by: "..identifier.." with the plate "..plate..".")                 
                     else
-                        Utils.Debug('error', "No vehicle found with the plate: " .. plate .. "")  
+                        Utils.Debug('error', "Error deleting vehicle from "..Config.databaseName..". No rows changed.")  
                     end
                 end)
+            else
+                Utils.Debug('error', "No vehicle found owned by: "..identifier.." With Plate "..plate.."")
             end
         end)
     else
