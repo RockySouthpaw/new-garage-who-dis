@@ -25,7 +25,7 @@ Config.deleteBarriers 	= false
 
 --Config Variables (Blips)
 Config.enableBlips 		= true
-Config.enableBlipNames 	= true -- Set to false if you need to consolidate blips.
+Config.enableBlipNames 	= false -- Set to false if you need to consolidate blips.
 Config.enableRangedBlip = false -- Only show blip if you're in range.
 Config.blipRange 		= 75 -- How far until the blip shows.
 Config.blipColor 		= 1 -- https://docs.fivem.net/natives/?_0x03D7FB09E75D6B7E
