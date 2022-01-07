@@ -22,9 +22,9 @@ client_scripts {
 ui_page 'html/index.html'
 
 files {
-	'html/index.html',
-	'html/js/*.js',
-	'html/css/*.css',
+	--'html/index.html',
+	--'html/js/*.js',
+	--'html/css/*.css',
 	'html/img/*.png'
 }
 
