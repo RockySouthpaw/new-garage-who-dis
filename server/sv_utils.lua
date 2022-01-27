@@ -16,7 +16,7 @@ end
 
 Utils.getPlayerIdentifier = function(playerId)
     local identifier
-    for k, v in ipairs(GetPlayerIdentifiers(playerId)) do 
+    for k, v in ipairs(GetPlayerIdentifiers(playerId)) do
 		if string.match(v, Config.Identifier) then
 			identifier = v
 			break

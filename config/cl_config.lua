@@ -9,7 +9,7 @@ Config.errorLength 		= 2 -- Length of error Notification (Seconds)
 
 -- Config Variables (T-Notify)
 Config.tNotify 			= true
-Config.tLocation 		= 'top-right' -- (top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
+Config.tLocation 		= 'center-right' -- top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, middle-left, middle-right
 -- Config Variables (Mythic Notify https://github.com/FlawwsX/mythic_notify)
 Config.mythicNotify 	= false
 Config.backgroundColor  = '#292929'
@@ -38,16 +38,16 @@ Config.useGabzPD		= false	-- Enables polyzone for Gabz Police Department. Will u
 
 -- Config (Blips)
 Config.blipLocations = {
-	[1]  = {pos = vector3(217.58, -802.31, 30.76), 		name = "Legion"}, 		-- Done 		
-	[2]  = {pos = vector3(273.77, -344.17, 44.91), 		name = "Pink Cage"}, 	-- Done	
-	[3]  = {pos = vector3(1036.25, -763.19, 57.99), 	name = "Mirror Park"}, 	-- Done	
+	[1]  = {pos = vector3(217.58, -802.31, 30.76), 		name = "Legion"}, 		-- Done
+	[2]  = {pos = vector3(273.77, -344.17, 44.91), 		name = "Pink Cage"}, 	-- Done
+	[3]  = {pos = vector3(1036.25, -763.19, 57.99), 	name = "Mirror Park"}, 	-- Done
 	[4]  = {pos = vector3(44.58, -843.09, 31.127), 		name = "Pillbox Hill"},	-- Done
 	[5]  = {pos = vector3(438.97, -1006.49, 27.41), 	name = "Mission Row"},	-- Police Department
-	[6]  = {pos = vector3(-280.97, -887.98, 31.31), 	name = "Alta Street"},	
-	[7]  = {pos = vector3(453.33, -1146.18, 29.51), 	name = "Speedophile"}, 	
+	[6]  = {pos = vector3(-280.97, -887.98, 31.31), 	name = "Alta Street"},
+	[7]  = {pos = vector3(453.33, -1146.18, 29.51), 	name = "Speedophile"},
 	[8]  = {pos = vector3(984.27, -206.19, 71.06), 		name = "East Vinewood"},
-	[9]  = {pos = vector3(-97.64, -2117.46, 16.87), 	name = "Davis"},		 
-	[10] = {pos = vector3(-73.31, -2004.03, 18.27), 	name = "Banning"},	
+	[9]  = {pos = vector3(-97.64, -2117.46, 16.87), 	name = "Davis"},
+	[10] = {pos = vector3(-73.31, -2004.03, 18.27), 	name = "Banning"},
 	[11] = {pos = vector3(-1183.96, -1509.88, 4.64), 	name = "Vespuci Beach"},
 	[12] = {pos = vector3(-2030.96, -465.92, 11.60), 	name = "Del Perro"},
 	[13] = {pos = vector3(-340.53, 266.64, 85.67), 		name = "Last Train Diner"},
@@ -76,7 +76,7 @@ Config.barrierLocations = {
 	{pos = vector3(230.96, -816.36, 30.32)}, 	-- Legion 2
 	{pos = vector3(223.87, -740.16, 33.42)}, 	-- Legion 3
 	{pos = vector3(1038.61, -763.18, 57.77)}, 	-- Mirror Park 1
-	{pos = vector3(1030.61, -758.09, 57.77)}, 	-- Mirror Park 2 
+	{pos = vector3(1030.61, -758.09, 57.77)}, 	-- Mirror Park 2
 	{pos = vector3(451.45, -1144.53, 29.35)}, 	-- Mission Row
 }
 

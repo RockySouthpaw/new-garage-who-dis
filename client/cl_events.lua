@@ -14,7 +14,7 @@ RegisterNetEvent('NGWD:notifySuccess', function(message)
     notifyEnd("garageNotify")
     Wait(150) -- Ensures all notifications are removed in time before creating new ones.
     length = Config.successLength * 1000
-    if Config.tNotify then 
+    if Config.tNotify then
         exports['t-notify']:Alert({
             style  =  'success',
             message  =  "✔️ "..message,
@@ -37,9 +37,9 @@ RegisterNetEvent('NGWD:notifySuccess', function(message)
     end
     if Config.esxNotify then
         ESX.ShowNotification(
-            "✔️ "..message, 
-            false, 
-            false, 
+            "✔️ "..message,
+            false,
+            false,
             140
         )
     end
@@ -49,7 +49,7 @@ RegisterNetEvent('NGWD:notifyError', function(message)
     notifyEnd("garageNotify")
     Wait(150) -- Ensures all notifications are removed in time before creating new ones.
     length = Config.errorLength * 1000
-    if Config.tNotify then 
+    if Config.tNotify then
         exports['t-notify']:Alert({
             style  =  'error',
             message  =  "❌ "..message,
@@ -72,9 +72,9 @@ RegisterNetEvent('NGWD:notifyError', function(message)
     end
     if Config.esxNotify then
         ESX.ShowNotification(
-            "❌ "..message, 
-            false, 
-            false, 
+            "❌ "..message,
+            false,
+            false,
             140
         )
     end

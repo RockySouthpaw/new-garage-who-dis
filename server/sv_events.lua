@@ -14,7 +14,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, modelClass, 
             if not result then
                 MySQL.Async.execute('INSERT INTO '..Config.databaseName..' (owner, modelHash, modelName, modelClass, localizedName, plate) VALUES (@owner, @modelHash, @modelName, @modelClass, @localizedName, @plate)',
                 {
-                    ['owner']          = identifier, 
+                    ['owner']          = identifier,
                     ['modelHash']      = modelHash,
                     ['modelName']      = modelName,
                     ['modelClass']     = modelClass,
@@ -40,9 +40,9 @@ end)
 RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, modelHash, localizedName, vehicleProperties, vehicleCondition, vehicleMods)
     local playerId          = source
     local identifier        = Utils.getPlayerIdentifier(playerId)
-    local currentVehicle    = GetVehiclePedIsIn(GetPlayerPed(playerId), false) 
+    local currentVehicle    = GetVehiclePedIsIn(GetPlayerPed(playerId), false)
     if not identifier then TriggerClientEvent('NGWD:notifyError', playerId, "Error storing vehicle.") return Utils.Debug('error', "Unable to store vehicle, identifier not found.") end
-    
+
     if plate and modelHash then
         if Config.purchasedRestricted then
             MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
@@ -51,13 +51,13 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
             }, function(results)
                 if results and results[1] then
                     if not Config.ownerRestricted or results[1].owner == identifier then
-                        MySQL.Async.execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', { 
-                            ['plate']                  = plate, 
+                        MySQL.Async.execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', {
+                            ['plate']                  = plate,
                             ['garage']                 = garageName,
                             ['vehicleProperties']      = json.encode(vehicleProperties),
                             ['vehicleCondition']       = json.encode(vehicleCondition),
                             ['vehicleMods']            = json.encode(vehicleMods),
-                        })           
+                        })
                         TriggerClientEvent('NGWD:leaveVehicle', playerId, vehicle)
                         Wait(1500) -- Gives time for the player to leave the vehicle.
                         if Config.deleteVehicle then
@@ -110,21 +110,21 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
                 vehicleMods         = json.decode(results[1].vehicleMods)
                 local plyPed = GetPlayerPed(playerId)
                 local vehNet, veh = createVehicle(playerId, plyPed, modelHash, GetEntityCoords(plyPed))
-                if not vehNet then 
-                    return 
+                if not vehNet then
+                    return
                 end
                 TriggerClientEvent('NGWD:setVehicleProperties', playerId, vehNet, plate, vehicleProperties, vehicleCondition, vehicleMods)
 
                 Wait(100)
-                if not DoesEntityExist(veh) then 
-                    return 
+                if not DoesEntityExist(veh) then
+                    return
                 end
             else
-                Utils.Debug('error', "No vehicle found owned by: "..identifier.." With Plate "..plate.."") 
+                Utils.Debug('error', "No vehicle found owned by: "..identifier.." With Plate "..plate.."")
             end
         end)
     else
-       Utils.Debug('error', "Unable to spawn vehice, no plate was found.")  
+       Utils.Debug('error', "Unable to spawn vehice, no plate was found.")
     end
 end)
 
@@ -135,7 +135,7 @@ RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
     if not garageName then return Utils.Debug('error', "Unable to fetch vehicles, no garage specified.") end
     if type(garageName) ~= "string" then return Utils.Debug('error', "Unable to get owned vehicles. Data other than string found for garage.") end
     if not identifier then return Utils.Debug('error', "Unable to fetch vehicles, identifier not found.") end
-    
+
     MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE owner = @owner', {
         ['owner']   = identifier,
     }, function(results)
@@ -152,7 +152,7 @@ RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
             Utils.Debug('inform', ""..count.." Vehicles stored at "..garageName.." Garage")
             TriggerClientEvent('NGWD:openMenu', playerId, results)
         else
-            TriggerClientEvent('NGWD:notifyError', playerId, "You don't own any vehicles!") return Utils.Debug('error', "No vehicle found owned by: "..identifier.."") 
+            TriggerClientEvent('NGWD:notifyError', playerId, "You don't own any vehicles!") return Utils.Debug('error', "No vehicle found owned by: "..identifier.."")
         end
     end)
 end)
@@ -171,11 +171,11 @@ RegisterNetEvent('NGWD:sellVehicle', function(plate)
                 MySQL.Async.execute('DELETE FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
                     ['owner'] = identifier,
                     ['plate'] = plate,
-                }, function(rowsChanged) 
+                }, function(rowsChanged)
                     if rowsChanged ~= 0 then
-                        Utils.Debug('success', "Sold "..rowsChanged.." vehicle owned by: "..identifier.." with the plate "..plate..".")                 
+                        Utils.Debug('success', "Sold "..rowsChanged.." vehicle owned by: "..identifier.." with the plate "..plate..".")
                     else
-                        Utils.Debug('error', "Error deleting vehicle from "..Config.databaseName..". No rows changed.")  
+                        Utils.Debug('error', "Error deleting vehicle from "..Config.databaseName..". No rows changed.")
                     end
                 end)
             else

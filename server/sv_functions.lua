@@ -15,18 +15,18 @@ function createVehicle(playerId, plyPed, modelHash, coords)
                 Utils.Debug('inform', "Player was not in a vehicle.")
             end
             local veh = Citizen.InvokeNative(CreateAutomobile, modelHash, spawnZone.pos, spawnZone.heading, true, false)
-            if not DoesEntityExist(veh) then 
-                return nil 
+            if not DoesEntityExist(veh) then
+                return nil
             end
             local entState = Entity(veh).state
             entState:set('owner', GetPlayerName(playerId), true)
             entState:set('finishedSpawning', false, true)
-        
+
             while GetVehiclePedIsIn(plyPed) ~= veh do
                 Wait(50)
                 SetPedIntoVehicle(plyPed, veh, -1)
             end
-        
+
             while NetworkGetEntityOwner(veh) ~= playerId do
                 Wait(50)
             end
@@ -34,7 +34,7 @@ function createVehicle(playerId, plyPed, modelHash, coords)
                 Utils.Debug('success', ""..modelHash.." has spawned successfully.")
                 Utils.Debug('inform', ""..GetPlayerName(playerId).." has spawned a vehicle "..spawnDistance.." units away.")
             end
-            return NetworkGetNetworkIdFromEntity(veh), veh 
+            return NetworkGetNetworkIdFromEntity(veh), veh
         end
     end
 end

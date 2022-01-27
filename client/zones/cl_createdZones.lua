@@ -5,7 +5,7 @@ polyZones.RetrieveZones = {
     {name = 'Mirror Park', coords = {vector2(1036.02, -761.74),vector2(1034.50, -764.32),vector2(1036.20, -765.41),vector2(1037.76, -762.74)}, minZ = 57.02, maxZ = 59.80},
     {name = 'Mission Row', coords = {vector2(423.20, -1010.27),vector2(426.62, -1010.27),vector2(426.60, -1016.86),vector2(422.82, -1016.88)}, minZ = 28.11, maxZ = 31.0},
     {name = 'Speedophile', coords = {vector2(452.313, -1144.84),vector2(452.33, -1147.88),vector2(454.29, -1147.89),vector2(454.25, -1144.82)}, minZ = 28.54, maxZ = 31.0},
-    {name = 'East Vinewood', coords = {vector2(985.39, -205.59),vector2(983.70, -204.62),vector2(982.16, -207.30),vector2(983.87, -208.26)}, minZ = 70.09, maxZ = 73.00}, 
+    {name = 'East Vinewood', coords = {vector2(985.39, -205.59),vector2(983.70, -204.62),vector2(982.16, -207.30),vector2(983.87, -208.26)}, minZ = 70.09, maxZ = 73.00},
     -- Below are placeholder coords
     {name = 'Banning', coords = {vector2(0,0),vector2(0,0),vector2(0,0)}, minZ = 0.0, maxZ = 0.0},
     {name = 'PlaceHolder1', coords = {vector2(0,0),vector2(0,0),vector2(0,0)}, minZ = 0.0, maxZ = 0.0},
@@ -57,14 +57,14 @@ comboZones.StoreZones = {
 -- Cords for gabz PD to be added back later
 --[[
     {name = 'Mission Row', coords = PolyZone:Create({vector2(430.81958007813, -978.23529052734),vector2(440.17370605469, -978.34918212891),vector2(440.18566894531, -973.60400390625),vector2(430.88815307617, -973.71490478516)},
-    {minZ = 25.699966430664, 
+    {minZ = 25.699966430664,
     maxZ = 28.699991226196}
 
     {name = 'Mission Row', coords = PolyZone:Create({vector2(445.49438476563, -973.66314697266),vector2(454.85049438477, -973.65393066406),vector2(454.90621948242, -978.29162597656),vector2(445.43908691406, -978.16223144531)},
-    {minZ = 25.699966430664, 
+    {minZ = 25.699966430664,
     maxZ = 28.699991226196}
 
     {name = 'Mission Row', coords = PolyZone:Create({vector2(456.52249145508, -987.78070068359),vector2(456.48892211914, -997.32092285156),vector2(461.12734985352, -997.23706054688),vector2(461.08880615234, -987.77709960938)},
-    {minZ = 25.699966430664, 
+    {minZ = 25.699966430664,
     maxZ = 28.699991226196}
 ]]

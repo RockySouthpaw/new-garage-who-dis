@@ -14,10 +14,10 @@ Config.purchaseNotification = true
 -- Config Variables (Spawning)
 Config.spawnRange           = 15 -- Distance of the player to the spawn range. 10 is roughly 3 parking spaces.
 
-Config.spawnLocations       = { 
+Config.spawnLocations       = {
     -- Cant use vector4 here since we're comparing it to entity coords which is vector3.
     [1]  = {pos = vector3(227.46, -811.34, 29.52),     heading = 153.00,   name = "Legion"},
-	[2]  = {pos = vector3(286.78, -345.68, 43.94),     heading = 160.00,   name = "Pink Cage"}, 
+	[2]  = {pos = vector3(286.78, -345.68, 43.94),     heading = 160.00,   name = "Pink Cage"},
     [3]  = {pos = vector3(1025.36, -760.92, 56.97),    heading = 319.11,   name = "Mirror Park"},
 	[4]  = {pos = vector3(36.05, -848.34, 29.77),      heading = 249.56,   name = "Pillbox Hill"},
 	[5]  = {pos = vector3(458.49, -902.96, 34.97),     heading = 355.45,   name = "Mission Row"},

@@ -10,7 +10,7 @@ RegisterKeyMapping("notiOff", "Clear Notification", 'keyboard', 'f')
 
 -- Commands
 RegisterCommand("Retrieve", function()
-    if RetrieveNotification then 
+    if RetrieveNotification then
 		local playerCoords = GetEntityCoords(PlayerPedId())
         for i = 1, #Config.blipLocations do
             local zone = Config.blipLocations[i]
@@ -32,7 +32,7 @@ end)
 RegisterCommand("Store", function()
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local driver  = GetPedInVehicleSeat(vehicle, -1)
-    if activeNotification and IsPedInVehicle(PlayerPedId(),vehicle, true) and driver == PlayerPedId() then 
+    if activeNotification and IsPedInVehicle(PlayerPedId(),vehicle, true) and driver == PlayerPedId() then
 		local playerCoords = GetEntityCoords(PlayerPedId())
 
         for i = 1, #Config.blipLocations do

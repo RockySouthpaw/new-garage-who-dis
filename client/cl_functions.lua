@@ -19,7 +19,7 @@ function notifyStorePrompt(garage, id)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
     local driver  = GetPedInVehicleSeat(vehicle, -1)
     if not activeNotification and driver == PlayerPedId() then
-        if Config.tNotify then 
+        if Config.tNotify then
             exports['t-notify']:Persist({
                 id = id,
                 step = 'start',
@@ -29,7 +29,7 @@ function notifyStorePrompt(garage, id)
                     sound = true,
                     message = "Press **~c~["..Config.storageKey.."]~c~** To Park Vehicle",
                     position = Config.tLocation
-                    
+
                 }
             })
         end
@@ -62,7 +62,7 @@ end
 
 function notifyRetrievePrompt(garage, id)
     if not activeNotification then
-        if Config.tNotify then 
+        if Config.tNotify then
             exports['t-notify']:Persist({
                 id = id,
                 step = 'start',
@@ -104,7 +104,7 @@ end
 
 function notifyEnd(id)
     if activeNotification then
-        if Config.tNotify then 
+        if Config.tNotify then
             exports['t-notify']:Persist({
                 id = id,
                 step = 'end'
@@ -175,10 +175,10 @@ end
 --          Exports
 
 -- getters
-function getVehicleCondition(vehicle) -- make async export 
+function getVehicleCondition(vehicle) -- make async export
     if DoesEntityExist(vehicle) then
         local Condition = {}
-        
+
         Condition.engineHealth = GetVehicleEngineHealth(vehicle)
         Condition.bodyHealth = GetVehicleBodyHealth(vehicle)
         Condition.tankHealth = GetVehiclePetrolTankHealth(vehicle)
@@ -204,7 +204,7 @@ function getVehicleCondition(vehicle) -- make async export
 end
 exports('getVehicleCondition', getVehicleCondition)
 
-function getVehicleProperties(vehicle) -- make async export 
+function getVehicleProperties(vehicle) -- make async export
     if DoesEntityExist(vehicle) then
         local Property = {}
 
@@ -239,7 +239,7 @@ function getVehicleProperties(vehicle) -- make async export
 end
 exports('getVehicleProperties', getVehicleProperties)
 
-function getVehicleMods(vehicle) -- make async export 
+function getVehicleMods(vehicle) -- make async export
     if DoesEntityExist(vehicle) then
         local Mods = {}
 
@@ -303,7 +303,7 @@ exports('getVehicleMods', getVehicleMods)
 
 -- Setters
 
-function setVehicleCondition(vehicle, vehicleCondition) -- make async export 
+function setVehicleCondition(vehicle, vehicleCondition) -- make async export
     if DoesEntityExist(vehicle) then
         for Condition, Value in pairs(vehicleCondition) do
             --print(Condition, Value)
@@ -332,24 +332,24 @@ function setVehicleCondition(vehicle, vehicleCondition) -- make async export
             end
             if Condition == 'tireBurstState' then
                 for wheelIndex, burstState in pairs(Value) do
-                    if burstState then 
+                    if burstState then
                         SetVehicleTyreBurst(vehicle, tonumber(wheelIndex), false, 1000.0)
                     end
                 end
             end
             if Condition == 'tireBurstCompletely' then
                 for wheelIndex, burstState in pairs(Value) do
-                    if burstState then 
+                    if burstState then
                         SetVehicleTyreBurst(vehicle, tonumber(wheelIndex), true, 1000.0)
                     end
                 end
-            end 
+            end
         end
     end
 end
 exports('setVehicleCondition', setVehicleCondition)
 
-function setVehicleProperties(vehicle, plate, vehicleProperties) -- make async export 
+function setVehicleProperties(vehicle, plate, vehicleProperties) -- make async export
     if DoesEntityExist(vehicle) then
         SetVehicleNumberPlateText(vehicle, plate)
 

@@ -25,7 +25,7 @@ for _,v in pairs(polyZones.RetrieveZones) do
                 end
             end
         else
-            if RetrieveNotification then 
+            if RetrieveNotification then
                 notifyEnd(NotificationId)
                 RetrieveNotification = false
             end
@@ -50,7 +50,7 @@ for _,v in pairs(comboZones.RetrieveZones) do
                 end
             end
         else
-            if RetrieveNotification then 
+            if RetrieveNotification then
                 notifyEnd(NotificationId)
                 RetrieveNotification = false
             end
@@ -73,7 +73,7 @@ for _,v in pairs(comboZones.StoreZones) do
                 activeNotification = true
             end
         else
-            if activeNotification then 
+            if activeNotification then
                 notifyEnd(NotificationId)
                 activeNotification = false
             end
