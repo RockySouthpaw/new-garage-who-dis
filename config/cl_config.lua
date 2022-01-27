@@ -9,7 +9,7 @@ Config.errorLength 		= 2 -- Length of error Notification (Seconds)
 
 -- Config Variables (T-Notify)
 Config.tNotify 			= true
-Config.tLocation 		= 'center-right' -- top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, middle-left, middle-right
+Config.tLocation 		= 'middle-right' -- top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, middle-left, middle-right
 -- Config Variables (Mythic Notify https://github.com/FlawwsX/mythic_notify)
 Config.mythicNotify 	= false
 Config.backgroundColor  = '#292929'
