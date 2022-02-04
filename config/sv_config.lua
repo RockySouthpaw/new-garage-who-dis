@@ -48,13 +48,18 @@ Config.spawnLocations       = {
 	[29] = {pos = vector3(-665.94, -2002.41, 7.60),    heading = 331.78,   name = "New Garage 10"},
 }
 
+Config.usedStates           = {
+    'retrieving',
+    'storing',
+}
+
 Debug = {}
 
 Debug.setActive             = true -- Enables/Disables debug prints.
-
 Debug.successDebugColor     = "^2"
 Debug.informDebugColor      = "^5"
 Debug.errorDebugColor       = "^1"
+Debug.devDebugColor         = "^3"
 
 --[[
 Example: Utils.Debug('error', "hello")

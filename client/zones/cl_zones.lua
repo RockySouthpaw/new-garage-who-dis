@@ -20,12 +20,14 @@ for _,v in pairs(polyZones.RetrieveZones) do
             if not IsPedInVehicle(PlayerPedId(), vehicle, true) then
                 if not RetrieveNotification then
                     local garageName = v.name
+                    setState('retrieving', true, true)
                     notifyRetrievePrompt(garageName, NotificationId)
                     RetrieveNotification = true
                 end
             end
         else
             if RetrieveNotification then
+                setState('retrieving', false, true)
                 notifyEnd(NotificationId)
                 RetrieveNotification = false
             end
@@ -45,12 +47,14 @@ for _,v in pairs(comboZones.RetrieveZones) do
             if not IsPedInVehicle(PlayerPedId(), vehicle, true) then
                 if not RetrieveNotification then
                     local garageName = v.name
+                    setState('retrieving', true, true)
                     notifyRetrievePrompt(garageName, NotificationId)
                     RetrieveNotification = true
                 end
             end
         else
             if RetrieveNotification then
+                setState('retrieving', false, false)
                 notifyEnd(NotificationId)
                 RetrieveNotification = false
             end
@@ -69,11 +73,13 @@ for _,v in pairs(comboZones.StoreZones) do
             local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
             if IsPedInVehicle(PlayerPedId(), vehicle, true) and not activeNotification then
                 local garageName = v.name
+                setState('storing', true, true)
                 notifyStorePrompt(garageName, NotificationId)
                 activeNotification = true
             end
         else
             if activeNotification then
+                setState('storing', false, true)
                 notifyEnd(NotificationId)
                 activeNotification = false
             end

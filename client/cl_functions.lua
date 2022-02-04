@@ -14,6 +14,10 @@ if Config.esxNotify then
     end)
 end
 
+function setState(state, bool, replicated)
+    LocalPlayer.state:set(state, bool, replicated)
+end
+
 -- Function (Notification)
 function notifyStorePrompt(garage, id)
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)

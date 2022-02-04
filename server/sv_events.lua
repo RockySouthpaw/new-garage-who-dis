@@ -41,7 +41,9 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
     local playerId          = source
     local identifier        = Utils.getPlayerIdentifier(playerId)
     local currentVehicle    = GetVehiclePedIsIn(GetPlayerPed(playerId), false)
+    local validState        = Utils.getState(playerId, 'storing')
     if not identifier then TriggerClientEvent('NGWD:notifyError', playerId, "Error storing vehicle.") return Utils.Debug('error', "Unable to store vehicle, identifier not found.") end
+    if not validState then Utils.failedCheck(playerId, 'Store State Bag') return end
 
     if plate and modelHash then
         if Config.purchasedRestricted then
@@ -129,12 +131,14 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
 end)
 
 RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
-    -- Add distance check with kick event?
     local playerId      = source
     local identifier    = Utils.getPlayerIdentifier(playerId)
+    local validState    = Utils.getState(playerId, 'retrieving')
+
     if not garageName then return Utils.Debug('error', "Unable to fetch vehicles, no garage specified.") end
     if type(garageName) ~= "string" then return Utils.Debug('error', "Unable to get owned vehicles. Data other than string found for garage.") end
     if not identifier then return Utils.Debug('error', "Unable to fetch vehicles, identifier not found.") end
+    if not validState then Utils.failedCheck(playerId, 'Retrieve State Bag') return end
 
     MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE owner = @owner', {
         ['owner']   = identifier,

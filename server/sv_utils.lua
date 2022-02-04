@@ -1,16 +1,18 @@
 Utils = {}
+local debugTypes    = "success, error, inform, dev"
 
 Utils.Debug = function(class, message)
     if Debug.setActive then
         if class == "error" then
-            print(Debug.errorDebugColor.."[ERROR]:"..message.."^7")
+            return print(Debug.errorDebugColor.."[ERROR]:"..message.."^7")
         elseif class == "success" then
-            print(Debug.successDebugColor.."[SUCCESS]:"..message.."^7")
+            return print(Debug.successDebugColor.."[SUCCESS]:"..message.."^7")
         elseif class == "inform" then
-            print(Debug.informDebugColor.."[INFO]:"..message.."^7")
-        elseif class ~= "error" and class ~= "success" and class ~= "inform" then
-            print("^1[ERROR]: Invalid Debug Class: ^0"..class.."^1 Please use 'error', 'success' or 'inform'.^7")
+            return print(Debug.informDebugColor.."[INFO]:"..message.."^7")
+        elseif class == "dev" then
+            return print(Debug.devDebugColor.."[DEBUG]:".. message .. "^7")
         end
+        print("^1[ERROR]: Invalid Debug Class: ^0".. class .. "^1 Please use "..debugTypes..".^7")
     end
 end
 
@@ -34,6 +36,22 @@ Utils.getVehicleModelName = function(modelHash)
             return v.modelName
         end
     end
+end
+
+Utils.getState = function(playerId, stateBag)
+    local player = Player(playerId)
+    return player.state[stateBag]
+end
+
+Utils.failedCheck = function(playerId, checkType)
+    Utils.Debug('error', "Player: ["..playerId.."] failed check: "..checkType)
+    -- Do whatever here such as discord logging or kicking.
+end
+
+Utils.setState = function(playerId, stateBag, bool, replicated)
+    local player = Player(playerId)
+    if replicated == nil then replicated = false end
+    player.state:set(stateBag, bool, replicated)
 end
 
 CreateThread(function()
@@ -62,3 +80,12 @@ CreateThread(function()
 
 	PerformHttpRequest("https://raw.githubusercontent.com"..updatePath.."/dev/version", checkVersion, "GET")
 end)
+
+for i = 1, #Config.usedStates do
+    local state = Config.usedStates[i]
+    AddStateBagChangeHandler(state --[[key filter]], false --[[bag filter]], function(bagName, key, value, source, replicated)
+        local playerNet = tonumber(bagName:gsub('player:', ''), 10)
+        Utils.Debug('dev', "bagName: ["..bagName.."] key: ["..key.."] value: ["..tostring(value).."] source: ["..source.."] replicated: ["..tostring(replicated).."] playerNet: ["..playerNet.."]")
+        -- just used for debugging states atm. Can be used for other things later.
+    end)
+end
