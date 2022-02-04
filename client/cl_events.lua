@@ -115,7 +115,7 @@ RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehiclePro
         Wait(50)
     end
     local vehicle = NetworkGetEntityFromNetworkId(vehNet)
-    -- Shouldn't be needed after storing vehicle but will toss a nil erorr otherwise.
+    -- Shouldn't be needed after storing a vehicle but will toss a nil erorr otherwise.
     if vehicleProperties then
         setVehicleProperties(vehicle, plate, vehicleProperties)
     end

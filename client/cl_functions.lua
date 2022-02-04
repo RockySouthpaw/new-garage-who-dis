@@ -20,6 +20,8 @@ function notifyStorePrompt(garage, id)
     local driver  = GetPedInVehicleSeat(vehicle, -1)
     if not activeNotification and driver == PlayerPedId() then
         if Config.tNotify then
+            local isActive = exports['t-notify']:IsPersistentShowing(id)
+            if isActive then notifyEnd(id) end
             exports['t-notify']:Persist({
                 id = id,
                 step = 'start',
@@ -63,6 +65,8 @@ end
 function notifyRetrievePrompt(garage, id)
     if not activeNotification then
         if Config.tNotify then
+            local isActive = exports['t-notify']:IsPersistentShowing(id)
+            if isActive then notifyEnd(id) end
             exports['t-notify']:Persist({
                 id = id,
                 step = 'start',
@@ -105,6 +109,8 @@ end
 function notifyEnd(id)
     if activeNotification then
         if Config.tNotify then
+            local isActive = exports['t-notify']:IsPersistentShowing(id)
+            if not isActive then return end
             exports['t-notify']:Persist({
                 id = id,
                 step = 'end'
