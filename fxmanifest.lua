@@ -6,7 +6,7 @@ version '1.1.0'
 description 'New-Garage-Who-Dis'
 
 server_scripts {
-	'@mysql-async/lib/MySQL.lua',
+	'@oxmysql/lib/MySQL.lua',
 	'config/sv_config.lua',
 	'server/*.lua'
 }
@@ -20,6 +20,7 @@ client_scripts {
 }
 
 dependencies {
+	'oxmysql', -- https://github.com/overextended/oxmysql
 	'PolyZone' -- https://github.com/mkafrin/PolyZone
 }
 

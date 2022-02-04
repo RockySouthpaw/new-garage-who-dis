@@ -6,7 +6,7 @@ RegisterNetEvent('NGWD:purchaseVehicle', function(plate, modelHash, modelClass, 
     if not modelName then modelName = 'Not Found' end
     if type(modelClass) ~= "number" then return Utils.Debug('error', "Unable to purchase vehicle, invalid modelClass.") end
     if plate and modelHash then
-        -- can also add a distance check for the dealership cords and trigger a kick event..
+        -- can also add a distance check for the dealership cords and trigger a kick event if you don't plan on invocating elsewhere
         MySQL.Async.fetchScalar('SELECT 1 FROM '..Config.databaseName..' WHERE (owner, plate) = (@owner, @plate)', {
             ['owner']          = identifier,
             ['plate']          = plate,
@@ -45,12 +45,12 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
 
     if plate and modelHash then
         if Config.purchasedRestricted then
-            MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
+            MySQL.single('SELECT * FROM '..Config.databaseName..' WHERE (modelHash, plate) = (@modelHash, @plate)', {
                 ['modelHash']  = modelHash,
                 ['plate']      = plate,
-            }, function(results)
-                if results and results[1] then
-                    if not Config.ownerRestricted or results[1].owner == identifier then
+            }, function(result)
+                if result then
+                    if not Config.ownerRestricted or result.owner == identifier then
                         MySQL.Async.execute('UPDATE '..Config.databaseName..' SET garage = @garage, vehicleProperties = @vehicleProperties, vehicleCondition = @vehicleCondition, vehicleMods = @vehicleMods WHERE plate = @plate', {
                             ['plate']                  = plate,
                             ['garage']                 = garageName,
@@ -72,7 +72,7 @@ RegisterNetEvent('NGWD:storeVehicle', function(vehicle, garageName, plate, model
                             -- lock vehicle + set invincible
                         end
                         TriggerClientEvent('NGWD:notifySuccess', playerId, "Vehicle Stored Successfully at "..garageName.." Garage")
-                        Utils.Debug('inform', "Vehicle owned by: ^5"..results[1].owner.."^2 with the plate ^5"..plate.."^2 has been stored at ^5"..garageName.." Garage")
+                        Utils.Debug('inform', "Vehicle owned by: ^5"..result.owner.."^2 with the plate ^5"..plate.."^2 has been stored at ^5"..garageName.." Garage")
                     else
                         Utils.Debug('error', "Unable to find the modelHash "..modelHash.." owned by: "..identifier.." with the plate "..plate..".")
                         TriggerClientEvent('NGWD:notifyError', playerId, "You do not own this vehicle!")
@@ -97,17 +97,17 @@ RegisterNetEvent('NGWD:spawnVehicle', function(plate, garageName)
     if not identifier then return Utils.Debug('error', "Unable to spawn vehicle, identifier not found.") end
 
     if plate then
-        MySQL.Async.fetchAll('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
+        MySQL.single('SELECT * FROM '..Config.databaseName..' WHERE (owner, plate, garage) = (@owner, @plate, @garage)', {
             ['owner']   = identifier,
             ['plate']   = plate,
             ['garage']  = garageName,
-        }, function(results)
-            if results and results[1] then
-                modelHash           = results[1].modelHash
-                plate               = results[1].plate
-                vehicleProperties   = json.decode(results[1].vehicleProperties)
-                vehicleCondition    = json.decode(results[1].vehicleCondition)
-                vehicleMods         = json.decode(results[1].vehicleMods)
+        }, function(result)
+            if result then
+                modelHash           = result.modelHash
+                plate               = result.plate
+                vehicleProperties   = json.decode(result.vehicleProperties)
+                vehicleCondition    = json.decode(result.vehicleCondition)
+                vehicleMods         = json.decode(result.vehicleMods)
                 local plyPed = GetPlayerPed(playerId)
                 local vehNet, veh = createVehicle(playerId, plyPed, modelHash, GetEntityCoords(plyPed))
                 if not vehNet then
