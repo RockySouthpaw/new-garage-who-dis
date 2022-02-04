@@ -28,7 +28,7 @@ comboZones.RetrieveZones = {
 comboZones.StoreZones = {
     {name = 'Legion', coords = PolyZone:Create({vector2(208.25, -803.65),vector2(201.46, -801.01),vector2(215.68, -762.27),vector2(222.79, -764.90)}, {minZ = 29.84, maxZ = 37.00})},
     {name = 'Legion', coords = PolyZone:Create({vector2(226.46, -766.22),vector2(237.58, -770.56),vector2(222.04, -812.39),vector2(216.34, -809.77),vector2(217.46, -806.91),vector2(211.80, -804.81)}, {minZ = 29.84, maxZ = 37.00})},
-    {name = 'Legion', coords = PolyZone:Create({vector2(243.067, -769.46),vector2(254.53,-773.87),vector2(239.10, -815.51),vector2(227.62, -810.98)}, {minZ = 29.84, maxZ = 37.00})},
+    {name = 'Legion', coords = PolyZone:Create({vector2(243.067, -769.46),vector2(254.53,-773.87),vector2(239.10, -815.51),vector2(227.62, -810.98)}, {minZ = 27.84, maxZ = 37.00})},
     {name = 'Legion', coords = PolyZone:Create({vector2(246.621, -755.49),vector2(244.75, -760.63),vector2(265.17, -767.73),vector2(267.05, -762.64)}, {minZ = 28.84, maxZ = 33.0})},
     {name = 'Legion', coords = PolyZone:Create({vector2(270.34, -754.02),vector2(272.36, -748.50),vector2(244.01, -738.75),vector2(242.04, -744.014)}, {minZ = 28.84, maxZ = 33.0})},
     {name = 'Legion', coords = PolyZone:Create({vector2(233.21, -734.90),vector2(230.71, -742.39),vector2(254.41, -750.44),vector2(257.07, -742.81)}, {minZ = 33.66, maxZ = 42.00})},
