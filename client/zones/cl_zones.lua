@@ -54,7 +54,7 @@ for _,v in pairs(comboZones.RetrieveZones) do
             end
         else
             if RetrieveNotification then
-                setState('retrieving', false, false)
+                setState('retrieving', false, true)
                 notifyEnd(NotificationId)
                 RetrieveNotification = false
             end
