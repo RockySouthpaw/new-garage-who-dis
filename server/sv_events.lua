@@ -144,7 +144,6 @@ RegisterNetEvent('NGWD:getOwnedVehicles', function(garageName)
             local count = 0
             for _,v in pairs(results) do
                 --print(v.plate, v.modelHash, v.garage, v.vehicleCondition)
-                print(v.plate, v.modelHash, v.garage)
                 if v.garage == garageName then
                     count = count + 1
                 end
