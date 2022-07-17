@@ -2,14 +2,6 @@
 
 ## Current State
 Resource is mostly done, however, the UI still has to be made. While numerous people have said they will make it, none have yet to do so. 
-<p align="center">
-  <img src="https://media4.giphy.com/media/xUySTNfFds1K3phXmo/giphy.gif" width="350" title="You Smell">
-</p>
-
-I(@RockySouthpaw) do not have time to make it so if this resource is ever to be finished, it will need to be completed. You can find a figma for the planned UI [here.](https://www.figma.com/file/CdIKuIvXXtVSkFoG59q4Vv/NGWD-Menu-Mockup?node-id=0%3A1).
-
-## Project Error Discord
-- Join the [Discord](https://discord.gg/HYwBjTbAY5) to follow current development of the project.
 
 ## Dependencies
 - [PolyZone](https://github.com/mkafrin/PolyZone) This ensures the lowest resource use possible as the resource currently uses `0.01 ms` due to no threads being used outside of blips and barrier deletion (Config based). This dependency will exist for the forseable future.
@@ -34,4 +26,4 @@ I(@RockySouthpaw) do not have time to make it so if this resource is ever to be 
 - [Git Kraken](https://app.gitkraken.com/glo/board/YEU_GRdxdwARhoP7)
 
 ## Contributing
-Please make all pull request towards the [**Dev Branch**](https://github.com/project-error/new-garage-who-dis/tree/dev). If you have any suggestions for improvements please contact `ROCKY_southpaw#6771` on **Discord** or in the [**Project Error Discord**](https://discord.gg/HYwBjTbAY5).
+Please make all pull request towards the [**Dev Branch**](https://github.com/project-error/new-garage-who-dis/tree/dev). If you have any suggestions for improvements please contact `ROCKY_southpaw#6771` on **Discord**.
