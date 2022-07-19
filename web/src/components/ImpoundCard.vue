@@ -11,32 +11,6 @@ defineProps({
   },
 })
 
-const elImg = ref(null)
-
-const newImage = () => {
-
-}
-
-const sellVehicle = (id) => {
-  fetchNui('sell_vehicle', {}).then(() => {
-    if (success) {
-      console.log('Vehicle sold')
-    } else {
-      console.log('Vehicle sell failed')
-    }
-  })
-}
-
-const spawnVehicle = (id) => {
-  fetchNui('spawn_vehicle', {}).then(() => {
-    if (success) {
-      console.log('Vehicle spawned')
-    } else {
-      console.log('Vehicle spawn failed')
-    }
-  })
-}
-
 const checkImage = (image) => {
   // check if the image is a valid url
   if (image && image.startsWith('https')) {
@@ -47,8 +21,11 @@ const checkImage = (image) => {
 </script>
 
 <template>
-  <div class="h-[34em] bg-[#450C0C] shadow w-80 rounded-xl overflow-hidden flex flex-col justify-evenly items-center">
-    <img ref="elImg" class="w-full h-48" :src="checkImage(vehicle.image)" alt="Vehicle image">
+  <div class="h-[34em] bg-[#1C0000] shadow w-80 rounded-xl overflow-hidden flex flex-col justify-evenly items-center">
+    <div class="w-full h-48 relative mt-2">
+      <img class="absolute h-full w-full" :src="checkImage(vehicle.image)" alt="Vehicle image">
+      <img class="absolute h-full w-full" src="https://cdn.discordapp.com/attachments/784247486427693057/999060015581245631/unknown.png" alt="Impounded">
+    </div>
     <div class="grid grid-rows-3 grid-cols-2 mt-2 text-lg">
       <div class="font-medium flex flex-col text-start">
         <span class="text-neutral-400">Model</span>
@@ -75,11 +52,10 @@ const checkImage = (image) => {
         <span class="font-light">{{ vehicle.bodyState }}</span>
       </div>
     </div>
-    <span class="text-xl text-neutral-400 w-4/5 font-medium">Purchased on {{ vehicle.purchased }}</span>
+    <span class="text-xl text-neutral-400 w-4/5 font-medium">Impounded on {{ vehicle.purchased }}</span>
     <div class="flex justify-center mb-2 mt-2 w-full font-semibold flex-wrap">
-      <button @click="sellVehicle(vehicle.id)" class="w-2/5 h-10 mr-1 bg-[#5E1515] shadow rounded duration-150 hover:bg-[#6E1515]">Sell Vehicle</button>
-      <button @click="$emit('newImage', vehicle.id)" class="w-2/5 h-10 ml-2 bg-[#0F501E] shadow rounded duration-150 hover:bg-[#0F601E]">New Photo</button>
-      <button @click="spawnVehicle(vehicle.id)" class="w-5/6 h-10 mt-2 bg-[#0F1650] shadow rounded duration-150 font-bold hover:bg-[#0F1660]">Spawn Vehicle</button>
+      <button @click="spawnVehicle(vehicle.id)" class="w-5/6 h-10 mt-2 bg-[#5B1616] shadow rounded duration-150 font-bold hover:bg-[#6B1616]">30 Hours Remaining</button>
+      <button @click="spawnVehicle(vehicle.id)" class="w-5/6 h-10 mt-2 bg-[#333333] shadow rounded duration-150 font-bold hover:bg-[#444444]">Release Vehicle</button>
     </div>
   </div>
 </template>
