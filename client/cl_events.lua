@@ -80,33 +80,16 @@ RegisterNetEvent('NGWD:notifyError', function(message)
     end
 end)
 
-RegisterNetEvent('NGWD:openMenu', function (garageData)
-    for _, v in pairs(garageData) do
-        print(v.modelName)
-        print(v.modelHash)
-        print(v.modelClass)
-        print(v.localizedName)
-        print(v.plate)
-        print(v.garage)
-        print(v.preview)
+RegisterNetEvent('NGWD:openMenu', function(garageData)
+    local data = {}
+    for k, v in pairs(garageData) do
+        data[k] = v
     end
-    --[[SendNUIMessage({
-        action = 'display',
-        display = false,
-        garageData = {
-			model = 'Random 1',
-			garage = 'Pink Cage',
-			class = 0,
-			plate = '12A9JKAD',
-			engineState= 'Decent',
-			bodyState= 'Fabulous',
-			purchasedDay = 'Thursday',
-			purchasedMonth = 'April',
-			purchasedDate = '2nd',
-			isVehicleImpounded = true,
-			vehicleImage = ''}
+    SendNUIMessage({
+        action = "openMenu",
+        vehicles = data
     })
-    SetNuiFocus(true, true)]]
+    SetNuiFocus(true, true)
 end)
 
 RegisterNetEvent('NGWD:setVehicleProperties', function(vehNet, plate, vehicleProperties, vehicleCondition, vehicleMods)

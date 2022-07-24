@@ -8,7 +8,7 @@ Config.successLength 	= 2 -- Length of success Notification (Seconds)
 Config.errorLength 		= 2 -- Length of error Notification (Seconds)
 
 -- Config Variables (T-Notify)
-Config.tNotify 			= true
+Config.tNotify 			= false
 Config.tLocation 		= 'middle-right' -- top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, middle-left, middle-right
 -- Config Variables (Mythic Notify https://github.com/FlawwsX/mythic_notify)
 Config.mythicNotify 	= false
@@ -18,7 +18,7 @@ Config.pNotify 			= false
 Config.layout 			= "centerRight" -- top, topLeft, topCenter, topRight, center, cenerLeft, centerRight, bottom, bottomLeft, bottomCenter, bottomRight
 Config.theme 			= "gta" -- gta, mint, relax, metroui
 -- Config Variables (ESX Notification)
-Config.esxNotify		= false
+Config.esxNotify		= true
 
 -- Config Variables (Barier)
 Config.deleteBarriers 	= false
