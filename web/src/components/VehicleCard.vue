@@ -47,12 +47,12 @@ const checkImage = (image) => {
 </script>
 
 <template>
-  <div class="h-[34em] bg-[#450C0C] shadow w-80 rounded-xl overflow-hidden flex flex-col justify-evenly items-center">
-    <img ref="elImg" class="w-full h-48" :src="checkImage(vehicle.image)" alt="Vehicle image">
+  <div class="h-[34em] bg-[#333333E6] shadow w-80 rounded-xl overflow-hidden flex flex-col justify-evenly items-center">
+    <img ref="elImg" class="w-full h-48" :src="checkImage(vehicle.preview)" alt="Vehicle image">
     <div class="grid grid-rows-3 grid-cols-2 mt-2 text-lg">
       <div class="font-medium flex flex-col text-start">
         <span class="text-neutral-400">Model</span>
-        <span class="font-light">{{ vehicle.model }}</span>
+        <span class="font-light">{{ vehicle }}</span>
       </div>
       <div class="font-medium flex flex-col text-start ml-6">
         <span class="text-neutral-400">Garage</span>
@@ -64,7 +64,7 @@ const checkImage = (image) => {
       </div>
       <div class="font-medium flex flex-col text-start ml-6">
         <span class="text-neutral-400">License Plate</span>
-        <span class="font-light">{{ vehicle.licensePlate }}</span>
+        <span class="font-light">{{ vehicle.plate }}</span>
       </div>
       <div class="font-medium flex flex-col text-start">
         <span class="text-neutral-400">Engine State</span>

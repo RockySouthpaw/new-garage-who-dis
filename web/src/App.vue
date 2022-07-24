@@ -14,7 +14,7 @@ const currentData = ref({
   id: 0,
   url: '',
 })
-const vehicles = []
+const vehicles = ref([])
 const classNames = [
   { id: 'all', name: 'All Classes'},
   { id: 0, name: 'Compact'},
@@ -70,7 +70,11 @@ const cancelImage = () => {
 
 const eventListener = (e) => {
   const data = e.data;
-  console.log(JSON.stringify(data))
+  if (e.data.action === 'openMenu') {
+    vehicles.value = data.vehicles
+    console.log(JSON.stringify(vehicles.value))
+    activeGarage.value = true
+  }
 }
 
 onMounted(() => window.addEventListener('message', eventListener))
@@ -95,8 +99,8 @@ onUnmounted(() => window.removeEventListener('message', eventListener))
       <i @click="slide(false)" class="cursor-pointer z-10 fas fa-chevron-left text-[#FFFFFF89] text-4xl duration-150 hover:scale-105"></i>
       <Carousel class="w-[90%]" ref="myCarousel" :itemsToShow="4" :itemsToScroll="1" :snapAlign="'start'">
         <Slide v-for="(veh, index) in getVehicles" :key="index">
-          <VehicleCard @newImage="newImage" :vehicle="veh" :vehicleClass="getClassName(veh.class)"/>
-          <ImpoundCard :vehicle="veh" :vehicleClass="getClassName(veh.class)"/>
+          <VehicleCard v-if="veh.garage !== 'Impound'" @newImage="newImage" :vehicle="veh" :vehicleClass="getClassName(veh.modelClass)"/>
+<!--          <ImpoundCard v-else :vehicle="veh" :vehicleClass="getClassName(veh.modelClass)"/>-->
         </Slide>
       </Carousel>
       <i @click="slide" class="cursor-pointer z-10 fas fa-chevron-right text-[#FFFFFF89] text-4xl duration-150 hover:scale-105"></i>
